@@ -10,7 +10,7 @@ use App\Services\GalleryGroups\GalleryGroup;
 /**
  * Class GalleryImage
  * @package App\Services\GalleryImage
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class GalleryImage extends Model

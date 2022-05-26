@@ -8,7 +8,7 @@ use App\Services\OrderCouponDetails\OrderCouponDetail;
 /**
  * Class OrderCouponDetailsRepository
  * @package App\Services\OrderCouponDetails\Repositories
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class OrderCouponDetailsRepository extends Repository implements OrderCouponDetailsRepositoryInterface

@@ -8,7 +8,7 @@ use App\Services\Countries\Country;
 /**
  * Class CountryRepository
  * @package App\Services\Countries\Repositories
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class CountryRepository extends Repository implements CountryRepositoryInterface

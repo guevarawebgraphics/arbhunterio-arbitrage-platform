@@ -8,7 +8,7 @@ use App\Services\OrderAddressDetails\OrderAddressDetail;
 /**
  * Class OrderAddressDetailRepository
  * @package App\Services\OrderAddressDetails\Repositories
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class OrderAddressDetailRepository extends Repository implements OrderAddressDetailRepositoryInterface

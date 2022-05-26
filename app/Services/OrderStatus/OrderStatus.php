@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * Class OrderStatus
  * @package App\Services\OrderStatus
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class OrderStatus extends Model

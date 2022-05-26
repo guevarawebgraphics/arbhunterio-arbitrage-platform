@@ -10,7 +10,7 @@ use App\Services\Users\Requests\updatePasswordRequest;
 /**
  * Class AdminDashboardController
  * @package App\Http\Controllers
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 class AdminDashboardController extends Controller
 {

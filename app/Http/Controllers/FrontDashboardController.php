@@ -10,7 +10,7 @@ use App\Services\Pages\Repositories\PageRepositoryInterface;
 /**
  * Class DashboardController
  * @package App\Http\Controllers
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 class FrontDashboardController extends Controller
 {

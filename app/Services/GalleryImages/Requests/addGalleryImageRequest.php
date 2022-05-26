@@ -10,7 +10,7 @@ use Illuminate\Validation\ValidationException;
 /**
  * Class addGalleryImageRequest
  * @package App\Services\GalleryImages\Requests
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class addGalleryImageRequest extends FormRequest

@@ -9,7 +9,7 @@ use File;
 /**
  * Class BlogRepository
  * @package App\Services\Blogs\Repositories
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class BlogRepository extends Repository implements BlogRepositoryInterface

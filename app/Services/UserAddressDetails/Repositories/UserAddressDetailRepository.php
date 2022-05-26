@@ -8,7 +8,7 @@ use App\Services\UserAddressDetails\UserAddressDetail;
 /**
  * Class UserAddressDetailRepository
  * @package App\Services\UserAddressDetails\Repositories
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class UserAddressDetailRepository extends Repository implements UserAddressDetailRepositoryInterface

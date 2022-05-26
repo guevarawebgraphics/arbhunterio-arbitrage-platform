@@ -7,7 +7,7 @@ use App\Services\Base\RepositoryInterface;
 /**
  * Class OrderLogRepositoryInterface
  * @package App\Services\OrderLogs\Repositories
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 interface OrderLogRepositoryInterface extends RepositoryInterface

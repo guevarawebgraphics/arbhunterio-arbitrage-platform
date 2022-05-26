@@ -9,7 +9,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * Class CouponCode
  * @package App\Services\CouponCodes
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class CouponCode extends Model

@@ -7,7 +7,7 @@ use App\Services\Base\RepositoryInterface;
 /**
  * Class SectionRepositoryInterface
  * @package App\Services\Sections\Repositories
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 interface SectionRepositoryInterface extends RepositoryInterface

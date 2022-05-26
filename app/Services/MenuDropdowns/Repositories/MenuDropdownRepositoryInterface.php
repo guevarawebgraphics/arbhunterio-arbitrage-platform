@@ -7,7 +7,7 @@ use App\Services\Base\RepositoryInterface;
 /**
  * Class MenuDropdownRepositoryInterface
  * @package App\Services\MenuDropdowns\Repositories
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 interface MenuDropdownRepositoryInterface extends RepositoryInterface

@@ -8,7 +8,7 @@ use App\Services\States\State;
 /**
  * Class StateRepository
  * @package App\Services\States\Repositories
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class StateRepository extends Repository implements StateRepositoryInterface

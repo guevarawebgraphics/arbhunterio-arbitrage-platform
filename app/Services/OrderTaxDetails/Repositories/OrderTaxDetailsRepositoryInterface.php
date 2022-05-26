@@ -7,7 +7,7 @@ use App\Services\Base\RepositoryInterface;
 /**
  * Class OrderTaxDetailsRepositoryInterface
  * @package App\Services\OrderTaxDetails\Repositories
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 interface OrderTaxDetailsRepositoryInterface extends RepositoryInterface

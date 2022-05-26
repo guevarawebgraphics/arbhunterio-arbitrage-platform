@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 /**
  * Class updatePermissionRequest
  * @package App\Services\Permissions\Requests
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class updatePermissionRequest extends FormRequest

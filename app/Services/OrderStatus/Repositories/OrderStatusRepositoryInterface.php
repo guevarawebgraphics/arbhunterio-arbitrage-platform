@@ -7,7 +7,7 @@ use App\Services\Base\RepositoryInterface;
 /**
  * Class OrderStatusRepositoryInterface
  * @package App\Services\OrderStatus\Repositories
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 interface OrderStatusRepositoryInterface extends RepositoryInterface

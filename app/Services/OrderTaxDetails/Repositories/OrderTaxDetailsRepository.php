@@ -8,7 +8,7 @@ use App\Services\OrderTaxDetails\OrderTaxDetail;
 /**
  * Class OrderTaxDetailsRepository
  * @package App\Services\OrderTaxDetails\Repositories
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class OrderTaxDetailsRepository extends Repository implements OrderTaxDetailsRepositoryInterface

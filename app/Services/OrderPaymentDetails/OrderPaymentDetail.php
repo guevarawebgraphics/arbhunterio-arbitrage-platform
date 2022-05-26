@@ -9,7 +9,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * Class OrderCouponDetail
  * @package App\Services\OrderCouponDetails
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class OrderCouponDetail extends Model

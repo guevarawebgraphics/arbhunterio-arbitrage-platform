@@ -12,7 +12,7 @@ use App\Http\Traits\Attachments\HasAttachment;
 /**
  * Class Page
  * @package App\Services\Pages
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class Page extends Model

@@ -8,7 +8,7 @@ use App\Services\OrderLogs\OrderLog;
 /**
  * Class OrderLogRepository
  * @package App\Services\OrderLogs\Repositories
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class OrderLogRepository extends Repository implements OrderLogRepositoryInterface

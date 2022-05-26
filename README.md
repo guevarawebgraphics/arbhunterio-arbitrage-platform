@@ -1,6 +1,6 @@
 # MY_CMS V2.0
 
-- [Developed by Bryan James Dela Luya](https://bjcdl.github.io/)
+- [Developed by Richard Guevara](https://kingrgdev.com)
 
 ## Requirements
 - PHP -> 7.3+
@@ -10,7 +10,7 @@
 ## Installation
 1. Clone this repository to your local machine
 ```sh
-$ git clone https://github.com/bryanjamesdelaluya/my_cms_2.0
+$ git clone https://github.com/kingrgdev/my_cms.git
 ```
 2. Create your database
 ```sh
@@ -58,7 +58,7 @@ $ curl -X POST 'http://127.0.0.1:8000/api/login' \
 -F 'password=secret'
 ```
 ## Developer
-- Bryan James Dela Luya
+- Richard Guevara
 
 ## VERSIONS
 1.0 - Native PHP

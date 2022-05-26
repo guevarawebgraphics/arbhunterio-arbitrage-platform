@@ -16,7 +16,7 @@ use DB;
 /**
  * Class PermissionController
  * @package App\Http\Controllers
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class PermissionController extends Controller

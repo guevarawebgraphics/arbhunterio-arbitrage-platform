@@ -9,7 +9,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * Class City
  * @package App\Services\Cities
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class City extends Model

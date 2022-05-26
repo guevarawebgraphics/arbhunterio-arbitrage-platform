@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Log;
 /**
  * Class updatePermissionGroupRequest
  * @package App\Services\PermissionGroups\Requests
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class updatePermissionGroupRequest extends FormRequest

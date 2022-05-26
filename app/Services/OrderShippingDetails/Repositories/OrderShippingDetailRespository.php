@@ -8,7 +8,7 @@ use App\Services\OrderShippingDetails\OrderShippingDetail;
 /**
  * Class OrderShippingDetailRespository
  * @package App\Services\OrderShippingDetails\Repositories
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class OrderShippingDetailRespository extends Repository implements OrderShippingDetailRespositoryInterface

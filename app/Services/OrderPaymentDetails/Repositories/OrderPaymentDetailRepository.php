@@ -8,7 +8,7 @@ use App\Services\OrderPaymentDetails\OrderPaymentDetail;
 /**
  * Class OrderPaymentDetailRepository
  * @package App\Services\OrderPaymentDetails\Repositories
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class OrderPaymentDetailRepository extends Repository implements OrderPaymentDetailRepositoryInterface

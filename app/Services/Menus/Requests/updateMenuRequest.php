@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 /**
  * Class updateMenuRequest
  * @package App\Services\Menus\Requests
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class updateMenuRequest extends FormRequest

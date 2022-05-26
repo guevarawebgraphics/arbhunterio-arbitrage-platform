@@ -11,7 +11,7 @@ use App\Services\SeoMetas\SeoMeta;
 /**
  * Class Blog
  * @package App\Services\Blogs
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class Blog extends Model

@@ -10,7 +10,7 @@ use Illuminate\Validation\ValidationException;
 /**
  * Class addPageRequest
  * @package App\Services\Pages\Requests
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class addPageRequest extends FormRequest

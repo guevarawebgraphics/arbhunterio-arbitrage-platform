@@ -9,7 +9,7 @@ use File;
 /**
  * Class SystemSettingRepository
  * @package App\Services\SystemSettings\Repositories
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class SystemSettingRepository extends Repository implements SystemSettingRepositoryInterface

@@ -12,7 +12,7 @@ use App\Services\CategoryPerProducts\CategoryPerProduct;
 /**
  * Class Product
  * @package App\Services\Products
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class Product extends Model

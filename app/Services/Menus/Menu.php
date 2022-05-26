@@ -10,7 +10,7 @@ use App\Services\Pages\Page;
 /**
  * Class Contact
  * @package App\Services\Menus
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class Menu extends Model

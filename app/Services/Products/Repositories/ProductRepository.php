@@ -9,7 +9,7 @@ use File;
 /**
  * Class ProductRepository
  * @package App\Services\Products\Repositories
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class ProductRepository extends Repository implements ProductRepositoryInterface

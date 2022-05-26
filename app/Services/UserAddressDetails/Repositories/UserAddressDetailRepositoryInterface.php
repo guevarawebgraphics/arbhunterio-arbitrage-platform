@@ -7,7 +7,7 @@ use App\Services\Base\RepositoryInterface;
 /**
  * Class UserAddressDetailRepositoryInterface
  * @package App\Services\UserAddressDetails\Repositories
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 interface UserAddressDetailRepositoryInterface extends RepositoryInterface

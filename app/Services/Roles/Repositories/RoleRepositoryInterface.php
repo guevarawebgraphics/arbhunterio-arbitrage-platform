@@ -7,7 +7,7 @@ use App\Services\Base\RepositoryInterface;
 /**
  * Class RoleRepositoryInterface
  * @package App\Services\Roles\Repositories
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 interface RoleRepositoryInterface extends RepositoryInterface

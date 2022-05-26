@@ -7,7 +7,7 @@ use App\Services\Base\RepositoryInterface;
 /**
  * Class CartRepositoryInterface
  * @package App\Services\Carts\Repositories
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 interface CartRepositoryInterface extends RepositoryInterface

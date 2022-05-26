@@ -13,7 +13,7 @@ use DB;
 /**
  * Class PermissionGroupController
  * @package App\Http\Controllers
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 class PermissionGroupController extends Controller
 {

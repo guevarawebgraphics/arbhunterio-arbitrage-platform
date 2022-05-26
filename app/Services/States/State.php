@@ -10,7 +10,7 @@ use App\Services\Countries\Country;
 /**
  * Class State
  * @package App\Services\States
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class State extends Model

@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 /**
  * Class updateBlogCategoryRequest
  * @package App\Services\BlogCategories\Requests
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class updateBlogCategoryRequest extends FormRequest

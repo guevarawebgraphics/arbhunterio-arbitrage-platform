@@ -10,7 +10,7 @@ use Illuminate\Validation\ValidationException;
 /**
  * Class addMenuRequest
  * @package App\Services\Menus\Requests
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class addMenuRequest extends FormRequest

@@ -8,7 +8,7 @@ use App\Services\CategoryPerProducts\CategoryPerProduct;
 /**
  * Class CategoryPerProductRepository
  * @package App\Services\CategoryPerProducts\Repositories
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class CategoryPerProductRepository extends Repository implements CategoryPerProductRepositoryInterface

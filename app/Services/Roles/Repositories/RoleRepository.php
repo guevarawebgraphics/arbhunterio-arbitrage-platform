@@ -8,7 +8,7 @@ use Spatie\Permission\Models\Role;
 /**
  * Class RoleRepository
  * @package App\Services\Roles\Repositories
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class RoleRepository extends Repository implements RoleRepositoryInterface

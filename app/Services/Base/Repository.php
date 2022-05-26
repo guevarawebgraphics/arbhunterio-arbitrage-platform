@@ -13,7 +13,7 @@ use Illuminate\Support\Str;
 /**
  * Class Repository
  * @package App\Servicess\Base
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class Repository implements RepositoryInterface

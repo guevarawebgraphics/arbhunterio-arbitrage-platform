@@ -7,7 +7,7 @@ use App\Services\Base\RepositoryInterface;
 /**
  * Class SectionDisplayHandlerInterface
  * @package App\Services\Sections\Repositories
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 interface SectionDisplayHandlerInterface extends RepositoryInterface

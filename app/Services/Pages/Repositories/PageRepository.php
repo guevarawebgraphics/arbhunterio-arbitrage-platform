@@ -10,7 +10,7 @@ use File;
 /**
  * Class PageRepository
  * @package App\Services\Pages\Repositories
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class PageRepository extends Repository implements PageRepositoryInterface

@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
 /**
  * Class OrderByCreatedAtScope
  * @package App\Servicess\Base\Scopes
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class OrderByCreatedAtScope implements Scope

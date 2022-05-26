@@ -10,7 +10,7 @@ use Illuminate\Validation\ValidationException;
 /**
  * Class addCouponCodeRequest
  * @package App\Services\CouponCodes\Requests
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class addCouponCodeRequest extends FormRequest

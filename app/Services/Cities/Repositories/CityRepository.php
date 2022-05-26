@@ -8,7 +8,7 @@ use App\Services\Cities\City;
 /**
  * Class CityRepository
  * @package App\Services\Cities\Repositories
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class CityRepository extends Repository implements CityRepositoryInterface

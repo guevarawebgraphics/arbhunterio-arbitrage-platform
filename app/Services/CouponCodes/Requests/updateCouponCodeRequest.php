@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 /**
  * Class updateCouponCodeRequest
  * @package App\Services\CouponCodes\Requests
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class updateCouponCodeRequest extends FormRequest

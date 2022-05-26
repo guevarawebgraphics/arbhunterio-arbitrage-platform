@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 /**
  * Class updatePageRequest
  * @package App\Services\Pages\Requests
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class updatePageRequest extends FormRequest

@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 /**
  * Class updateProfileRequest
  * @package App\Services\Users\Requests
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class updateProfileRequest extends FormRequest

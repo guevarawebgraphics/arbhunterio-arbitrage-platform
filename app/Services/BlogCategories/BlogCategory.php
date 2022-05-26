@@ -9,7 +9,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * Class BlogCategory
  * @package App\Services\BlogCategories
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class BlogCategory extends Model

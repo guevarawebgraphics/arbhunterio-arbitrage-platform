@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Hash;
 /**
  * Class HashedPasswordTrait
  * @package App\Servicess\Base\Traits
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 trait HashedPasswordTrait

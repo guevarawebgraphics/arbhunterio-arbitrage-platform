@@ -9,7 +9,7 @@ use File;
 /**
  * Class SeoMetasRepository
  * @package App\Services\SeoMetas\Repositories
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class SeoMetasRepository extends Repository implements SeoMetasRepositoryInterface

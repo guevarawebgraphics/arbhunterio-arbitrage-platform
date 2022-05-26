@@ -8,7 +8,7 @@ use App\Services\ProductCategories\ProductCategory;
 /**
  * Class ProductCategoryRepository
  * @package App\Services\ProductCategories\Repositories
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class ProductCategoryRepository extends Repository implements ProductCategoryRepositoryInterface

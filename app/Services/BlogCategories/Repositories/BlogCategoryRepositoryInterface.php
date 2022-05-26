@@ -7,7 +7,7 @@ use App\Services\Base\RepositoryInterface;
 /**
  * Class BlogCategoryRepositoryInterface
  * @package App\Services\BlogCategories\Repositories
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 interface BlogCategoryRepositoryInterface extends RepositoryInterface

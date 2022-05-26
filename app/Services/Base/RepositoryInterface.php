@@ -7,7 +7,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 /**
  * Class RepositoryInterface
  * @package App\Servicess\Base
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 interface RepositoryInterface

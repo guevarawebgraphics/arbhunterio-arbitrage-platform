@@ -10,7 +10,7 @@ use Illuminate\Validation\ValidationException;
 /**
  * Class addNewsletterRequest
  * @package App\Services\Newsletters\Requests
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class addNewsletterRequest extends FormRequest

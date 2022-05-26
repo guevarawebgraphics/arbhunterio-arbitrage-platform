@@ -7,7 +7,7 @@ use App\Services\Base\RepositoryInterface;
 /**
  * Class CategoryPerProductRepositoryInterface
  * @package App\Services\CategoryPerProducts\Repositories
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 interface CategoryPerProductRepositoryInterface extends RepositoryInterface

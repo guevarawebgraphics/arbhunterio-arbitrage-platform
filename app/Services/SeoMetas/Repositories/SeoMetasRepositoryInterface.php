@@ -7,7 +7,7 @@ use App\Services\Base\RepositoryInterface;
 /**
  * Class SeoMetasRepositoryInterface
  * @package App\Services\SeoMetas\Repositories
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 interface SeoMetasRepositoryInterface extends RepositoryInterface

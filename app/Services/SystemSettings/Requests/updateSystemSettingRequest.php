@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 /**
  * Class updateSystemSettingRequest
  * @package App\Services\SystemSettings\Requests
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class updateSystemSettingRequest extends FormRequest

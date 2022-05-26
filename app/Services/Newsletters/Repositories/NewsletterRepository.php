@@ -8,7 +8,7 @@ use App\Services\Newsletters\Newsletter;
 /**
  * Class NewsletterRepository
  * @package App\Services\Newsletters\Repositories
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class NewsletterRepository extends Repository implements NewsletterRepositoryInterface

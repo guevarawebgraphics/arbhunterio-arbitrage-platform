@@ -10,7 +10,7 @@ use Illuminate\Validation\ValidationException;
 /**
  * Class addRoleRequest
  * @package App\Services\Roles\Requests
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class addRoleRequest extends FormRequest

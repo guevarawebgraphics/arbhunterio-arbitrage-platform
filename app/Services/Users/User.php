@@ -14,7 +14,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * Class User
  * @package App\Services\Users
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class User extends Authenticatable

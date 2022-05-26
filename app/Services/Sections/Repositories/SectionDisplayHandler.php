@@ -10,7 +10,7 @@ use Illuminate\Support\Collection;
 /**
  * Class SectionDisplayHandler
  * @package App\Services\Sections\Repositories
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class SectionDisplayHandler extends Repository implements SectionDisplayHandlerInterface

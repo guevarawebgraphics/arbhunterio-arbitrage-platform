@@ -11,7 +11,7 @@ use App\Services\Pages\Page;
 /**
  * Class Contact
  * @package App\Services\MenuDropdowns
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class MenuDropdown extends Model

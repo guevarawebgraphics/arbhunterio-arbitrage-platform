@@ -8,7 +8,7 @@ use App\Services\OrderItemDetails\OrderItemDetail;
 /**
  * Class OrderItemDetailsRepository
  * @package App\Services\OrderItemDetails\Repositories
- * @author Bryan James Dela Luya
+ * @author Richard Guevara
  */
 
 class OrderItemDetailsRepository extends Repository implements OrderItemDetailsRepositoryInterface
