@@ -40,7 +40,7 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
-            'throttle:api',
+            // 'throttle:api', // temporarily removed
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
     ];

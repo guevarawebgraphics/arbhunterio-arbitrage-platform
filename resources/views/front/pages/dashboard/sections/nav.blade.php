@@ -14,7 +14,7 @@
                 </div>
             </a>
         </li>
-        <li class="nav-item">
+        {{-- <li class="nav-item">
             <a class="nav-link {{ request()->is('orders') ? 'active' : '' }}" href="{{url('orders')}}">
                 <div class="row">
                     <div class="col-md-3">
@@ -41,7 +41,7 @@
                     </div>
                 </div>
             </a>
-        </li>
+        </li> --}}
         <li class="nav-item">
             <a class="nav-link {{ request()->is('account-details') ? 'active' : '' }}" href="{{url('account-details')}}">
                 <div class="row">

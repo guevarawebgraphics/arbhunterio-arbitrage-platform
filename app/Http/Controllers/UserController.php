@@ -21,12 +21,14 @@ class UserController extends Controller
 
     public function indexAccountDetails(Request $request) 
     {
-        $page = $this->pageRepository->getPageBySlug('customer/dashboard');
+        $page = $this->pageRepository->getPageBySlug('account-details');
         if (!empty($page)) {
             $seo_meta = $this->getSeoMeta($page);
+        } else {
+            $seo_meta = [];
         }
 
-        return view('front.pages.dashboard.account_details', compact('page'));
+        return view('front.pages.dashboard.account_details', compact('page','seo_meta'));
     }
 
     public function updateAccountDetails(Request $request, $id)

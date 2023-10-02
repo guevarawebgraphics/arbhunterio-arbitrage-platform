@@ -40,10 +40,10 @@ class FrontDashboardController extends Controller
     {
         $page = $this->pageRepository->getPageBySlug('dashboard');
         // if (!empty($page)) {
-            $seo_meta = $this->getSeoMeta($page);
+        $seo_meta = $this->getSeoMeta($page);
         // }
         //$orders = $this->order_repository->getAllOrdersByUser();
 
-        return view('front.pages.dashboard.dashboard', compact('page' /*,'orders'*/));
+        return view('front.pages.dashboard.dashboard', compact('page','seo_meta'));
     }
 }
