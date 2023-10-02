@@ -7,7 +7,7 @@ use App\Services\Base\RepositoryInterface;
 /**
  * Class CouponCodeRepositoryInterface
  * @package App\Services\CouponCodes\Repositories
- * @author Richard Guevara
+ * @author Guevara Web Graphics Studio
  */
 
 interface CouponCodeRepositoryInterface extends RepositoryInterface

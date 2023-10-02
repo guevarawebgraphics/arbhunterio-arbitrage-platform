@@ -7,7 +7,7 @@ use App\Services\Base\RepositoryInterface;
 /**
  * Class PageRepositoryInterface
  * @package App\Services\Pages\Repositories
- * @author Richard Guevara
+ * @author Guevara Web Graphics Studio
  */
 
 interface PageRepositoryInterface extends RepositoryInterface

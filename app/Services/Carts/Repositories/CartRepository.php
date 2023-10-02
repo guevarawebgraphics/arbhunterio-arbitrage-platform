@@ -8,7 +8,7 @@ use App\Services\Carts\Cart;
 /**
  * Class CartRepository
  * @package App\Services\Products\Repositories
- * @author Richard Guevara
+ * @author Guevara Web Graphics Studio
  */
 
 class CartRepository extends Repository implements CartRepositoryInterface

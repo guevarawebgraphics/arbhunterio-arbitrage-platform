@@ -9,7 +9,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * Class Contact
  * @package App\Services\Newsletters
- * @author Richard Guevara
+ * @author Guevara Web Graphics Studio
  */
 
 class Newsletter extends Model

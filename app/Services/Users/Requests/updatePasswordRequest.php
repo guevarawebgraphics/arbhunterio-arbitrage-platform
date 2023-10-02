@@ -13,7 +13,7 @@ use App\Rules\MatchOldPassword;
 /**
  * Class updatePasswordRequest
  * @package App\Services\Users\Requests
- * @author Richard Guevara
+ * @author Guevara Web Graphics Studio
  */
 
 class updatePasswordRequest extends FormRequest

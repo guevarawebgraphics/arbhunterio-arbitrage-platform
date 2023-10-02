@@ -7,7 +7,7 @@ use App\Services\Base\RepositoryInterface;
 /**
  * Class OrderPaymentDetailRepositoryInterface
  * @package App\Services\OrderPaymentDetails\Repositories
- * @author Richard Guevara
+ * @author Guevara Web Graphics Studio
  */
 
 interface OrderPaymentDetailRepositoryInterface extends RepositoryInterface

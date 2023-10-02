@@ -11,7 +11,7 @@ use Mail;
 /**
  * Class ContactRepository
  * @package App\Services\Contacts\Repositories
- * @author Richard Guevara
+ * @author Guevara Web Graphics Studio
  */
 
 class ContactRepository extends Repository implements ContactRepositoryInterface

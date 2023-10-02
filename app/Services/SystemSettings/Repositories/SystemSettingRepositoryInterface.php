@@ -7,7 +7,7 @@ use App\Services\Base\RepositoryInterface;
 /**
  * Class SystemSettingRepositoryInterface
  * @package App\Services\SystemSettings\Repositories
- * @author Richard Guevara
+ * @author Guevara Web Graphics Studio
  */
 
 interface SystemSettingRepositoryInterface extends RepositoryInterface

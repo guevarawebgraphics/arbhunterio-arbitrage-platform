@@ -11,7 +11,7 @@ use App\Services\SystemSettings\Requests\updateSystemSettingRequest;
 /**
  * Class SystemSettingController
  * @package App\Http\Controllers
- * @author Richard Guevara
+ * @author Guevara Web Graphics Studio
  */
 
 class SystemSettingController extends Controller

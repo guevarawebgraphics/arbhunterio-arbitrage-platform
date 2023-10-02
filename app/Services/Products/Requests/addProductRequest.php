@@ -10,7 +10,7 @@ use Illuminate\Validation\ValidationException;
 /**
  * Class addProductRequest
  * @package App\Services\Products\Requests
- * @author Richard Guevara
+ * @author Guevara Web Graphics Studio
  */
 
 class addProductRequest extends FormRequest

@@ -8,7 +8,7 @@ use Illuminate\Http\UploadedFile;
 /**
  * trait HandlesAttachments
  * @package App\Http\Traits\Attachment
- * @author Richard Guevara
+ * @author Guevara Web Graphics Studio
  */
 
 trait HandlesAttachments

@@ -10,7 +10,7 @@ use App\Services\Sections\Section;
 /**
  * Class SeoMeta
  * @package App\Services\SeoMetas
- * @author Richard Guevara
+ * @author Guevara Web Graphics Studio
  */
 
 class SeoMeta extends Model

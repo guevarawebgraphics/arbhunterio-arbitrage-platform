@@ -7,7 +7,7 @@ use App\Services\Base\RepositoryInterface;
 /**
  * Class MenuRepositoryInterface
  * @package App\Services\Menus\Repositories
- * @author Richard Guevara
+ * @author Guevara Web Graphics Studio
  */
 
 interface MenuRepositoryInterface extends RepositoryInterface

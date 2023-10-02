@@ -9,7 +9,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * Class GalleryGroup
  * @package App\Services\GalleryGroups
- * @author Richard Guevara
+ * @author Guevara Web Graphics Studio
  */
 
 class GalleryGroup extends Model

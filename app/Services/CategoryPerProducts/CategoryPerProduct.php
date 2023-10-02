@@ -9,7 +9,7 @@ use App\Services\ProductCategories\ProductCategory;
 /**
  * Class Product
  * @package App\Services\CategoryPerProducts
- * @author Richard Guevara
+ * @author Guevara Web Graphics Studio
  */
 
 class CategoryPerProduct extends Model

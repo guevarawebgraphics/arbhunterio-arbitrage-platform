@@ -9,7 +9,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * Class Country
  * @package App\Services\Countries
- * @author Richard Guevara
+ * @author Guevara Web Graphics Studio
  */
 
 class Country extends Model

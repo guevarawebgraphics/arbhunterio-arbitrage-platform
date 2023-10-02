@@ -8,7 +8,7 @@ use App\Services\Orders\Order;
 /**
  * Class OrderRepository
  * @package App\Services\Orders\Repositories
- * @author Richard Guevara
+ * @author Guevara Web Graphics Studio
  */
 
 class OrderRepository extends Repository implements OrderRepositoryInterface

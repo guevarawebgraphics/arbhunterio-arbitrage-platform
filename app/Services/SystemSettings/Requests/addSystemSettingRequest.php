@@ -10,7 +10,7 @@ use Illuminate\Validation\ValidationException;
 /**
  * Class addSystemSettingRequest
  * @package App\Services\SystemSettings\Requests
- * @author Richard Guevara
+ * @author Guevara Web Graphics Studio
  */
 
 class addSystemSettingRequest extends FormRequest

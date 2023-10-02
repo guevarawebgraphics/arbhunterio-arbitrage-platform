@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 /**
  * Class updateProductCategoryRequest
  * @package App\Services\ProductCategories\Requests
- * @author Richard Guevara
+ * @author Guevara Web Graphics Studio
  */
 
 class updateProductCategoryRequest extends FormRequest

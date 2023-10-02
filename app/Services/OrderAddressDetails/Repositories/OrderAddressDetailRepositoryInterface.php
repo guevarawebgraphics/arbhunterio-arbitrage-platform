@@ -7,7 +7,7 @@ use App\Services\Base\RepositoryInterface;
 /**
  * Class OrderAddressDetailRepositoryInterface
  * @package App\Services\OrderAddressDetails\Repositories
- * @author Richard Guevara
+ * @author Guevara Web Graphics Studio
  */
 
 interface OrderAddressDetailRepositoryInterface extends RepositoryInterface

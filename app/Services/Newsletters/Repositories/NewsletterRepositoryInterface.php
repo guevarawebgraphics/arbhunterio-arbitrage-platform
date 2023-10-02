@@ -7,7 +7,7 @@ use App\Services\Base\RepositoryInterface;
 /**
  * Class NewsletterRepositoryInterface
  * @package App\Services\Contacts\Repositories
- * @author Richard Guevara
+ * @author Guevara Web Graphics Studio
  */
 
 interface NewsletterRepositoryInterface extends RepositoryInterface

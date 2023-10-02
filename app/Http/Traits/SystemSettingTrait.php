@@ -8,7 +8,7 @@ use App\Services\SeoMetas\SeoMeta;
 /**
  * Class SystemSettingTrait
  * @package App\Http\Traits
- * @author Richard Guevara
+ * @author Guevara Web Graphics Studio
  */
 trait SystemSettingTrait
 {

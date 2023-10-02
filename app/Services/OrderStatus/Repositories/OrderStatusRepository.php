@@ -8,7 +8,7 @@ use App\Services\OrderStatus\OrderStatus;
 /**
  * Class OrderStatusRepository
  * @package App\Services\OrderStatus\Repositories
- * @author Richard Guevara
+ * @author Guevara Web Graphics Studio
  */
 
 class OrderStatusRepository extends Repository implements OrderStatusRepositoryInterface

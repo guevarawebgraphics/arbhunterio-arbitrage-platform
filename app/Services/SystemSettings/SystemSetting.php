@@ -9,7 +9,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * Class SystemSetting
  * @package App\Services\SystemSettings
- * @author Richard Guevara
+ * @author Guevara Web Graphics Studio
  */
 
 class SystemSetting extends Model

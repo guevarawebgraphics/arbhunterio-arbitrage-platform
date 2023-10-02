@@ -9,7 +9,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * Class Attachment
  * @package App\Services\Attachments
- * @author Richard Guevara
+ * @author Guevara Web Graphics Studio
  */
 
 class Attachment extends Model

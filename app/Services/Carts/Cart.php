@@ -9,7 +9,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * Class Product
  * @package App\Services\Carts
- * @author Richard Guevara
+ * @author Guevara Web Graphics Studio
  */
 
 class Cart extends Model

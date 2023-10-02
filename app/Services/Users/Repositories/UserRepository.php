@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Hash;
 /**
  * Class UserRepository
  * @package App\Services\Users\Repositories
- * @author Richard Guevara
+ * @author Guevara Web Graphics Studio
  */
 
 class UserRepository extends Repository implements UserRepositoryInterface

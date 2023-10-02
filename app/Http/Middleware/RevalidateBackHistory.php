@@ -7,7 +7,7 @@ use Closure;
 /**
  * Class RevalidateBackHistory
  * @package App\Http\Middleware
- * @author Richard Guevara
+ * @author Guevara Web Graphics Studio
  */
 class RevalidateBackHistory
 {

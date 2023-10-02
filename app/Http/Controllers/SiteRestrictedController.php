@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 /**
  * Class SiteRestrictedController
  * @package App\Http\Controllers
- * @author Richard Guevara
+ * @author Guevara Web Graphics Studio
  */
 class SiteRestrictedController extends Controller
 {

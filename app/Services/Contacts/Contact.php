@@ -9,7 +9,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * Class Contact
  * @package App\Services\Contacts
- * @author Richard Guevara
+ * @author Guevara Web Graphics Studio
  */
 
 class Contact extends Model

@@ -7,7 +7,7 @@ use App\Services\Base\RepositoryInterface;
 /**
  * Class GalleryGroupRepositoryInterface
  * @package App\Services\GalleryGroups\Repositories
- * @author Richard Guevara
+ * @author Guevara Web Graphics Studio
  */
 
 interface GalleryGroupRepositoryInterface extends RepositoryInterface

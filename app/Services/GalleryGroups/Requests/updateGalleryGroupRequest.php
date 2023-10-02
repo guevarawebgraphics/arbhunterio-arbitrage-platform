@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 /**
  * Class updateGalleryGroupRequest
  * @package App\Services\GalleryGroups\Requests
- * @author Richard Guevara
+ * @author Guevara Web Graphics Studio
  */
 
 class updateGalleryGroupRequest extends FormRequest

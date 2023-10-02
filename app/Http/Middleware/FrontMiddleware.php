@@ -7,7 +7,7 @@ use Closure;
 /**
  * Class FrontMiddleware
  * @package App\Http\Middleware
- * @author Richard Guevara
+ * @author Guevara Web Graphics Studio
  */
 class FrontMiddleware
 {

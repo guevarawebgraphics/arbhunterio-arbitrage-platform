@@ -7,7 +7,7 @@ use App\Services\Attachments\Attachment;
 /**
  * trait HandlesAttachments
  * @package App\Http\Traits\Attachment
- * @author Richard Guevara
+ * @author Guevara Web Graphics Studio
  */
 
 trait HasAttachment

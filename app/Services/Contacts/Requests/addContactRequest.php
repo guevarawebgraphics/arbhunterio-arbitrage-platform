@@ -10,7 +10,7 @@ use Illuminate\Validation\ValidationException;
 /**
  * Class addContactRequest
  * @package App\Services\Contacts\Requests
- * @author Richard Guevara
+ * @author Guevara Web Graphics Studio
  */
 
 class addContactRequest extends FormRequest

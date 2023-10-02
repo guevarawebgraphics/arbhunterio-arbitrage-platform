@@ -8,7 +8,7 @@ use App\Services\Menus\Menu;
 /**
  * Class MenuRepository
  * @package App\Services\Menus\Repositories
- * @author Richard Guevara
+ * @author Guevara Web Graphics Studio
  */
 
 class MenuRepository extends Repository implements MenuRepositoryInterface

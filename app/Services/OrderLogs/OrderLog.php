@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * Class OrderLog
  * @package App\Services\OrderLogs
- * @author Richard Guevara
+ * @author Guevara Web Graphics Studio
  */
 
 class OrderLog extends Model

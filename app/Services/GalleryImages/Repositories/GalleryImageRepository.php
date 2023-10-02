@@ -9,7 +9,7 @@ use File;
 /**
  * Class GalleryGroupRepository
  * @package App\Services\GalleryImages\Repositories
- * @author Richard Guevara
+ * @author Guevara Web Graphics Studio
  */
 
 class GalleryImageRepository extends Repository implements GalleryImageRepositoryInterface

@@ -8,7 +8,7 @@ use App\Services\PermissionGroups\PermissionGroup;
 /**
  * Class PermissionGroupRepository
  * @package App\Services\PermissionGroups\Repositories
- * @author Richard Guevara
+ * @author Guevara Web Graphics Studio
  */
 
 class PermissionGroupRepository extends Repository implements PermissionGroupRepositoryInterface

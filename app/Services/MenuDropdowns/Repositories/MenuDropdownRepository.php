@@ -8,7 +8,7 @@ use App\Services\MenuDropdowns\MenuDropdown;
 /**
  * Class MenuDropdownRepository
  * @package App\Services\MenuDropdowns\Repositories
- * @author Richard Guevara
+ * @author Guevara Web Graphics Studio
  */
 
 class MenuDropdownRepository extends Repository implements MenuDropdownRepositoryInterface

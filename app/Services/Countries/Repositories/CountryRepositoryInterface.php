@@ -7,7 +7,7 @@ use App\Services\Base\RepositoryInterface;
 /**
  * Class CountryRepositoryInterface
  * @package App\Services\Countries\Repositories
- * @author Richard Guevara
+ * @author Guevara Web Graphics Studio
  */
 
 interface CountryRepositoryInterface extends RepositoryInterface

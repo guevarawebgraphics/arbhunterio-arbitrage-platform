@@ -9,7 +9,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * Class PermissionGroup
  * @package App\Services\PermissionGroups
- * @author Richard Guevara
+ * @author Guevara Web Graphics Studio
  */
 
 class PermissionGroup extends Model

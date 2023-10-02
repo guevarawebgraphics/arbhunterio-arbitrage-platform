@@ -11,7 +11,7 @@ use App\Services\Pages\Page;
 /**
  * Class Section
  * @package App\Services\Sections
- * @author Richard Guevara
+ * @author Guevara Web Graphics Studio
  */
 
 class Section extends Model

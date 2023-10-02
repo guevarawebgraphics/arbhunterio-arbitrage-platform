@@ -7,7 +7,7 @@ use Closure;
 /**
  * Class FrontRedirectIfAuthenticated
  * @package App\Http\Middleware
- * @author Richard Guevara
+ * @author Guevara Web Graphics Studio
  */
 class FrontRedirectIfAuthenticated
 {

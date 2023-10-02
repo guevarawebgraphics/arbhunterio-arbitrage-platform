@@ -10,7 +10,7 @@ use Illuminate\Validation\ValidationException;
 /**
  * Class addBlogRequest
  * @package App\Services\Blogs\Requests
- * @author Richard Guevara
+ * @author Guevara Web Graphics Studio
  */
 
 class addBlogRequest extends FormRequest

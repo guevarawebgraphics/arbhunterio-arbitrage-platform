@@ -9,7 +9,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * Class OrderAddressDetail
  * @package App\Services\Products
- * @author Richard Guevara
+ * @author Guevara Web Graphics Studio
  */
 
 class OrderAddressDetail extends Model

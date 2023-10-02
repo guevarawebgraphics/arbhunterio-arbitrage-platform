@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 /**
  * Class updateRoleRequest
  * @package App\Services\Roles\Requests
- * @author Richard Guevara
+ * @author Guevara Web Graphics Studio
  */
 
 class updateRoleRequest extends FormRequest

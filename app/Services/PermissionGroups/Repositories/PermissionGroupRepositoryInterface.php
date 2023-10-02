@@ -7,7 +7,7 @@ use App\Services\Base\RepositoryInterface;
 /**
  * Class PermissionGroupRepositoryInterface
  * @package App\Services\PermissionGroups\Repositories
- * @author Richard Guevara
+ * @author Guevara Web Graphics Studio
  */
 
 interface PermissionGroupRepositoryInterface extends RepositoryInterface

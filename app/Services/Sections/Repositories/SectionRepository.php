@@ -10,7 +10,7 @@ use Illuminate\Support\Collection;
 /**
  * Class SectionRepository
  * @package App\Services\Sections\Repositories
- * @author Richard Guevara
+ * @author Guevara Web Graphics Studio
  */
 
 class SectionRepository extends Repository implements SectionRepositoryInterface

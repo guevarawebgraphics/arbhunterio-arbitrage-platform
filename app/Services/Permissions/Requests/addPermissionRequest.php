@@ -10,7 +10,7 @@ use Illuminate\Validation\ValidationException;
 /**
  * Class addPermissionRequest
  * @package App\Services\Permissions\Requests
- * @author Richard Guevara
+ * @author Guevara Web Graphics Studio
  */
 
 class addPermissionRequest extends FormRequest
