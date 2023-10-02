@@ -1,7 +1,7 @@
 function getGames() {
 
     var currentDateISO8601 = moment().format('YYYY-MM-DDTHH:mm:ss');
-
+    console.log(currentDateISO8601);
     $.ajax({
         url: sBaseURI + '/api/games',
         method: 'GET',

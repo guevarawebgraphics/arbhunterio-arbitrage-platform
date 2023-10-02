@@ -98,7 +98,7 @@ trait OddsJamAPITrait
             $response = json_decode($json, true);
            
             $output = [
-                'data'  =>  $response,
+                $response,
                 'message'   =>  'Successfully processed..',
                 'status'    => true
             ];
@@ -127,7 +127,7 @@ trait OddsJamAPITrait
                 "Content-Type: application/json"
             );
 
-            curl_setopt($curl, CURLOPT_URL, "https://api-external.oddsjam.com/api/v2/game-odds/?key=" . config('services.oddsjam.key') . "&sportsbook=oddsjam&marketName=&sport=football&league=&start_date_after=&is_main&game_id=39804-16218-24-06");
+            curl_setopt($curl, CURLOPT_URL, "https://api-external.oddsjam.com/api/v2/game-odds?key=" . config('services.oddsjam.key') . "&game_id=" . $data['game_id'] );
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($curl, CURLOPT_POST, false);
             curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
@@ -151,7 +151,7 @@ trait OddsJamAPITrait
             $response = json_decode($json, true);
            
             $output = [
-                'data'  =>  $response,
+                $response,
                 'message'   =>  'Successfully processed..',
                 'status'    => true
             ];
@@ -204,7 +204,7 @@ trait OddsJamAPITrait
             $response = json_decode($json, true);
            
             $output = [
-                'data'  =>  $response,
+                $response,
                 'message'   =>  'Successfully processed..',
                 'status'    => true
             ];
@@ -257,7 +257,7 @@ trait OddsJamAPITrait
             $response = json_decode($json, true);
            
             $output = [
-                'data'  =>  $response,
+                $response,
                 'message'   =>  'Successfully processed..',
                 'status'    => true
             ];
@@ -310,7 +310,7 @@ trait OddsJamAPITrait
             $response = json_decode($json, true);
            
             $output = [
-                'data'  =>  $response,
+                $response,
                 'message'   =>  'Successfully processed..',
                 'status'    => true
             ];
@@ -363,7 +363,7 @@ trait OddsJamAPITrait
             $response = json_decode($json, true);
            
             $output = [
-                'data'  =>  $response,
+                $response,
                 'message'   =>  'Successfully processed..',
                 'status'    => true
             ];
@@ -416,7 +416,7 @@ trait OddsJamAPITrait
             $response = json_decode($json, true);
            
             $output = [
-                'data'  =>  $response,
+                $response,
                 'message'   =>  'Successfully processed..',
                 'status'    => true
             ];
@@ -469,7 +469,7 @@ trait OddsJamAPITrait
             $response = json_decode($json, true);
            
             $output = [
-                'data'  =>  $response,
+                $response,
                 'message'   =>  'Successfully processed..',
                 'status'    => true
             ];
@@ -522,7 +522,7 @@ trait OddsJamAPITrait
             $response = json_decode($json, true);
            
             $output = [
-                'data'  =>  $response,
+                $response,
                 'message'   =>  'Successfully processed..',
                 'status'    => true
             ];
@@ -575,7 +575,7 @@ trait OddsJamAPITrait
             $response = json_decode($json, true);
            
             $output = [
-                'data'  =>  $response,
+                $response,
                 'message'   =>  'Successfully processed..',
                 'status'    => true
             ];
@@ -604,7 +604,7 @@ trait OddsJamAPITrait
                 "Content-Type: application/json"
             );
 
-            curl_setopt($curl, CURLOPT_URL, "https://api-external.oddsjam.com/api/v2/markets?key=" . config('services.oddsjam.key') . "&team_id=18F74A0DDBD1");
+            curl_setopt($curl, CURLOPT_URL, "https://api-external.oddsjam.com/api/v2/markets?key=" . config('services.oddsjam.key') ."&game_id=" . $data['game_id']);
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($curl, CURLOPT_POST, false);
             curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
@@ -628,7 +628,7 @@ trait OddsJamAPITrait
             $response = json_decode($json, true);
            
             $output = [
-                'data'  =>  $response,
+                $response,
                 'message'   =>  'Successfully processed..',
                 'status'    => true
             ];
@@ -657,7 +657,7 @@ trait OddsJamAPITrait
                 "Content-Type: application/json"
             );
 
-            curl_setopt($curl, CURLOPT_URL, "https://api-external.oddsjam.com/api/v2/stream/odd?key=" . config('services.oddsjam.key') . "&team_id=18F74A0DDBD1&sportsbooks=mma");
+            curl_setopt($curl, CURLOPT_URL, "https://api-external.oddsjam.com/api/v2/stream/odds?key=" . config('services.oddsjam.key') . "&team_id=18F74A0DDBD1&sportsbooks=mma");
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($curl, CURLOPT_POST, false);
             curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
@@ -680,7 +680,60 @@ trait OddsJamAPITrait
             $response = json_decode($json, true);
            
             $output = [
-                'data'  =>  $response,
+                $response,
+                'message'   =>  'Successfully processed..',
+                'status'    => true
+            ];
+
+        } catch ( \Exception $e ) {
+
+            $output = [
+                'data'  =>  NULL,
+                'message'   => $e->getMessage(),
+                'status'    => false
+            ];
+
+        }
+
+        return $output;
+
+    }
+
+    public function sportsBook($data)  {
+
+        try {
+
+            $curl = curl_init();
+
+            $headers = array(
+                "Content-Type: application/json"
+            );
+
+            curl_setopt($curl, CURLOPT_URL, "https://api-external.oddsjam.com/api/v2/sportsbooks?key=" . config('services.oddsjam.key') . "&game_id=" .$data['game_id']);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($curl, CURLOPT_POST, false);
+            curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+
+            $json = curl_exec($curl);
+
+            if ($json === false) {
+                $error = curl_error($curl);
+                $output = [
+                    'data'  =>  $error,
+                    'message'   =>  'Error.. Something went wrong',
+                    'status'    => false
+                ];
+                return $output;
+
+            }
+
+            curl_close($curl);
+
+
+            $response = json_decode($json, true);
+           
+            $output = [
+                $response,
                 'message'   =>  'Successfully processed..',
                 'status'    => true
             ];

@@ -40,3 +40,7 @@ Route::get('/player-results', '\App\Http\Controllers\Api\APIController@getPlayer
 // Base
 Route::get('/teams', '\App\Http\Controllers\Api\APIController@getTeams')->name('api.teams');
 Route::get('/players', '\App\Http\Controllers\Api\APIController@getPlayers')->name('api.players');
+
+
+// Detailed Game Listing
+Route::get('/game-listing', '\App\Http\Controllers\Api\APIController@getGameListing')->name('api.game.listing');

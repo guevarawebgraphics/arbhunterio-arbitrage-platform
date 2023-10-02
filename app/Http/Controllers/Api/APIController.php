@@ -103,10 +103,43 @@ class APIController extends Controller
     }
 
     public function getUpcomingOddsPushStreams(Request $request) {
-
         $input = $request->all();
         $response = $this->upcomingOddsPushStreams($input);
         return $response;
+    }
+
+    public function getSportsBook(Request $request) {
+        $input = $request->all();
+        $response = $this->sportsBook($input);
+        return $response;
+    }
+
+    public function getGameListing(Request $request) {
+        $input = $request->all();
+        $input['start_date_before'] = $request->start_date_before;
+        $gameData = $this->games($input);
+
+
+        // Game
+        if ($gameData['status'] & !empty($gameData['data']) ) {
+            $response = $gameData['data'];
+            foreach ($response['data'] as $game) {
+
+                // SportsBook
+                $sports_book_input = [
+                    'game_id'   =>  $game['id']
+                ];
+                $sports_book = $this->sportsBook($sports_book_input);
+                $sports_book_data = $sports_book[0]['data'];
+
+                $upcomingGameOdds_input = [];
+                $upcomingGameOdds_input['game_id'] = $game['id'];
+                $upcomingGameOdds =  $this->upcomingGameOdds($upcomingGameOdds_input);
+
+                dd($upcomingGameOdds);
+
+            }
+        }
 
     }
 }
