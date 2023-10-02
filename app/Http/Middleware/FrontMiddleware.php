@@ -7,7 +7,7 @@ use Closure;
 /**
  * Class FrontMiddleware
  * @package App\Http\Middleware
- * @author Guevara Web Graphics Studio
+ * @author Richard Guevara
  */
 class FrontMiddleware
 {
@@ -24,10 +24,11 @@ class FrontMiddleware
             if ($request->ajax() || $request->wantsJson()) {
                 return response('Unauthorized.', 401);
             } else {
-                return redirect()->guest('/user/login');
+                return redirect()->guest('/patient/login');
             }
         }
 
+        return $next($request);
         
     }
 }

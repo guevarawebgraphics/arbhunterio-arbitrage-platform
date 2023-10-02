@@ -7,7 +7,7 @@ use Closure;
 /**
  * Class FrontRedirectIfAuthenticated
  * @package App\Http\Middleware
- * @author Guevara Web Graphics Studio
+ * @author Richard Guevara
  */
 class FrontRedirectIfAuthenticated
 {
@@ -26,7 +26,7 @@ class FrontRedirectIfAuthenticated
             if (session()->get('logged_in_from') == 'admin') {
                 return redirect('/admin/dashboard');
             } elseif (session()->get('logged_in_from') == 'normal') {
-                return redirect('/user/dashboard');
+                return redirect('/dashboard');
             }
         }
 

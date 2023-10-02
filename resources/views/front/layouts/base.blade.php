@@ -46,6 +46,7 @@
         </style>
     </head>
     <body class="d-flex flex-column h-100">
+
         <main class="flex-shrink-0">
             @include('front.layouts.sections.header')
             @yield('content')

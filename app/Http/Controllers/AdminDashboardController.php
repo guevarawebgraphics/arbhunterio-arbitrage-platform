@@ -27,6 +27,7 @@ class AdminDashboardController extends Controller
      * Create a new controller instance.
      *
      */
+    
     public function __construct(UserRepositoryInterface $userRepository)
     {
         $this->userRepository = $userRepository;

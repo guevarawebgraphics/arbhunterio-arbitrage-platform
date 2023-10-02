@@ -8,7 +8,7 @@ use Cookie;
 /**
  * Class SiteRestricted
  * @package App\Http\Middleware
- * @author Guevara Web Graphics Studio
+ * @author Richard Guevara
  */
 class SiteRestricted
 {
