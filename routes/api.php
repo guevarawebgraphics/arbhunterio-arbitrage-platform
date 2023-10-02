@@ -21,19 +21,22 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 // Upcoming Games & Odds
-Route::get('/games', '\App\Http\Controllers\Api\APIController@games')->name('api.games');
-Route::get('/leagues', '\App\Http\Controllers\Api\APIController@leagues')->name('api.leagues');
-Route::get('/upcoming-odds', '\App\Http\Controllers\Api\APIController@upcomingGameOdds')->name('api.upcoming.game.odds');
+Route::get('/games', '\App\Http\Controllers\Api\APIController@getGames')->name('api.games');
+Route::get('/leagues', '\App\Http\Controllers\Api\APIController@getLeagues')->name('api.leagues');
+Route::get('/upcoming-odds', '\App\Http\Controllers\Api\APIController@getUpcomingGameOdds')->name('api.upcoming.game.odds');
+Route::get('/market-categories', '\App\Http\Controllers\Api\APIController@getMarketCategories')->name('api.market.categories');
+Route::get('/markets', '\App\Http\Controllers\Api\APIController@getMarkets')->name('api.market');
+Route::get('/upcoming-odds-push-streams', '\App\Http\Controllers\Api\APIController@getUpcomingOddsPushStreams')->name('api.upcoming.odds.push.streams');
 
 // Futures & Odds
-Route::get('/future-odds', '\App\Http\Controllers\Api\APIController@futureOdds')->name('api.future.odds');
-Route::get('/futures', '\App\Http\Controllers\Api\APIController@futures')->name('api.futures');
+Route::get('/future-odds', '\App\Http\Controllers\Api\APIController@getFutureOdds')->name('api.future.odds');
+Route::get('/futures', '\App\Http\Controllers\Api\APIController@getFutures')->name('api.futures');
 
 // Player Results
-Route::get('/best-grader', '\App\Http\Controllers\Api\APIController@bestGrader')->name('api.best.grader');
-Route::get('/game-scores', '\App\Http\Controllers\Api\APIController@gameScores')->name('api.game.scores');
-Route::get('/player-results', '\App\Http\Controllers\Api\APIController@playerResults')->name('api.player.results');
+Route::get('/best-grader', '\App\Http\Controllers\Api\APIController@getBestGrader')->name('api.best.grader');
+Route::get('/game-scores', '\App\Http\Controllers\Api\APIController@getGameScores')->name('api.game.scores');
+Route::get('/player-results', '\App\Http\Controllers\Api\APIController@getPlayerResults')->name('api.player.results');
 
 // Base
-Route::get('/teams', '\App\Http\Controllers\Api\APIController@teams')->name('api.teams');
-Route::get('/players', '\App\Http\Controllers\Api\APIController@players')->name('api.players');
+Route::get('/teams', '\App\Http\Controllers\Api\APIController@getTeams')->name('api.teams');
+Route::get('/players', '\App\Http\Controllers\Api\APIController@getPlayers')->name('api.players');

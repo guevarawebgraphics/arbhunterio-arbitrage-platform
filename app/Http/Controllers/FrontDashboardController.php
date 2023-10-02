@@ -36,13 +36,12 @@ class FrontDashboardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index()
     {
         $page = $this->pageRepository->getPageBySlug('dashboard');
-        // if (!empty($page)) {
+        
         $seo_meta = $this->getSeoMeta($page);
-        // }
-        //$orders = $this->order_repository->getAllOrdersByUser();
 
         return view('front.pages.dashboard.dashboard', compact('page','seo_meta'));
     }

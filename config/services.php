@@ -30,4 +30,8 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'oddsjam' => [
+        'key' => env('ODDSJAM_API_KEY')
+    ],
+
 ];

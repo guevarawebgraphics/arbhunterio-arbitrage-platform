@@ -14,18 +14,28 @@
                         <div class="dashboard__content">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <h2>Welcome {{ auth()->user()->first_name . ' ' . auth()->user()->last_name }}</h2>
+                                    <h2>Arbitrage Bets</h2>
                                     <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
-                                    {{-- Static --}}
-                                    {{-- <div class="alert alert-warning">
-                                        You currently have no orders
-                                    </div>
-                                    <a href="{{url('shop')}}" class="btn btn--primary mb-5">Start Shopping</a> --}}
-                        
-                                    {{-- <div class="table-responsive "> --}}
-                                    
-                        
-                                    {{-- <a href="{{ url('orders') }}" class="btn btn--primary">View all orders</a> --}}
+                                    <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Percent</th>
+                                            <th scope="col">Event Date</th>
+                                            <th scope="col">Event</th>
+                                            <th scope="col">Market</th>
+                                            <th scope="col">Bet</th>
+                                            <th scope="col">Books</th>
+                                            <th scope="col">Pinny</th>
+                                            <th scope="col">Updated</th>
+                                            <th scope="col">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="arbitrage_body">
+
+                                        
+
+                                    </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -36,4 +46,13 @@
     </div>
     {{-- @include('front.layouts.sections.footer') --}}
 </section>
+@endsection
+
+
+@section('extra-script')
+
+    <script>
+        var sBaseURI = '{{ url('/') }}';
+    </script>
+    {{Html::script('public/js/bjcdl/libraries/dashboard.js')}}
 @endsection

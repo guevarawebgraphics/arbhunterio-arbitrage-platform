@@ -53,8 +53,15 @@
         </main>
         @include('front.layouts.sections.footer')
         <!-- Bootstrap core JS-->
+
+        <script src="{{asset('public/js/jquery-1.12.4.min.js')}}"></script>
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
         <script src="{{ asset('public/my_cms_default/js/scripts.js') }}"></script>
+
+        {{Html::script('public/bsbmd/plugins/momentjs/moment.js')}}
+
+        @yield('extra-script')
     </body>
 </html>
