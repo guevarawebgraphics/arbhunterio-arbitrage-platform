@@ -127,7 +127,7 @@ trait OddsJamAPITrait
                 "Content-Type: application/json"
             );
 
-            curl_setopt($curl, CURLOPT_URL, "https://api-external.oddsjam.com/api/v2/game-odds?key=" . config('services.oddsjam.key') . "&game_id=" . $data['game_id'] );
+            curl_setopt($curl, CURLOPT_URL, "https://api-external.oddsjam.com/api/v2/game-odds?key=" . config('services.oddsjam.key') . "&game_id=" . $data['game_id'] . "&team_id=" . $data['team_id'] . "&market_name=" . $data['market_name'] );
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($curl, CURLOPT_POST, false);
             curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
@@ -150,11 +150,7 @@ trait OddsJamAPITrait
 
             $response = json_decode($json, true);
            
-            $output = [
-                $response,
-                'message'   =>  'Successfully processed..',
-                'status'    => true
-            ];
+            $output = $response;
 
         } catch ( \Exception $e ) {
 
@@ -661,6 +657,7 @@ trait OddsJamAPITrait
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($curl, CURLOPT_POST, false);
             curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+
             $json = curl_exec($curl);
 
             if ($json === false) {

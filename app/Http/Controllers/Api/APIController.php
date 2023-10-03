@@ -120,36 +120,53 @@ class APIController extends Controller
         $gameData = $this->games($input);
 
         $game_array = [];
-        // Game
-        if ($gameData['status'] & !empty($gameData['data']) ) {
+
+        if ($gameData['status'] && !empty($gameData['data'])) {
             $response = $gameData['data'];
             $count = 0;
 
             foreach ($response['data'] as $game) {
                 $count++;
-                if($count == 2) {
 
+                if ($count == 2) {
                     // SportsBook
-                    $sports_book_input = [
-                        'game_id'   =>  $game['id']
-                    ];
+                    $sports_book_input = ['game_id' => $game['id']];
                     $sports_book = $this->sportsBook($sports_book_input);
+                    $sports_book_data = $sports_book[0]['data'];
 
-                    $upcomingGameOdds_input = [];
-                    $upcomingGameOdds_input['game_id'] = $game['id'];
-                    $upcomingGameOdds =  $this->upcomingGameOdds($upcomingGameOdds_input);
+                    $home_team = $game['home_team_info'];
+                    $away_team = $game['away_team_info'];
+
+                    $upcomingGameOddsInput = [];
+                    $upcomingGameOddsInput['game_id']    =   $game['id'];
+                    $upcomingGameOddsInput['market_name']    =   "Moneyline";
+                    // $upcomingGameOddsInput['is_main']    =   true;
+                    $upcomingGameOddsInput['team_id']    =   $home_team['id'];
+
+
+                    // Retrieve odds per team
+                    // Home Team
+                    $upcomingGameOddsHomeTeam = $this->upcomingGameOdds($upcomingGameOddsInput);
+
+                    // Away Team
+                    $upcomingGameOddsInput['team_id']    =   $away_team['id'];
+                    $upcomingGameOddsAwayTeam = $this->upcomingGameOdds($upcomingGameOddsInput);
 
                     array_push($game_array, [
-                        'game'  =>  $game,
-                        'sports_book'   =>  $sports_book[0]['data'],
-                        'game-odds' =>  $upcomingGameOdds[0]['data']
+                        'game' => $game,
+                        'sports_book' => $sports_book_data,
+                        'home_team' =>  $upcomingGameOddsHomeTeam['data'][0]['odds'],
+                        'away_team' => $upcomingGameOddsAwayTeam['data'][0]['odds']
                     ]);
-                    
-                    dd($game_array);
-                }
 
+                    dd($game_array);
+
+
+
+                    
+                }
             }
         }
-
     }
+
 }
