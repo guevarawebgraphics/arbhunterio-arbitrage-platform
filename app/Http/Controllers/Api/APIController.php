@@ -116,27 +116,37 @@ class APIController extends Controller
 
     public function getGameListing(Request $request) {
         $input = $request->all();
-        $input['start_date_before'] = $request->start_date_before;
+        $input['start_date_before'] = "2024-02-11T16:35:00-05:00";
         $gameData = $this->games($input);
 
-
+        $game_array = [];
         // Game
         if ($gameData['status'] & !empty($gameData['data']) ) {
             $response = $gameData['data'];
+            $count = 0;
+
             foreach ($response['data'] as $game) {
+                $count++;
+                if($count == 2) {
 
-                // SportsBook
-                $sports_book_input = [
-                    'game_id'   =>  $game['id']
-                ];
-                $sports_book = $this->sportsBook($sports_book_input);
-                $sports_book_data = $sports_book[0]['data'];
+                    // SportsBook
+                    $sports_book_input = [
+                        'game_id'   =>  $game['id']
+                    ];
+                    $sports_book = $this->sportsBook($sports_book_input);
 
-                $upcomingGameOdds_input = [];
-                $upcomingGameOdds_input['game_id'] = $game['id'];
-                $upcomingGameOdds =  $this->upcomingGameOdds($upcomingGameOdds_input);
+                    $upcomingGameOdds_input = [];
+                    $upcomingGameOdds_input['game_id'] = $game['id'];
+                    $upcomingGameOdds =  $this->upcomingGameOdds($upcomingGameOdds_input);
 
-                dd($upcomingGameOdds);
+                    array_push($game_array, [
+                        'game'  =>  $game,
+                        'sports_book'   =>  $sports_book[0]['data'],
+                        'game-odds' =>  $upcomingGameOdds[0]['data']
+                    ]);
+                    
+                    dd($game_array);
+                }
 
             }
         }

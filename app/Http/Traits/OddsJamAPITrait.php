@@ -19,7 +19,7 @@ trait OddsJamAPITrait
                 "Content-Type: application/json"
             );
 
-            $url =  "https://api-external.oddsjam.com/api/v2/games/?key=" . config('services.oddsjam.key') . ( $data['start_date_before'] ? '&start_date_before=' .$data['start_date_before'] : '' );
+            $url =  "https://api-external.oddsjam.com/api/v2/games/?include_team_info=true&key=" . config('services.oddsjam.key') . ( $data['start_date_before'] ? '&start_date_before=' .$data['start_date_before'] : '' );
             
             curl_setopt($curl, CURLOPT_URL, $url);
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -657,7 +657,7 @@ trait OddsJamAPITrait
                 "Content-Type: application/json"
             );
 
-            curl_setopt($curl, CURLOPT_URL, "https://api-external.oddsjam.com/api/v2/stream/odds?key=" . config('services.oddsjam.key') . "&team_id=18F74A0DDBD1&sportsbooks=mma");
+            curl_setopt($curl, CURLOPT_URL, "https://api-external.oddsjam.com/api/v2/stream/odds?key=" . config('services.oddsjam.key') . "&sportsbooks=". $data['sports_book']."&game_id=". $data['game_id']);
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($curl, CURLOPT_POST, false);
             curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
