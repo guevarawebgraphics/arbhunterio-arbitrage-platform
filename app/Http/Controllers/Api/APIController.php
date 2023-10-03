@@ -160,9 +160,6 @@ class APIController extends Controller
                     ]);
 
                     dd($game_array);
-
-
-
                     
                 }
             }
