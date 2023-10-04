@@ -215,8 +215,8 @@ class APIController extends Controller
 
                         $market_input = [];
                         $market_input['game_id'] = $game['id'];
-                        // $market_input['leagues'] =   ['WTA'];
-                        // $market_input['sports']  =   ['tennis'];
+                        $market_input['leagues'] =   ['NBA'];
+                        $market_input['sports']  =   ['basketball'];
                         $market_query = $this->markets($market_input);
                         $market_categories_query = $this->marketCategories($market_input);
 
@@ -228,7 +228,7 @@ class APIController extends Controller
                             // 'sports_book' => $sports_book_data,
                             'home_team_odds' =>  $upcomingGameOddsHomeTeam['data'][0]['odds'],
                             'away_team_odds' => $upcomingGameOddsAwayTeam['data'][0]['odds'],
-                            // 'market'  => $market_query[0]['data'],
+                            'market'  => $market_query[0]['data'],
                             // 'market_categories' =>  $market_categories_query[0]['data'],
                             
                         ]);
