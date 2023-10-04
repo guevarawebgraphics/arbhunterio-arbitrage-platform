@@ -196,4 +196,50 @@ class APIController extends Controller
         
     }
 
+    // BRYAN
+    public function getGameListingV2(Request $request)
+    {
+        $games = $this->fetchGames();
+        $markets = $this->fetchMarkets($games);
+
+        return [];
+    }
+    
+    private function fetchMarkets($games)
+    {
+        $markets = [];
+        foreach ($games ?? [] as $game) {
+            $markets[] = $this->fetchMarkets($game['id'])[0]['data'];
+        }
+        
+        $market_input = [];
+        $market_input['game_id'] = $id;
+        $market_input['leagues'] = ['NBA'];
+        $market_input['sports'] = ['basketball'];
+        $market_query = $this->markets($market_input);
+        $market_categories_query = $this->marketCategories($market_input);
+
+        return $market_categories_query;
+    }
+
+    private function fetchGames()
+    {
+        $sports = [
+            'football','basketball','baseball','mma','boxing','hockey','soccer','tennis','golf','motorsports','esports','wrestling','aussie-rules','rugby'
+        ];
+
+        $input = [];
+        $input['start_date_after'] = "2023-10-01T22:00:00-04:00";
+        $input['sports'] = $sports;
+
+        $league_raw = $this->leagues($input);
+        $league_data = $league_raw[0]['data'];
+        $input['leagues'] = $league_data;
+
+        $game_array = [];
+        $gameData = array_splice($this->games($input)['data']['data'], 0, 10);
+
+        return $gameData;
+    }
+
 }
