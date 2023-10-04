@@ -168,7 +168,31 @@ trait OddsJamAPITrait
                 "Content-Type: application/json"
             );
 
-            curl_setopt($curl, CURLOPT_URL, "https://api-external.oddsjam.com/api/v2/game-odds?key=" . config('services.oddsjam.key') . "&game_id=" . $data['game_id'] . "&team_id=" . $data['team_id']);
+            $sportsbook ='';
+            if(!empty($data)) {
+                foreach ($data['sportsbook'] as $value ) {
+                    $sportsbook .= '&sportsbook=' . $value;
+                }
+            }
+
+            $baseURL = "https://api-external.oddsjam.com/api/v2/game-odds/";
+
+            $queryParams = [
+                'key' => config('services.oddsjam.key'),
+                'game_id'  =>   $data['game_id'],
+                'team_id'   =>   $data['team_id']
+            ];
+
+
+            parse_str(ltrim($sportsbook, '&'), $sportsbookArray);
+
+            // Merge the two arrays
+            $queryParams = array_merge($queryParams, $sportsbookArray);
+
+            // Using Laravel's http_build_query function
+            $url = $baseURL . '?' . http_build_query($queryParams);
+
+            curl_setopt($curl, CURLOPT_URL, $url );
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($curl, CURLOPT_POST, false);
             curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
