@@ -114,132 +114,59 @@ class APIController extends Controller
         return $response;
     }
 
+ 
     public function getGameListing(Request $request) {
 
-        $sports = [
-            'football','basketball','baseball','mma','boxing','hockey','soccer','tennis','golf','motorsports','esports','wrestling','aussie-rules','rugby'
-        ];
-
-        $input = [];
-        $input['start_date_after'] = "2023-10-01T22:00:00-04:00";
-        $input['sports']    =   $sports;
-
-        $league_raw = $this->leagues($input);
-        $league_data = $league_raw[0]['data'];
-        $input['leagues']    =   $league_data;
-
-        $game_array = [];
+        $input = ['start_date_after' => "2023-02-11T16:35:00-05:00"];
         $gameData = $this->games($input);
+        $sportsBook = $this->defaultSporksBook();
 
-        if ($gameData['status'] && !empty($gameData['data'])) {
-            $response = $gameData['data'];
-            $count = 0;
-            
-            foreach ($response['data'] as $game) {
-                $count++;
+        if (!$gameData['status'] || empty($gameData['data'])) {
+            return [];
+        }
 
-                if ( $count<= 10 ) {
+        $games = $gameData['data']['data'];
+        $games = array_slice($games, 0, 15); // Take only first 5 games
 
-                    // SportsBook
-                    $sports_book_data = ['Action 24/7'];
-                    // $sports_book_data = $this->defaultSporksBook();
-
-                    $home_team = $game['home_team_info'];
-                    $away_team = $game['away_team_info'];
-
-                    if ( isset($home_team) && isset($away_team) ) {
-
-                        $upcomingGameOddsInput = [];
-                        $upcomingGameOddsInput['game_id']    =   $game['id'];
-                        $upcomingGameOddsInput['team_id']    =   $home_team['id'];
-                        $upcomingGameOddsInput['sportsbook']    =   $sports_book_data;
-
-                        // Retrieve odds per team
-                        // Home Team
-                        $upcomingGameOddsHomeTeam = $this->upcomingGameOdds($upcomingGameOddsInput);
-
-                        // Away Team
-                        $upcomingGameOddsInput['team_id']    =   $away_team['id'];
-                        $upcomingGameOddsAwayTeam = $this->upcomingGameOdds($upcomingGameOddsInput);
-
-                        $market_input = [];
-                        $market_input['game_id'] = $game['id'];
-                        $market_input['leagues'] =   ['NBA'];
-                        $market_input['sports']  =   ['basketball'];
-                        $market_query = $this->markets($market_input);
-                        $market_categories_query = $this->marketCategories($market_input);
-
-
-                        array_push($game_array, [
-                            'game' => $game,
-                            // 'sports_book' => $sports_book_data,
-                            'home_team_odds' =>  $upcomingGameOddsHomeTeam['data'][0]['odds'],
-                            'away_team_odds' => $upcomingGameOddsAwayTeam['data'][0]['odds'],
-                            'market'  => $market_query[0]['data'],
-                            // 'market_categories' =>  $market_categories_query[0]['data'],
-                            
-                        ]);
-
-                    }
-
-                }
-                    
+        $gameArray = [];
+        foreach ($games as $game) {
+            if (isset($game['home_team_info']) && isset($game['away_team_info'])) {
+                $gameArray[] = $this->fetchOddsData($game, $sportsBook);
             }
-
         }
 
-        dd($game_array);
-
-
-
-
-        
+       return $gameArray;
     }
 
-    // BRYAN
-    public function getGameListingV2(Request $request)
-    {
-        $games = $this->fetchGames();
-        $markets = $this->fetchMarkets($games);
-
-        return [];
-    }
-    
-    private function fetchMarkets($games)
-    {
-        $markets = [];
-        foreach ($games ?? [] as $game) {
-            $markets[] = $this->fetchMarkets($game['id'])[0]['data'];
-        }
-        
-        $market_input = [];
-        $market_input['game_id'] = $id;
-        $market_input['leagues'] = ['NBA'];
-        $market_input['sports'] = ['basketball'];
-        $market_query = $this->markets($market_input);
-        $market_categories_query = $this->marketCategories($market_input);
-
-        return $market_categories_query;
-    }
-
-    private function fetchGames()
-    {
-        $sports = [
-            'football','basketball','baseball','mma','boxing','hockey','soccer','tennis','golf','motorsports','esports','wrestling','aussie-rules','rugby'
+    private function fetchOddsData($game, $sportsBook) {
+        $upcomingGameOddsInput = [
+            'game_id' => $game['id'],
+            'team_id' => $game['home_team_info']['id'],
+            'sportsbook' => $sportsBook
         ];
 
-        $input = [];
-        $input['start_date_after'] = "2023-10-01T22:00:00-04:00";
-        $input['sports'] = $sports;
+        $homeTeamOdds = $this->groupOddsByMarket($this->upcomingGameOdds($upcomingGameOddsInput));
 
-        $league_raw = $this->leagues($input);
-        $league_data = $league_raw[0]['data'];
-        $input['leagues'] = $league_data;
+        $upcomingGameOddsInput['team_id'] = $game['away_team_info']['id'];
+        $awayTeamOdds = $this->groupOddsByMarket($this->upcomingGameOdds($upcomingGameOddsInput));
 
-        $game_array = [];
-        $gameData = array_splice($this->games($input)['data']['data'], 0, 10);
+        $marketName = $this->markets($upcomingGameOddsInput);
 
-        return $gameData;
+        return [
+            'game' => $game,
+            'home_team_odds' => $homeTeamOdds,
+            'away_team_odds' => $awayTeamOdds,
+            'markets'   =>  $marketName[0]['data']
+        ];
     }
+
+    private function groupOddsByMarket($oddsData) {
+        $grouped = [];
+        foreach ($oddsData['data'][0]['odds'] ?? [] as $item) {
+            $grouped[$item['market_name']][] = $item;
+        }
+        return $grouped;
+    }
+
 
 }

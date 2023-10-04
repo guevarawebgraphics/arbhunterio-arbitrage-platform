@@ -675,41 +675,28 @@ trait OddsJamAPITrait
                 "Content-Type: application/json"
             );
 
-
-            $sports ='';
+            $sportsbooks ='';
             if(!empty($data)) {
-                foreach ($data['sports'] as $sport ) {
-                    $sports .= '&sport=' . $sport;
-                }
-            }
-
-            $leagues ='';
-            if(!empty($data)) {
-                foreach ($data['leagues'] as $league ) {
-                    $leagues .= '&league=' . $league;
+                foreach ($data['sportsbook'] as $sportsbook ) {
+                    $sportsbooks .= '&sportsbook=' . urlencode($sportsbook);
                 }
             }
 
             $baseURL = "https://api-external.oddsjam.com/api/v2/markets/";
 
             $queryParams = [
-                'include_team_info' => 'true',
-                'key' => config('services.oddsjam.key')
+                'key' => config('services.oddsjam.key'),
+                'game_id'   =>  $data['game_id']
             ];
 
             if (isset($data['start_date_after']) && $data['start_date_after']) {
                 $queryParams['start_date_after'] = $data['start_date_after'];
             }
 
-            // Assuming $leagues is something like "&league=soccer&league=football"
-            parse_str(ltrim($leagues, '&'), $leaguesArray);
-
-            // Merge the two arrays
-            $queryParams = array_merge($queryParams, $leaguesArray);
 
             // Using Laravel's http_build_query function
-            $url = $baseURL . '?' . http_build_query($queryParams);
-
+            $url = $baseURL . '?' . http_build_query($queryParams) . $sportsbooks;
+            \Log::info($url);
 
             curl_setopt($curl, CURLOPT_URL, $url );
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -733,6 +720,8 @@ trait OddsJamAPITrait
 
 
             $response = json_decode($json, true);
+
+            \Log::info($url);
            
             $output = [
                 $response,

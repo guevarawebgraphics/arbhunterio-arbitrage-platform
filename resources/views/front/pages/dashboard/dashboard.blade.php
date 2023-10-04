@@ -17,24 +17,24 @@
                                     <h2>Arbitrage Bets</h2>
                                     <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
                                     <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">Percent</th>
-                                            <th scope="col">Event Date</th>
-                                            <th scope="col">Event</th>
-                                            <th scope="col">Market</th>
-                                            <th scope="col">Bet</th>
-                                            <th scope="col">Books</th>
-                                            <th scope="col">Pinny</th>
-                                            <th scope="col">Updated</th>
-                                            <th scope="col">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="arbitrage_body">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Percent</th>
+                                                <th scope="col">Event Date</th>
+                                                <th scope="col">Event</th>
+                                                <th scope="col">Market</th>
+                                                <th scope="col">Bet</th>
+                                                <th scope="col">Books</th>
+                                                <th scope="col">Pinny</th>
+                                                <th scope="col">Updated</th>
+                                                <th scope="col">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="arbitrage_body">
 
-                                        
+                                            
 
-                                    </tbody>
+                                        </tbody>
                                     </table>
                                 </div>
                             </div>
@@ -54,5 +54,7 @@
     <script>
         var sBaseURI = '{{ url('/') }}';
     </script>
+    
     {{Html::script('public/js/bjcdl/libraries/dashboard.js')}}
+
 @endsection
