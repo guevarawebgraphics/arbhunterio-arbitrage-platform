@@ -189,7 +189,7 @@ class APIController extends Controller
             foreach ($response['data'] as $game) {
                 $count++;
 
-                // if ( $count == 2) {
+                if ( $count<= 10 ) {
 
                     // SportsBook
                     $sports_book_data = ['Action 24/7'];
@@ -233,11 +233,11 @@ class APIController extends Controller
                             
                         ]);
 
-                        dd($game_array);
+                        // dd($game_array);
 
                     }
 
-                // }
+                }
                     
             }
 
