@@ -115,57 +115,6 @@ class APIController extends Controller
     }
 
     public function getGameListing(Request $request) {
-        // $input = $request->all();
-        // $input['start_date_after'] = "2024-04-11T16:35:00-05:00";
-
-        // $gameData = $this->games($input);
-
-        // $game_array = [];
-
-        // if ($gameData['status'] && !empty($gameData['data'])) {
-        //     $response = $gameData['data'];
-        //     $count = 0;
-
-        //     foreach ($response['data'] as $game) {
-        //         $count++;
-
-        //             // SportsBook
-        //             $sports_book_input = ['game_id' => $game['id']];
-        //             $sports_book = $this->sportsBook($sports_book_input);
-        //             $sports_book_data = $sports_book[0]['data'];
-
-        //             $home_team = $game['home_team_info'];
-        //             $away_team = $game['away_team_info'];
-
-        //         if ( isset($home_team) && isset($away_team) ) {
-
-        //             $upcomingGameOddsInput = [];
-        //             $upcomingGameOddsInput['game_id']    =   $game['id'];
-        //             $upcomingGameOddsInput['market_name']    =   "Moneyline";
-        //             // $upcomingGameOddsInput['is_main']    =   true;
-        //             $upcomingGameOddsInput['team_id']    =   $home_team['id'];
-        //             // Retrieve odds per team
-        //             // Home Team
-        //             $upcomingGameOddsHomeTeam = $this->upcomingGameOdds($upcomingGameOddsInput);
-
-        //             // Away Team
-        //             $upcomingGameOddsInput['team_id']    =   $away_team['id'];
-        //             $upcomingGameOddsAwayTeam = $this->upcomingGameOdds($upcomingGameOddsInput);
-
-        //             array_push($game_array, [
-        //                 'game' => $game,
-        //                 'sports_book' => $sports_book_data,
-        //                 'home_team' =>  $upcomingGameOddsHomeTeam['data'][0]['odds'],
-        //                 'away_team' => $upcomingGameOddsAwayTeam['data'][0]['odds']
-        //             ]);
-
-        //             dd($game_array);
-
-        //         }
-                    
-        //     }
-        // }
-
 
         $sports = [
             'football','basketball','baseball','mma','boxing','hockey','soccer','tennis','golf','motorsports','esports','wrestling','aussie-rules','rugby'
@@ -221,8 +170,6 @@ class APIController extends Controller
                         $market_categories_query = $this->marketCategories($market_input);
 
 
-                        // dd($upcomingGameOddsHomeTeam);
-
                         array_push($game_array, [
                             'game' => $game,
                             // 'sports_book' => $sports_book_data,
@@ -232,8 +179,6 @@ class APIController extends Controller
                             // 'market_categories' =>  $market_categories_query[0]['data'],
                             
                         ]);
-
-                        // dd($game_array);
 
                     }
 
