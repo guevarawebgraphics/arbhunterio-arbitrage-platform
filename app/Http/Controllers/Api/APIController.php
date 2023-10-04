@@ -116,7 +116,7 @@ class APIController extends Controller
 
     public function getGameListing(Request $request) {
         // $input = $request->all();
-        // $input['start_date_before'] = "2024-04-11T16:35:00-05:00";
+        // $input['start_date_after'] = "2024-04-11T16:35:00-05:00";
 
         // $gameData = $this->games($input);
 
@@ -172,7 +172,7 @@ class APIController extends Controller
         ];
 
         $input = [];
-        $input['start_date_before'] = "2024-05-11T16:35:00-05:00";
+        $input['start_date_after'] = "2023-10-01T22:00:00-04:00";
         $input['sports']    =   $sports;
 
         $league_raw = $this->leagues($input);
@@ -189,12 +189,7 @@ class APIController extends Controller
             foreach ($response['data'] as $game) {
                 $count++;
 
-                if ( $count <= 10) {
-
-                    // SportsBook
-                    // $sports_book_input = ['game_id' => $game['id']];
-                    // $sports_book = $this->sportsBook($sports_book_input);
-                    // $sports_book_data = $sports_book[0]['data'];
+                // if ( $count == 2) {
 
                     // SportsBook
                     $sports_book_data = ['Action 24/7'];
@@ -238,11 +233,11 @@ class APIController extends Controller
                             
                         ]);
 
-                        // dd($game_array);
+                        dd($game_array);
 
                     }
 
-                }
+                // }
                     
             }
 
