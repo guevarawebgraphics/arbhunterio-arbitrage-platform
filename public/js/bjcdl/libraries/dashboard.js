@@ -105,7 +105,7 @@ function getGames() {
                                 <td>${formattedDate}</td>
                                 <td>
                                     <p>
-                                        ${value.game.home_team} vs ${value.game.away_team} | ${value.game.league} |  ${value.game.sport}
+                                        ${value.game.home_team} vs ${value.game.away_team} <br> <small>${value.game.league} |  ${value.game.sport}</small>
                                     </p>
                                 </td>
                                 <td>
