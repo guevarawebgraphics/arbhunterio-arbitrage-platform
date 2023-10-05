@@ -24,10 +24,10 @@ function getGames() {
 
     console.log('Loading...');
     $.ajax({
-        url: sBaseURI + '/api/game-listing',
-        // url: sBaseURI + '/public/oddsjam.js',
+        // url: sBaseURI + '/api/game-listing',
+        url: sBaseURI + '/public/oddsjam.js',
         method: 'GET',
-        // dataType: 'json',
+        dataType: 'json',
         data: {
             _token: $('meta[name="csrf-token"]').attr('content'),
             is_live: false,
@@ -82,6 +82,24 @@ function getGames() {
                             var homeOddsSportsBookName = [...homeOddsSportsBookNamesSet].join(', ');
                             var awayOddsSportsBookName = [...awayOddsSportsBookNamesSet].join(', ');
 
+
+                            var homeBetName = "";
+                            var awayBetName = "";
+
+                            $.each(home_odds[market_name], function(_, odd) {
+                                if (odd.selection_points === homeOddsBooksSelectionPoint) {
+                                    homeBetName = odd.name;
+                                    return false; // break out of the loop after the first match
+                                }
+                            });
+
+                            $.each(away_odds[market_name], function(_, odd) {
+                                if (odd.selection_points === awayOddsBooksSelectionPoint) {
+                                    awayBetName = odd.name;
+                                    return false; // break out of the loop after the first match
+                                }
+                            });
+
                             html += `<tr>
                                 <th scope="row">--</th>
                                 <td>${formattedDate}</td>
@@ -92,9 +110,11 @@ function getGames() {
                                 </td>
                                 <td>
                                     <p>${val.label}</p>
-                                </td>ge
+                                </td>
                                 <td>
-                                    
+                                     <p>${homeBetName}</p>
+                                    <hr>
+                                    <p>${awayBetName}</p>
                                 </td>
                                  <td>
                                     <p>
