@@ -32,6 +32,24 @@ function getSportsBookNames(game, marketLabel) {
         away: awaySportsBooks
     };
 }
+function getBets(game, marketLabel) {
+    let homeBets = [];
+    let awayBets = [];
+
+    if (game && game.home_team_odds && game.home_team_odds[marketLabel]) {
+        homeBets = [...new Set(game.home_team_odds[marketLabel].map(odd => odd.name))].filter(Boolean);
+    }
+
+    if (game && game.away_team_odds && game.away_team_odds[marketLabel]) {
+        awayBets = [...new Set(game.away_team_odds[marketLabel].map(odd => odd.name))].filter(Boolean);
+    }
+
+    return {
+        home: homeBets,
+        away: awayBets
+    };
+}
+
 
 
 
@@ -42,8 +60,10 @@ function getGames() {
 
     console.log('Loading...');
     $.ajax({
-        url: sBaseURI + '/api/game-listing',
+        // url: sBaseURI + '/api/game-listing',
+        url: sBaseURI + '/public/oddsjam.js',
         method: 'GET',
+        dataType: 'json',
         data: {
             _token: $('meta[name="csrf-token"]').attr('content'),
             is_live: false,
@@ -66,6 +86,11 @@ function getGames() {
                             const homeSportsBooksList = sportsBooks.home.join(', ');
                             const awaySportsBooksList = sportsBooks.away.join(', ');
 
+
+                            const bets = getBets(value, val.label);
+                            const highTeamBets = bets.home;
+                            const lowestTeamBets = bets.away;
+
                             html += `<tr>
                                 <th scope="row">--</th>
                                 <td>${formattedDate}</td>
@@ -78,20 +103,18 @@ function getGames() {
                                     <p>${val.label}</p>
                                 </td>ge
                                 <td>
-                                    <ul style="list-style-type:none;">
-                                        <li></li>
-                                        <li></li>
-                                    </ul>
+                                    <label><small>${highTeamBets}</small></label><br>
+                                    <label><small>${lowestTeamBets}</small></label>
                                 </td>
                                  <td>
-                                    <ul style="list-style-type:none;">
-                                         <li>${highestBetPointForHome} | ${homeSportsBooksList}</li>
-                                         <li>${lowestBetPointForAway} | ${awaySportsBooksList}</li>
-                                    </ul>
+                                    <label><small>${highestBetPointForHome} | ${homeSportsBooksList}</small></label><br>
+                                    <label><small>${lowestBetPointForAway} | ${awaySportsBooksList}</small></label>
                                 </td>
                                 <td>---</td>
                                 <td>---</td>
-                                <td>---</td>
+                                <td>
+                                
+                                </td>
                             </tr>`;
                         });
                     }
@@ -99,6 +122,7 @@ function getGames() {
 
                 $("#arbitrage_body").html(html);
             }
+
         },
         get success() {
             return this._success;

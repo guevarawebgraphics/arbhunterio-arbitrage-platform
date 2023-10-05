@@ -150,7 +150,7 @@ class APIController extends Controller
         }
 
         $games = $gameData['data']['data'];
-        $games = array_slice($games, 0, 5); // Take only first 5 games
+        $games = array_slice($games, 0, 20); // Take only first 5 games
 
         $gameArray = [];
         foreach ($games as $game) {
@@ -170,7 +170,7 @@ class APIController extends Controller
         ];
 
         $homeTeamOdds = $this->groupOddsByMarket($this->upcomingGameOdds($upcomingGameOddsInput));
-        
+
         $upcomingGameOddsInput['team_id'] = $game['away_team_info']['id'];
         $awayTeamOdds = $this->groupOddsByMarket($this->upcomingGameOdds($upcomingGameOddsInput));
 
