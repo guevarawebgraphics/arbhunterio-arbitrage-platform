@@ -50,6 +50,13 @@ Route::group(
         'uses' => '\App\Http\Controllers\UserController@updateAccountDetails',
         'as' => 'account-details.update',
     ]);
+
+    // profile
+
+    Route::get('/account-details/overview', [
+        'uses' => '\App\Http\Controllers\UserController@overviewAccountDetails',
+        'as' => 'account-details.overview',
+    ]);
     
 });
 

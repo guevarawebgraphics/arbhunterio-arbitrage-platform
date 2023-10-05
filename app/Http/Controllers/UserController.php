@@ -82,4 +82,18 @@ class UserController extends Controller
             ->route('address')
             ->with('success', 'User addresses successfully updated.');
     }
+
+    ////////////
+
+    public function overviewAccountDetails(Request $request)
+    {
+        $page = $this->pageRepository->getPageBySlug('account-details/overview');
+        if (!empty($page)) {
+            $seo_meta = $this->getSeoMeta($page);
+        } else {
+            $seo_meta = [];
+        }
+
+        return view('front.pages.dashboard.account_details', compact('page','seo_meta'));
+    }
 }
