@@ -1,7 +1,18 @@
 <!-- Navigation-->
 @include('front.layouts.sections.navigation')
 
-@if( !in_array(url()->current() , [ url('dashboard'),  url('account-details'), url('account-details/overview') ] ))
+@if( !in_array(url()->current() , [ 
+        url('dashboard'),  
+        url('account-details'), 
+        url('account-details/overview'),
+        url('account-details/general-settings'),
+        url('account-details/manage-subscription'),
+        url('account-details/manage-filters'),
+        url('account-details/bet-tracker-notifications'),
+        url('account-details/bankroll-settings'),
+        url('account-details/manage-injury-notifications'),
+        url('account-details/betting-tool-notifications'),
+    ] ))
     <!-- Header-->
     <header class="bg-dark py-5">
         <div class="container px-5">

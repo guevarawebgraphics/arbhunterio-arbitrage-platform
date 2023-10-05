@@ -1,7 +1,7 @@
 <div class="dashboard__tab-menu">
     <ul class="nav flex-colum nav-pills">
         <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link {{ request()->is('account-details/overview') ? 'active' : '' }}" href="{{ url('account-details/overview') }}">
                 <div class="row align-items-center">
                     <div class="col-md-3">
                         <div class="icon">
@@ -15,7 +15,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link {{ request()->is('account-details/general-settings') ? 'active' : '' }}" href="{{ url('account-details/general-settings') }}">
                 <div class="row">
                     <div class="col-md-3">
                         <div class="icon">
@@ -29,7 +29,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link {{ request()->is('account-details/manage-subscription') ? 'active' : '' }}" href="{{ url('account-details/manage-subscription') }}">
                 <div class="row">
                     <div class="col-md-3">
                         <div class="icon">
@@ -43,7 +43,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link {{ request()->is('account-details/manage-filters') ? 'active' : '' }}" href="{{ url('account-details/manage-filters') }}">
                 <div class="row">
                     <div class="col-md-3">
                         <div class="icon">
@@ -57,7 +57,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link {{ request()->is('account-details/bet-tracker-notifications') ? 'active' : '' }}" href="{{ url('account-details/bet-tracker-notifications') }}">
                 <div class="row">
                     <div class="col-md-3">
                         <div class="icon">
@@ -65,13 +65,13 @@
                         </div>
                     </div>
                     <div class="col-md-9">
-                        <h3>Bet Tracker notifications</h3>
+                        <h3>Bet Tracker Notifications</h3>
                     </div>
                 </div>
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link {{ request()->is('account-details/bankroll-settings') ? 'active' : '' }}" href="{{ url('account-details/bankroll-settings') }}">
                 <div class="row">
                     <div class="col-md-3">
                         <div class="icon">
@@ -85,7 +85,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link {{ request()->is('account-details/manage-injury-notifications') ? 'active' : '' }}" href="{{ url('account-details/manage-injury-notifications') }}">
                 <div class="row">
                     <div class="col-md-3">
                         <div class="icon">
@@ -99,7 +99,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link {{ request()->is('account-details/betting-tool-notifications') ? 'active' : '' }}" href="{{ url('account-details/betting-tool-notifications') }}">
                 <div class="row">
                     <div class="col-md-3">
                         <div class="icon">

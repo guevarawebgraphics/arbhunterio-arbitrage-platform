@@ -57,6 +57,41 @@ Route::group(
         'uses' => '\App\Http\Controllers\UserController@overviewAccountDetails',
         'as' => 'account-details.overview',
     ]);
+
+    Route::get('/account-details/general-settings', [
+        'uses' => '\App\Http\Controllers\UserController@generalSettingsAccountDetails',
+        'as' => 'account-details.general_settings',
+    ]);
+
+    Route::get('/account-details/manage-subscription', [
+        'uses' => '\App\Http\Controllers\UserController@manageSubscriptionAccountDetails',
+        'as' => 'account-details.manage_subscription',
+    ]);
+
+    Route::get('/account-details/manage-filters', [
+        'uses' => '\App\Http\Controllers\UserController@manageFiltersAccountDetails',
+        'as' => 'account-details.manage_filters',
+    ]);
+
+    Route::get('/account-details/bet-tracker-notifications', [
+        'uses' => '\App\Http\Controllers\UserController@betTrackerNotificationAccountDetails',
+        'as' => 'account-details.bet_tracker_notifications',
+    ]);
+
+    Route::get('/account-details/bankroll-settings', [
+        'uses' => '\App\Http\Controllers\UserController@bankrollSettingsAccountDetails',
+        'as' => 'account-details.bankroll_settings',
+    ]);
+
+    Route::get('/account-details/manage-injury-notifications', [
+        'uses' => '\App\Http\Controllers\UserController@manageInjuryNotificationsAccountDetails',
+        'as' => 'account-details.manage_injury_notifications',
+    ]);
+
+    Route::get('/account-details/betting-tool-notifications', [
+        'uses' => '\App\Http\Controllers\UserController@bettingToolNotificationsAccountDetails',
+        'as' => 'account-details.betting_injury_notifications',
+    ]);
     
 });
 

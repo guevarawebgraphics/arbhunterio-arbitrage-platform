@@ -96,4 +96,88 @@ class UserController extends Controller
 
         return view('front.pages.dashboard.account_details', compact('page','seo_meta'));
     }
+
+    public function generalSettingsAccountDetails(Request $request)
+    {
+        $page = $this->pageRepository->getPageBySlug('account-details/general-settings');
+        if (!empty($page)) {
+            $seo_meta = $this->getSeoMeta($page);
+        } else {
+            $seo_meta = [];
+        }
+
+        return view('front.pages.dashboard.account_details', compact('page','seo_meta'));
+    }
+
+    public function manageSubscriptionAccountDetails(Request $request)
+    {
+        $page = $this->pageRepository->getPageBySlug('account-details/manage-subscription');
+        if (!empty($page)) {
+            $seo_meta = $this->getSeoMeta($page);
+        } else {
+            $seo_meta = [];
+        }
+
+        return view('front.pages.dashboard.account_details', compact('page','seo_meta'));
+    }
+
+    public function manageFiltersAccountDetails(Request $request)
+    {
+        $page = $this->pageRepository->getPageBySlug('account-details/manage-filters');
+        if (!empty($page)) {
+            $seo_meta = $this->getSeoMeta($page);
+        } else {
+            $seo_meta = [];
+        }
+
+        return view('front.pages.dashboard.account_details', compact('page','seo_meta'));
+    }
+
+    public function betTrackerNotificationAccountDetails(Request $request)
+    {
+        $page = $this->pageRepository->getPageBySlug('account-details/bet-tracker-notifications');
+        if (!empty($page)) {
+            $seo_meta = $this->getSeoMeta($page);
+        } else {
+            $seo_meta = [];
+        }
+
+        return view('front.pages.dashboard.account_details', compact('page','seo_meta'));
+    }
+
+    public function bankrollSettingsAccountDetails(Request $request)
+    {
+        $page = $this->pageRepository->getPageBySlug('account-details/bankroll-settings');
+        if (!empty($page)) {
+            $seo_meta = $this->getSeoMeta($page);
+        } else {
+            $seo_meta = [];
+        }
+
+        return view('front.pages.dashboard.account_details', compact('page','seo_meta'));
+    }
+
+    public function manageInjuryNotificationsAccountDetails(Request $request)
+    {
+        $page = $this->pageRepository->getPageBySlug('account-details/manage-injury-notifications');
+        if (!empty($page)) {
+            $seo_meta = $this->getSeoMeta($page);
+        } else {
+            $seo_meta = [];
+        }
+
+        return view('front.pages.dashboard.account_details', compact('page','seo_meta'));
+    }
+
+    public function bettingToolNotificationsAccountDetails(Request $request)
+    {
+        $page = $this->pageRepository->getPageBySlug('account-details/betting-tool-notifications');
+        if (!empty($page)) {
+            $seo_meta = $this->getSeoMeta($page);
+        } else {
+            $seo_meta = [];
+        }
+
+        return view('front.pages.dashboard.account_details', compact('page','seo_meta'));
+    }
 }

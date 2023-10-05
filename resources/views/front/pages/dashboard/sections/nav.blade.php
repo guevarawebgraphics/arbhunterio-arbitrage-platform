@@ -43,7 +43,16 @@
             </a>
         </li> --}}
         <li class="nav-item">
-            <a class="nav-link {{ request()->is('account-details/overview') ? 'active' : '' }}" href="{{ url('account-details/overview') }}">
+            <a class="nav-link {{ request()->is('account-details/overview') || 
+                                    request()->is('account-details/general-settings') || 
+                                    request()->is('account-details/general-settings')  || 
+                                    request()->is('account-details/manage-subscription') ||
+                                    request()->is('account-details/manage-filters') ||
+                                    request()->is('account-details/bet-tracker-notifications')||
+                                    request()->is('account-details/bankroll-settings') ||
+                                    request()->is('account-details/manage-injury-notifications') ||
+                                    request()->is('account-details/betting-tool-notifications')
+                                    ? 'active' : '' }}" href="{{ url('account-details/overview') }}">
                 <div class="row">
                     <div class="col-md-3">
                         <div class="icon">
