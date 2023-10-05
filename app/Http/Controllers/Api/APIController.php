@@ -113,11 +113,10 @@ class APIController extends Controller
         $response = $this->sportsBook($input);
         return $response;
     }
-
  
     public function getGameListing(Request $request) {
 
-        $input = ['start_date_after' => "2023-02-11T16:35:00-05:00"];
+        $input = ['start_date_before' => "2023-10-04T22:00:00-04:00"];
         $gameData = $this->games($input);
         $sportsBook = $this->defaultSporksBook();
 
@@ -126,7 +125,32 @@ class APIController extends Controller
         }
 
         $games = $gameData['data']['data'];
-        $games = array_slice($games, 0, 15); // Take only first 5 games
+        $games = array_slice($games, 0, 5); // Take only first 5 games
+
+        $gameArray = [];
+        foreach ($games as $game) {
+            if (isset($game['home_team_info']) && isset($game['away_team_info'])) {
+                $gameArray[] = $this->fetchOddsData($game, $sportsBook);
+            }
+        }
+
+       return $gameArray;
+    }
+
+    public function getGameListingV2(Request $request) {
+
+        // $input = ['start_date_before' => "2023-10-04T22:00:00-04:00"];
+        $input = [];
+        $input['start_date_before'] = null;
+        $gameData = $this->games($input);
+        $sportsBook = $this->defaultSporksBook();
+
+        if (!$gameData['status'] || empty($gameData['data'])) {
+            return [];
+        }
+
+        $games = $gameData['data']['data'];
+        $games = array_slice($games, 0, 5); // Take only first 5 games
 
         $gameArray = [];
         foreach ($games as $game) {
@@ -146,7 +170,7 @@ class APIController extends Controller
         ];
 
         $homeTeamOdds = $this->groupOddsByMarket($this->upcomingGameOdds($upcomingGameOddsInput));
-
+        
         $upcomingGameOddsInput['team_id'] = $game['away_team_info']['id'];
         $awayTeamOdds = $this->groupOddsByMarket($this->upcomingGameOdds($upcomingGameOddsInput));
 
@@ -162,6 +186,7 @@ class APIController extends Controller
 
     private function groupOddsByMarket($oddsData) {
         $grouped = [];
+
         foreach ($oddsData['data'][0]['odds'] ?? [] as $item) {
             $grouped[$item['market_name']][] = $item;
         }

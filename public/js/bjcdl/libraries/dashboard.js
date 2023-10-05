@@ -47,7 +47,7 @@ function getGames() {
         data: {
             _token: $('meta[name="csrf-token"]').attr('content'),
             is_live: false,
-            start_date_after: currentDateISO8601
+            start_date_before: currentDateISO8601
         },
         _success: function (response) {
             var html = '';

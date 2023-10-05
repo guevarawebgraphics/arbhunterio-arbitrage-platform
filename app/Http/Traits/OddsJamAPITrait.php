@@ -2,6 +2,8 @@
 
 namespace App\Http\Traits;
 
+use URL;
+
 /**
  * Class OddsJamAPITrait
  * @package App\Http\Traits
@@ -19,7 +21,7 @@ trait OddsJamAPITrait
                 "Content-Type: application/json"
             );
 
-            // $url =  "https://api-external.oddsjam.com/api/v2/games/?include_team_info=true&key=" . config('services.oddsjam.key') . ( $data['start_date_after'] ? '&start_date_after=' .$data['start_date_after'] : '' )  . $leagues;
+            // $url =  "https://api-external.oddsjam.com/api/v2/games/?include_team_info=true&key=" . config('services.oddsjam.key') . ( $data['start_date_before'] ? '&start_date_before=' .$data['start_date_before'] : '' )  . $leagues;
 
             $baseURL = "https://api-external.oddsjam.com/api/v2/games/";
 
@@ -28,12 +30,13 @@ trait OddsJamAPITrait
                 'key' => config('services.oddsjam.key')
             ];
 
-            if (isset($data['start_date_after']) && $data['start_date_after']) {
-                $queryParams['start_date_after'] = $data['start_date_after'];
-            }
+            // if (isset($data['start_date_before']) && $data['start_date_before']) {
+            //     $queryParams['start_date_before'] = $data['start_date_before'];
+            // }
 
             // Using Laravel's http_build_query function
             $url = $baseURL . '?' . http_build_query($queryParams);
+            \Log::info($url);
 
             curl_setopt($curl, CURLOPT_URL, $url);
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -144,59 +147,52 @@ trait OddsJamAPITrait
 
             $curl = curl_init();
 
-            $headers = array(
-                "Content-Type: application/json"
-            );
-
-            // $sportsbook ='';
-            // if(!empty($data)) {
-            //     foreach ($data['sportsbook'] as $value ) {
-            //         $sportsbook .= '&sportsbook=' . $value;
-            //     }
-            // }
-
             $baseURL = "https://api-external.oddsjam.com/api/v2/game-odds/";
 
             $queryParams = [
                 'key' => config('services.oddsjam.key'),
-                'game_id'  =>   $data['game_id'],
-                'team_id'   =>   $data['team_id']
+                'game_id' => $data['game_id'],
+                'team_id' => $data['team_id']
             ];
+                        
+            $sportsbook = $data['sportsbook'];
 
+            // Convert the non-sportsbook parameters to a query string
+            $queryString = http_build_query($queryParams);
 
-            // parse_str(ltrim($sportsbook, '&'), $sportsbookArray);
-
-            // Merge the two arrays
-            // $queryParams = array_merge($queryParams, $sportsbookArray);
-
-            // Using Laravel's http_build_query function
-            $url = $baseURL . '?' . http_build_query($queryParams);
-
-            curl_setopt($curl, CURLOPT_URL, $url );
-            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($curl, CURLOPT_POST, false);
-            curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-
-            $json = curl_exec($curl);
-
-            if ($json === false) {
-                $error = curl_error($curl);
-                $output = [
-                    'data'  =>  $error,
-                    'message'   =>  'Error.. Something went wrong',
-                    'status'    => false
-                ];
-                return $output;
-
+            // Manually append the sportsbook parameters to the query string
+            foreach ($sportsbook as $sportsbook) {
+                $queryString .= '&sportsbook=' . urlencode($sportsbook);
             }
+
+            $url = $baseURL . '?' . $queryString;
+
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => $url,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => 'GET',
+            ));
+
+
+            $response = curl_exec($curl);
 
             curl_close($curl);
 
+            $raw_data = json_decode($response,true);
 
-            $response = json_decode($json, true);
-           
-            $output = $response;
+            $output = [
+                'data'  =>  $raw_data['data'],
+                'message'   => "Successfully retrieved!",
+                'status'    => true
+            ];
 
+            // dd($output);
+            
         } catch ( \Exception $e ) {
 
             $output = [
@@ -689,8 +685,8 @@ trait OddsJamAPITrait
                 'game_id'   =>  $data['game_id']
             ];
 
-            if (isset($data['start_date_after']) && $data['start_date_after']) {
-                $queryParams['start_date_after'] = $data['start_date_after'];
+            if (isset($data['start_date_before']) && $data['start_date_before']) {
+                $queryParams['start_date_before'] = $data['start_date_before'];
             }
 
 
