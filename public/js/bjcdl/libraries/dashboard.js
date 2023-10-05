@@ -1,56 +1,21 @@
-function getBetPoints(game, marketLabel) {
-    let highestHomeBetPoints = null;
-    let lowestAwayBetPoints = null;
+// Utility function to get unique names
+function getUniqueNames(odds, market_name) {
+    var names = [];
+    var uniqueNames = [];
 
-    if (game && game.home_team_odds && game.home_team_odds[marketLabel]) {
-        highestHomeBetPoints = Math.max(...game.home_team_odds[marketLabel].map(odd => odd.bet_points || 0));
-    }
+    $.each(odds[market_name], function(_, odd) {
+        if (odd.selection_points !== null) {
+            names.push(odd.name);
+        }
+    });
 
-    if (game && game.away_team_odds && game.away_team_odds[marketLabel]) {
-        lowestAwayBetPoints = Math.min(...game.away_team_odds[marketLabel].map(odd => odd.bet_points || 0));
-    }
+    $.each(names, function(i, el){
+        if($.inArray(el, uniqueNames) === -1) uniqueNames.push(el);
+    });
 
-    return {
-        home: highestHomeBetPoints,
-        away: lowestAwayBetPoints
-    };
+    return uniqueNames;
 }
 
-function getSportsBookNames(game, marketLabel) {
-    let homeSportsBooks = [];
-    let awaySportsBooks = [];
-
-    if (game && game.home_team_odds && game.home_team_odds[marketLabel]) {
-        homeSportsBooks = [...new Set(game.home_team_odds[marketLabel].map(odd => odd.sports_book_name))].filter(Boolean);
-    }
-
-    if (game && game.away_team_odds && game.away_team_odds[marketLabel]) {
-        awaySportsBooks = [...new Set(game.away_team_odds[marketLabel].map(odd => odd.sports_book_name))].filter(Boolean);
-    }
-
-    return {
-        home: homeSportsBooks,
-        away: awaySportsBooks
-    };
-}
-
-function getBets(game, marketLabel) {
-    let homeBets = [];
-    let awayBets = [];
-
-    if (game && game.home_team_odds && game.home_team_odds[marketLabel]) {
-        homeBets = [...new Set(game.home_team_odds[marketLabel].map(odd => odd.name))].filter(Boolean);
-    }
-
-    if (game && game.away_team_odds && game.away_team_odds[marketLabel]) {
-        awayBets = [...new Set(game.away_team_odds[marketLabel].map(odd => odd.name))].filter(Boolean);
-    }
-
-    return {
-        home: homeBets,
-        away: awayBets
-    };
-}
 
 function getGames() {
 
@@ -59,10 +24,10 @@ function getGames() {
 
     console.log('Loading...');
     $.ajax({
-        // url: sBaseURI + '/api/game-listing',
-        url: sBaseURI + '/public/oddsjam.js',
+        url: sBaseURI + '/api/game-listing',
+        // url: sBaseURI + '/public/oddsjam.js',
         method: 'GET',
-        dataType: 'json',
+        // dataType: 'json',
         data: {
             _token: $('meta[name="csrf-token"]').attr('content'),
             is_live: false,
@@ -75,25 +40,47 @@ function getGames() {
             if (response.length > 0 ) {
                 $.each(response, function (index, value) {
 
-                    console.log(value);
-
                     if (value.markets.length > 0 ) {
                         $.each(value.markets, function (i, val) {
 
                             const formattedDate = moment(value.game.start_date).format('MMMM D, YYYY - h:mm A');
+                            
+                            // console.log(value.home_team_odds);
+                            // console.log(value.away_team_odds);
 
-                            const betPointsForMarket = getBetPoints(value, val.label);
-                            const highestBetPointForHome = betPointsForMarket.home;
-                            const lowestBetPointForAway = betPointsForMarket.away;
+                            var home_odds = value.home_team_odds;
+                            var away_odds = value.away_team_odds;
 
-                            const sportsBooks = getSportsBookNames(value, val.label);
-                            const homeSportsBooksList = sportsBooks.home.join(', ');
-                            const awaySportsBooksList = sportsBooks.away.join(', ');
+                            var market_name = val.label;
 
+                            var selectionPoints1 = $.map(home_odds[market_name], function(odd) {
+                                return odd.selection_points;
+                            });
+                            var selectionPoints2 = $.map(away_odds[market_name], function(odd) {
+                                return odd.selection_points;
+                            });
 
-                            const bets = getBets(value, val.label);
-                            const highTeamBets = bets.home;
-                            const lowestTeamBets = bets.away;
+                            var homeOddsBooksSelectionPoint = selectionPoints1.length ? Math.max.apply(null, selectionPoints1) : 0;
+                            var awayOddsBooksSelectionPoint = selectionPoints2.length ? Math.max.apply(null, selectionPoints2) : 0;
+
+                            // Retrieve sports_book_name based on matching selection points and ensure uniqueness using Set
+                            var homeOddsSportsBookNamesSet = new Set();
+                            $.each(home_odds[market_name], function(_, odd) {
+                                if (odd.selection_points === homeOddsBooksSelectionPoint) {
+                                    homeOddsSportsBookNamesSet.add(odd.sports_book_name);
+                                }
+                            });
+
+                            var awayOddsSportsBookNamesSet = new Set();
+                            $.each(away_odds[market_name], function(_, odd) {
+                                if (odd.selection_points === awayOddsBooksSelectionPoint) {
+                                    awayOddsSportsBookNamesSet.add(odd.sports_book_name);
+                                }
+                            });
+
+                            // Joining unique sports book names using comma and space
+                            var homeOddsSportsBookName = [...homeOddsSportsBookNamesSet].join(', ');
+                            var awayOddsSportsBookName = [...awayOddsSportsBookNamesSet].join(', ');
 
                             html += `<tr>
                                 <th scope="row">--</th>
@@ -107,12 +94,13 @@ function getGames() {
                                     <p>${val.label}</p>
                                 </td>ge
                                 <td>
-                                    <label><small>${highTeamBets}</small></label><br>
-                                    <label><small>${lowestTeamBets}</small></label>
+                                    
                                 </td>
                                  <td>
-                                    <label><small>${highestBetPointForHome} | ${homeSportsBooksList}</small></label><br>
-                                    <label><small>${lowestBetPointForAway} | ${awaySportsBooksList}</small></label>
+                                    <p>
+                                    <strong>${homeOddsBooksSelectionPoint}</strong> ${homeOddsSportsBookName}
+                                    <hr>
+                                    <strong>${awayOddsBooksSelectionPoint}</strong> ${awayOddsSportsBookName}</p>
                                 </td>
                                 <td>---</td>
                                 <td>---</td>

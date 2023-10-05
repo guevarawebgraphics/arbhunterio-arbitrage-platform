@@ -116,7 +116,19 @@ class APIController extends Controller
  
     public function getGameListing(Request $request) {
 
-        $input = ['start_date_before' => "2023-10-04T22:00:00-04:00"];
+        $input = ['start_date_before' => "2023-10-05T22:00:00-04:00"];
+
+        // Get the current date without the time
+        $currentDate = new \DateTime();
+        $currentDateString = $currentDate->format('Y-m-d');
+
+        // Extract the time and timezone from the input string
+        $timeParts = explode('T', $input['start_date_before'])[1];
+
+        // Combine the current date with the extracted time
+        $input['start_date_before'] = $currentDateString . 'T' . $timeParts;
+
+
         $gameData = $this->games($input);
         $sportsBook = $this->defaultSporksBook();
 
@@ -125,32 +137,7 @@ class APIController extends Controller
         }
 
         $games = $gameData['data']['data'];
-        $games = array_slice($games, 0, 5); // Take only first 5 games
-
-        $gameArray = [];
-        foreach ($games as $game) {
-            if (isset($game['home_team_info']) && isset($game['away_team_info'])) {
-                $gameArray[] = $this->fetchOddsData($game, $sportsBook);
-            }
-        }
-
-       return $gameArray;
-    }
-
-    public function getGameListingV2(Request $request) {
-
-        // $input = ['start_date_before' => "2023-10-04T22:00:00-04:00"];
-        $input = [];
-        $input['start_date_before'] = null;
-        $gameData = $this->games($input);
-        $sportsBook = $this->defaultSporksBook();
-
-        if (!$gameData['status'] || empty($gameData['data'])) {
-            return [];
-        }
-
-        $games = $gameData['data']['data'];
-        $games = array_slice($games, 0, 20); // Take only first 5 games
+        $games = array_slice($games, 0, 15); // Take only first 5 games
 
         $gameArray = [];
         foreach ($games as $game) {
@@ -172,6 +159,7 @@ class APIController extends Controller
         $homeTeamOdds = $this->groupOddsByMarket($this->upcomingGameOdds($upcomingGameOddsInput));
 
         $upcomingGameOddsInput['team_id'] = $game['away_team_info']['id'];
+
         $awayTeamOdds = $this->groupOddsByMarket($this->upcomingGameOdds($upcomingGameOddsInput));
 
         $marketName = $this->markets($upcomingGameOddsInput);

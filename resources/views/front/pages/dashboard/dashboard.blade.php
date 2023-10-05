@@ -17,7 +17,7 @@
                                     <h2>Arbitrage Bets</h2>
                                     <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
                                     <table class="table">
-                                        <thead>
+                                        <thead class="thead-dark">
                                             <tr>
                                                 <th scope="col">Percent</th>
                                                 <th scope="col">Event Date</th>
@@ -32,8 +32,7 @@
                                         </thead>
                                         <tbody id="arbitrage_body">
 
-                                            
-
+                                        
                                         </tbody>
                                     </table>
                                 </div>

@@ -30,9 +30,9 @@ trait OddsJamAPITrait
                 'key' => config('services.oddsjam.key')
             ];
 
-            // if (isset($data['start_date_before']) && $data['start_date_before']) {
-            //     $queryParams['start_date_before'] = $data['start_date_before'];
-            // }
+            if (isset($data['start_date_before']) && $data['start_date_before']) {
+                $queryParams['start_date_before'] = $data['start_date_before'];
+            }
 
             // Using Laravel's http_build_query function
             $url = $baseURL . '?' . http_build_query($queryParams);
