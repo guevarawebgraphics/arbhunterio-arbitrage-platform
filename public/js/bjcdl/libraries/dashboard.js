@@ -15,6 +15,7 @@ function getBetPoints(game, marketLabel) {
         away: lowestAwayBetPoints
     };
 }
+
 function getSportsBookNames(game, marketLabel) {
     let homeSportsBooks = [];
     let awaySportsBooks = [];
@@ -32,6 +33,7 @@ function getSportsBookNames(game, marketLabel) {
         away: awaySportsBooks
     };
 }
+
 function getBets(game, marketLabel) {
     let homeBets = [];
     let awayBets = [];
@@ -50,9 +52,6 @@ function getBets(game, marketLabel) {
     };
 }
 
-
-
-
 function getGames() {
 
     var currentDateISO8601 = moment().format('YYYY-MM-DDTHH:mm:ss');
@@ -70,12 +69,17 @@ function getGames() {
             start_date_before: currentDateISO8601
         },
         _success: function (response) {
+
             var html = '';
             
             if (response.length > 0 ) {
                 $.each(response, function (index, value) {
+
+                    console.log(value);
+
                     if (value.markets.length > 0 ) {
                         $.each(value.markets, function (i, val) {
+
                             const formattedDate = moment(value.game.start_date).format('MMMM D, YYYY - h:mm A');
 
                             const betPointsForMarket = getBetPoints(value, val.label);
@@ -116,6 +120,7 @@ function getGames() {
                                 
                                 </td>
                             </tr>`;
+
                         });
                     }
                 });
