@@ -15,7 +15,7 @@
                                     @include('front.pages.dashboard.sections.profile-nav')
                                 </div>
                                 <div class="col-md-9">
-                                    asd
+                                    @include('front.pages.dashboard.profile.' . $view)
                                 </div>
                             </div>
                         </div>

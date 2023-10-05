@@ -93,8 +93,9 @@ class UserController extends Controller
         } else {
             $seo_meta = [];
         }
+        $view = 'overview';
 
-        return view('front.pages.dashboard.account_details', compact('page','seo_meta'));
+        return view('front.pages.dashboard.account_details', compact('page','seo_meta', 'view'));
     }
 
     public function generalSettingsAccountDetails(Request $request)
@@ -105,8 +106,9 @@ class UserController extends Controller
         } else {
             $seo_meta = [];
         }
+        $view = 'general-settings';
 
-        return view('front.pages.dashboard.account_details', compact('page','seo_meta'));
+        return view('front.pages.dashboard.account_details', compact('page','seo_meta', 'view'));
     }
 
     public function manageSubscriptionAccountDetails(Request $request)
@@ -117,8 +119,9 @@ class UserController extends Controller
         } else {
             $seo_meta = [];
         }
+        $view = 'manage-subscription';
 
-        return view('front.pages.dashboard.account_details', compact('page','seo_meta'));
+        return view('front.pages.dashboard.account_details', compact('page','seo_meta', 'view'));
     }
 
     public function manageFiltersAccountDetails(Request $request)
@@ -129,8 +132,9 @@ class UserController extends Controller
         } else {
             $seo_meta = [];
         }
+        $view = 'manage-filters';
 
-        return view('front.pages.dashboard.account_details', compact('page','seo_meta'));
+        return view('front.pages.dashboard.account_details', compact('page','seo_meta', 'view'));
     }
 
     public function betTrackerNotificationAccountDetails(Request $request)
@@ -141,8 +145,9 @@ class UserController extends Controller
         } else {
             $seo_meta = [];
         }
+        $view = 'bet-tracker-notifications';
 
-        return view('front.pages.dashboard.account_details', compact('page','seo_meta'));
+        return view('front.pages.dashboard.account_details', compact('page','seo_meta', 'view'));
     }
 
     public function bankrollSettingsAccountDetails(Request $request)
@@ -153,8 +158,9 @@ class UserController extends Controller
         } else {
             $seo_meta = [];
         }
+        $view = 'bankroll-settings';
 
-        return view('front.pages.dashboard.account_details', compact('page','seo_meta'));
+        return view('front.pages.dashboard.account_details', compact('page','seo_meta', 'view'));
     }
 
     public function manageInjuryNotificationsAccountDetails(Request $request)
@@ -165,8 +171,9 @@ class UserController extends Controller
         } else {
             $seo_meta = [];
         }
+        $view = 'manage-injury-notifications';
 
-        return view('front.pages.dashboard.account_details', compact('page','seo_meta'));
+        return view('front.pages.dashboard.account_details', compact('page','seo_meta', 'view'));
     }
 
     public function bettingToolNotificationsAccountDetails(Request $request)
@@ -177,7 +184,8 @@ class UserController extends Controller
         } else {
             $seo_meta = [];
         }
+        $view = 'betting-tool-notifications';
 
-        return view('front.pages.dashboard.account_details', compact('page','seo_meta'));
+        return view('front.pages.dashboard.account_details', compact('page','seo_meta', 'view'));
     }
 }
