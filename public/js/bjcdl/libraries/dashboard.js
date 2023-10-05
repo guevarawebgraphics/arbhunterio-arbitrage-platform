@@ -24,10 +24,10 @@ function getGames() {
 
     console.log('Loading...');
     $.ajax({
-        // url: sBaseURI + '/api/game-listing',
-        url: sBaseURI + '/public/oddsjam.js',
+        url: sBaseURI + '/api/game-listing',
+        // url: sBaseURI + '/public/oddsjam.js',
         method: 'GET',
-        dataType: 'json',
+        // dataType: 'json',
         data: {
             _token: $('meta[name="csrf-token"]').attr('content'),
             is_live: false,
