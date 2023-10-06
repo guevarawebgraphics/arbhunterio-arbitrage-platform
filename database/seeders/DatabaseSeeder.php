@@ -37,5 +37,6 @@ class DatabaseSeeder extends Seeder
         $this->call(ProductCategorySeeder::class);
         $this->call(CouponCodesTableSeeder::class);
         $this->call(OrderStatusTableSeeder::class);
+        $this->call(OddsJamSportsBookSeeder::class);
     }
 }

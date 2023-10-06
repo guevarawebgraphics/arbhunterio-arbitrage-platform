@@ -146,9 +146,17 @@ class APIController extends Controller
             }
         }
         
-        OddsJamGameEventCronJob::where('id', 1 )->update([
-        'game_event_json'   =>    json_encode($gameArray)
-        ]);
+        $odds_cron = OddsJamGameEventCronJob::first();
+        if (!empty($odds_cron)) {
+            OddsJamGameEventCronJob::where('id', 1 )->update([
+                'game_event_json'   =>    json_encode($gameArray)
+            ]);
+        } else {
+            OddsJamGameEventCronJob::create([
+                'game_event_json'   =>    json_encode($gameArray)
+            ]);
+        }
+        
 
 
        return $gameArray;
