@@ -16,7 +16,7 @@ class CreateOddsJamGameEventCronJobsTable extends Migration
         Schema::create('oddsjamgameeventcronjobs', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name')->nullable();
-            $table->text('game_event_json')->nullable();
+            $table->json('game_event_json')->nullable();
             $table->tinyInteger('is_active')->default(1);
             $table->timestamps();
             $table->softDeletes();

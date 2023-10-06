@@ -36,11 +36,4 @@ class OddsJamGameEventAPICron extends Command
         echo "Successfully retrieved!";
     }
 
-    public function performAction( $data ) {
-
-       
-
-
-    }
-
 }

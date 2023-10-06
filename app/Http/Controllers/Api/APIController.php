@@ -5,15 +5,15 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Traits\OddsJamAPITrait;
+use App\Services\OddsJamGameEventCronJobs\OddsJamGameEventCronJob;
 
 class APIController extends Controller
 {
     use OddsJamAPITrait;
 
     public function getGames(Request $request) {
-        $input = $request->all();
-        $response = $this->games($input);
-        return $response;
+        $data = OddsJamGameEventCronJob::first();
+        return json_decode($data->game_event_json);
     }
 
     public function getLeagues(Request $request) {
@@ -145,6 +145,11 @@ class APIController extends Controller
                 $gameArray[] = $this->fetchOddsData($game, $sportsBook);
             }
         }
+        
+        OddsJamGameEventCronJob::where('id', 1 )->update([
+        'game_event_json'   =>    json_encode($gameArray)
+        ]);
+
 
        return $gameArray;
     }
