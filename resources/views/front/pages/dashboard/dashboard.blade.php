@@ -19,6 +19,12 @@
                                     <table class="table">
                                         <thead class="thead-dark">
                                             <tr>
+                                                <th scope="col">
+
+                                                </th>
+                                                <th scope="col">
+                                                    
+                                                </th>
                                                 <th scope="col">Percent</th>
                                                 <th scope="col">Event Date</th>
                                                 <th scope="col">Event</th>

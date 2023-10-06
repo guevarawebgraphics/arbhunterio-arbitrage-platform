@@ -24,10 +24,10 @@ function getGames() {
 
     console.log('Loading...');
     $.ajax({
-        url: sBaseURI + '/api/game-listing',
-        // url: sBaseURI + '/public/oddsjam.js',
+        // url: sBaseURI + '/api/game-listing',
+        url: sBaseURI + '/public/oddsjam.js',
         method: 'GET',
-        // dataType: 'json',
+        dataType: 'json',
         data: {
             _token: $('meta[name="csrf-token"]').attr('content'),
             is_live: false,
@@ -43,7 +43,9 @@ function getGames() {
                     if (value.markets.length > 0 ) {
                         $.each(value.markets, function (i, val) {
 
-                            const formattedDate = moment(value.game.start_date).format('MMMM D, YYYY - h:mm A');
+                            // const formattedDate = moment(value.game.start_date).format('MMMM D, YYYY - h:mm A');
+                            const formattedDate = moment(value.game.start_date).format('ddd, MMM D [at] h:mm A');
+
                             
                             // console.log(value.home_team_odds);
                             // console.log(value.away_team_odds);
@@ -101,7 +103,19 @@ function getGames() {
                             });
 
                             html += `<tr>
-                                <th scope="row">--</th>
+                              <th scope="row">
+                                    <a href="javascript:void(0);" class="btn--calculate-odds">
+                                       <i class="bi bi-calculator-fill"></i>
+                                    </a>
+                                </th>
+                                 <th scope="row">
+                                    <a href="javascript:void(0);" class="btn--bet-tracker">
+                                       <i class="bi bi-plus-circle-fill"></i>
+                                    </a>
+                                </th>
+                                <th scope="row">
+                                    5%
+                                </th>
                                 <td>${formattedDate}</td>
                                 <td>
                                     <p>
