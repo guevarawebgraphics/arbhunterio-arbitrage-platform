@@ -2,6 +2,7 @@
 
 namespace App\Http\Traits;
 
+use App\Services\SportsBooks\SportsBook;
 use URL;
 
 /**
@@ -802,48 +803,11 @@ trait OddsJamAPITrait
     }
 
     public function defaultSporksBook() {
-        $data = [
-                '10bet',
-                '888sport',
-                'bet365',
-                'BET99',
-                'Betano',
-                'Betcris',
-                'BetDSI',
-                'BetNow',
-                'BetOnline',
-                'BetonUSA',
-                'Betsafe',
-                'Betsson',
-                'BetUS',
-                'BetVictor',
-                'Betway',
-                'BookMaker',
-                'bwin',
-                'Casumo',
-                'ComeOn!',
-                'Coolbet',
-                'Everygame',
-                'Jazz Sports',
-                'LeoVegas',
-                'Looselines',
-                'LowVig',
-                'Mise-o-jeu',
-                'MyBookie',
-                'Nitrogen',
-                'partypoker',
-                'Pinnacle',
-                'PowerPlay',
-                'Royal Panda',
-                'Sportsbetting.ag',
-                'Sports Interaction',
-                'Stake',
-                'Suprabets',
-                'TonyBet',
-                'William Hill',
-                'Xbet'
-            ];
-
+        $query = SportsBook::orderBy('id','ASC')->get();
+        $data = [];
+        foreach($query ?? [] as $field ) {
+            array_push($data, $field->name);
+        }
         return $data;
     }
 

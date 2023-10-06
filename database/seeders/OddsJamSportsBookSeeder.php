@@ -15,7 +15,48 @@ class OddsJamSportsBookSeeder extends Seeder
      */
     public function run()
     {
-        $sports_book = $this->defaultSporksBook();
+        $sports_book = [
+            '10bet',
+            '888sport',
+            'bet365',
+            'BET99',
+            'Betano',
+            'Betcris',
+            'BetDSI',
+            'BetNow',
+            'BetOnline',
+            'BetonUSA',
+            'Betsafe',
+            'Betsson',
+            'BetUS',
+            'BetVictor',
+            'Betway',
+            'BookMaker',
+            'bwin',
+            'Casumo',
+            'ComeOn!',
+            'Coolbet',
+            'Everygame',
+            'Jazz Sports',
+            'LeoVegas',
+            'Looselines',
+            'LowVig',
+            'Mise-o-jeu',
+            'MyBookie',
+            'Nitrogen',
+            'partypoker',
+            'Pinnacle',
+            'PowerPlay',
+            'Royal Panda',
+            'Sportsbetting.ag',
+            'Sports Interaction',
+            'Stake',
+            'Suprabets',
+            'TonyBet',
+            'William Hill',
+            'Xbet'
+        ];
+
 
         \DB::table('sportsbooks')->delete();
         
