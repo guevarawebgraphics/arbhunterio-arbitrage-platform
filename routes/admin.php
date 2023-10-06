@@ -253,3 +253,16 @@ Route::delete('/taxes/{id}/delete',[
 ]);
 Route::get('taxes/{id}/restore', 'Admin\TaxController@restore')->name('admin.taxes.restore');
 /* taxes */
+
+/* sportsbooks */
+Route::resource('/sportsbooks', 'Admin\SportsBookController', [
+    'as' => 'admin'
+]);
+
+Route::delete('/sportsbooks/{id}/delete', [
+    'as' => 'admin.sportsbooks.delete',
+    'uses' => '\App\Http\Controllers\Admin\SportsBookController@destroy'
+]);
+
+Route::get('sportsbooks/{id}/restore', 'Admin\SportsBookController@restore')->name('admin.sportsbooks.restore');
+/* sportsbooks */

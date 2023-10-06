@@ -33,7 +33,41 @@ class OddsJamGameEventAPICron extends Command
      */
     public function handle()
     {   
+        $headers = ["Content-Type: application/json"];
+        $baseURL = url('api/game-listing');
+        $queryParams = [];
+
+        $url = $baseURL . '?' . http_build_query($queryParams);
+        
+        $response = $this->makeAPIRequest($url, $headers);
+        \Log::info('Cron: ' . json_encode($response) );
+
         echo "Successfully retrieved!";
+    }
+
+    private function makeAPIRequest($url, $headers) {
+        try {
+            $curl = curl_init();
+            curl_setopt($curl, CURLOPT_URL, $url);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($curl, CURLOPT_POST, false);
+            curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+            $json = curl_exec($curl);
+
+            if ($json === false) {
+                throw new \Exception(curl_error($curl));
+            }
+
+            curl_close($curl);
+            return json_decode($json, true);
+        } catch (\Exception $e) {
+            \Log::error($e->getMessage());
+            return [
+                'data' => NULL,
+                'message' => $e->getMessage(),
+                'status' => false
+            ];
+        }
     }
 
 }
