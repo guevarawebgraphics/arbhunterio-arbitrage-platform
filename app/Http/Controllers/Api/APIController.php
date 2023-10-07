@@ -137,7 +137,7 @@ class APIController extends Controller
         }
 
         $games = $gameData['data']['data'];
-        $games = array_slice($games, 0, 5); // Take only first 5 games
+        $games = array_slice($games, 0, 15); // Take only first 5 games
 
         $gameArray = [];
         foreach ($games as $game) {
