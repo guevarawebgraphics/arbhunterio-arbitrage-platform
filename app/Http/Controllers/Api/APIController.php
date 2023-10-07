@@ -137,7 +137,7 @@ class APIController extends Controller
         }
 
         $games = $gameData['data']['data'];
-        $games = array_slice($games, 0, 50); // Take only first 5 games
+        $games = array_slice($games, 0, 5); // Take only first 5 games
 
         $gameArray = [];
         foreach ($games as $game) {
@@ -148,9 +148,9 @@ class APIController extends Controller
         
         // $odds_cron = OddsJamGameEventCronJob::first();
         // if (!empty($odds_cron)) {
-            OddsJamGameEventCronJob::where('id', 1 )->update([
-                'game_event_json'   =>    json_encode($gameArray)
-            ]);
+        \DB::table('oddsjamgameeventcronjobs')->where('id', 1 )->update([
+            'game_event_json'   =>    json_encode($gameArray)
+        ]);
         // } else {
         //     OddsJamGameEventCronJob::create([
         //         'game_event_json'   =>    json_encode($gameArray)
