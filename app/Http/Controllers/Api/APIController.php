@@ -6,6 +6,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Traits\OddsJamAPITrait;
 use App\Services\OddsJamGameEventCronJobs\OddsJamGameEventCronJob;
+use Illuminate\Support\Facades\Storage;
+
+use DateTime;
+use DateTimeZone;
 
 class APIController extends Controller
 {
@@ -89,6 +93,10 @@ class APIController extends Controller
     public function getMarketCategories(Request $request) {
 
         $input = $request->all();
+        $input['sports'] = [];
+        foreach( getSports() ?? [] as $field) {
+            array_push( $input['sports'], $field );
+        }
         $response = $this->marketCategories($input);
         return $response;
 
@@ -145,21 +153,63 @@ class APIController extends Controller
                 $gameArray[] = $this->fetchOddsData($game, $sportsBook);
             }
         }
-        
-        // $odds_cron = OddsJamGameEventCronJob::first();
-        // if (!empty($odds_cron)) {
+
         \DB::table('oddsjamgameeventcronjobs')->where('id', 1 )->update([
             'game_event_json'   =>    json_encode($gameArray)
         ]);
-        // } else {
-        //     OddsJamGameEventCronJob::create([
-        //         'game_event_json'   =>    json_encode($gameArray)
-        //     ]);
-        // }
         
-
-
        return $gameArray;
+    }
+
+    public function getGameListingV2(Request $request) {
+        $input = $request->all();
+
+        $gameData = $this->games($input);
+        $sportsBook = $this->defaultSporksBook();
+
+        if (!$gameData['status'] || empty($gameData['data'])) {
+            return [];
+        }
+
+        $games = $gameData['data']['data'];
+        $games = array_slice($games, 0, 50); // Take only first 5 games
+
+        $gameArray = [];
+        foreach ($games as $game) {
+            if (isset($game['home_team_info']) && isset($game['away_team_info'])) {
+                $gameArray[] = $this->fetchOddsData($game, $sportsBook);
+            }
+        }
+ 
+        //  ------------------------------------------------------------------ //
+
+        // Define the path to the file in the public directory
+        $file = public_path('game.json');
+
+        // Read the existing content
+        $existingData = file_get_contents($file);
+
+        // Decode the JSON data to an array
+        $gamesExists = json_decode($existingData, true);
+
+        // If the file was empty or not a valid JSON, initialize an empty array
+        if (!is_array($gamesExists)) {
+            $gamesExists = [];
+        }
+
+        // Your new game data
+        $newGame = $gameArray;
+
+        // Append the new game to the games array
+        $gamesExists[] = $newGame;  // This line ensures the new game is added as an object, not wrapped inside another array
+
+        // Convert the updated games array back to JSON
+        $jsonData = json_encode($gamesExists, JSON_PRETTY_PRINT);
+
+        // Save the updated JSON data back to the file
+        file_put_contents($file, $jsonData);
+
+        return $gameArray;
     }
 
     private function fetchOddsData($game, $sportsBook) {
@@ -193,6 +243,4 @@ class APIController extends Controller
         }
         return $grouped;
     }
-
-
 }

@@ -129,3 +129,30 @@ function menu() {
 function dropdown($menu) {
     return \App\Services\MenuDropdowns\MenuDropdown::where('is_active', 1)->where('menu_id', $menu->id)->orderBy('order_number')->get();
 }
+
+
+function getSportsBook() {
+    return \App\Services\SportsBooks\SportsBook::where('is_active', 1)->whereNull('deleted_at')->orderBy('id','ASC')->get();
+}
+
+
+function getSports() {
+    $data = [
+        'football',
+        'basketball',
+        'baseball',
+        'mma',
+        'boxing',
+        'hockey',
+        'soccer',
+        'tennis',
+        'golf',
+        'motorsports',
+        'esports',
+        'wrestling',
+        'aussie-rules',
+        'rugby'
+    ];
+
+    return $data;
+}

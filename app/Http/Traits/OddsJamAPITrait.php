@@ -25,6 +25,11 @@ trait OddsJamAPITrait
             $queryParams['start_date_before'] = $data['start_date_before'];
         }
 
+        if (isset($data['start_date_after']) && $data['start_date_after']) {
+            $queryParams['start_date_after'] = $data['start_date_after'];
+        }
+
+
         $url = $baseURL . '?' . http_build_query($queryParams);
 
         $response = $this->makeAPIRequest($url, $headers);
@@ -547,14 +552,14 @@ trait OddsJamAPITrait
 
             $sports ='';
             if(!empty($data)) {
-                foreach ($data['sports'] as $sport ) {
+                foreach ($data['sports'] ?? [] as $sport ) {
                     $sports .= '&sport=' . $sport;
                 }
             }
 
             $leagues ='';
             if(!empty($data)) {
-                foreach ($data['leagues'] as $league ) {
+                foreach ($data['leagues'] ?? [] as $league ) {
                     $leagues .= '&league=' . $league;
                 }
             }

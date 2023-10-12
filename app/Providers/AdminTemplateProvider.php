@@ -55,141 +55,141 @@ class AdminTemplateProvider extends ServiceProvider
 
         if (auth()->check()) {
 
-            if ($this->hasCrudAccessFor('Page')) {
-                array_push($navigation, [
-                    'name' => 'Page Management',
-                    'url' => url('admin/pages'),
-                    'icon' => 'subtitles'
-                ]);
-            }
+            // if ($this->hasCrudAccessFor('Page')) {
+            //     array_push($navigation, [
+            //         'name' => 'Page Management',
+            //         'url' => url('admin/pages'),
+            //         'icon' => 'subtitles'
+            //     ]);
+            // }
 
-            if ($this->hasCrudAccessFor('Menu') || $this->hasCrudAccessFor('Menu Dropdown')) {
-                $menu_management = [];
+            // if ($this->hasCrudAccessFor('Menu') || $this->hasCrudAccessFor('Menu Dropdown')) {
+            //     $menu_management = [];
 
-                if ($this->hasCrudAccessFor('Menu')) {
-                    array_push($menu_management, [
-                        'name' => 'Menu',
-                        'url' => url('admin/menu'),
-                    ]);
-                }
+            //     if ($this->hasCrudAccessFor('Menu')) {
+            //         array_push($menu_management, [
+            //             'name' => 'Menu',
+            //             'url' => url('admin/menu'),
+            //         ]);
+            //     }
 
-                if ($this->hasCrudAccessFor('Menu Dropdown')) {
-                    array_push($menu_management, [
-                        'name' => 'Menu Dropdown',
-                        'url' => url('admin/dropdown_menu'),
-                    ]);
-                }
+            //     if ($this->hasCrudAccessFor('Menu Dropdown')) {
+            //         array_push($menu_management, [
+            //             'name' => 'Menu Dropdown',
+            //             'url' => url('admin/dropdown_menu'),
+            //         ]);
+            //     }
 
-                array_push($navigation, [
-                    'name' => 'Menu Management',
-                    'icon' => 'menu',
-                    'sub' => $menu_management
-                ]);
-            }
+            //     array_push($navigation, [
+            //         'name' => 'Menu Management',
+            //         'icon' => 'menu',
+            //         'sub' => $menu_management
+            //     ]);
+            // }
 
-            if ($this->hasCrudAccessFor('Gallery Group') || $this->hasCrudAccessFor('Gallery Image')) {
-                $gallery_tab = [];
+            // if ($this->hasCrudAccessFor('Gallery Group') || $this->hasCrudAccessFor('Gallery Image')) {
+            //     $gallery_tab = [];
 
-                if ($this->hasCrudAccessFor('Gallery Group')) {
-                    array_push($gallery_tab, [
-                        'name' => 'Gallery Groups',
-                        'url' => url('admin/gallery_groups'),
-                    ]);
-                }
+            //     if ($this->hasCrudAccessFor('Gallery Group')) {
+            //         array_push($gallery_tab, [
+            //             'name' => 'Gallery Groups',
+            //             'url' => url('admin/gallery_groups'),
+            //         ]);
+            //     }
 
-                if ($this->hasCrudAccessFor('Gallery Image')) {
-                    array_push($gallery_tab, [
-                        'name' => 'Gallery Images',
-                        'url' => url('admin/gallery_images'),
-                    ]);
-                }
+            //     if ($this->hasCrudAccessFor('Gallery Image')) {
+            //         array_push($gallery_tab, [
+            //             'name' => 'Gallery Images',
+            //             'url' => url('admin/gallery_images'),
+            //         ]);
+            //     }
 
-                array_push($navigation, [
-                    'name' => 'Gallery Management',
-                    'icon' => 'collections',
-                    'sub' => $gallery_tab
-                ]);
-            }
+            //     array_push($navigation, [
+            //         'name' => 'Gallery Management',
+            //         'icon' => 'collections',
+            //         'sub' => $gallery_tab
+            //     ]);
+            // }
 
-            if ($this->hasCrudAccessFor('Blog Category') || $this->hasCrudAccessFor('Blog')) {
-                $gallery_tab = [];
+            // if ($this->hasCrudAccessFor('Blog Category') || $this->hasCrudAccessFor('Blog')) {
+            //     $gallery_tab = [];
 
-                if ($this->hasCrudAccessFor('Blog Category')) {
-                    array_push($gallery_tab, [
-                        'name' => 'Blog Categories',
-                        'url' => url('admin/blog_categories'),
-                    ]);
-                }
+            //     if ($this->hasCrudAccessFor('Blog Category')) {
+            //         array_push($gallery_tab, [
+            //             'name' => 'Blog Categories',
+            //             'url' => url('admin/blog_categories'),
+            //         ]);
+            //     }
 
-                if ($this->hasCrudAccessFor('Blog')) {
-                    array_push($gallery_tab, [
-                        'name' => 'Blogs',
-                        'url' => url('admin/blogs'),
-                    ]);
-                }
+            //     if ($this->hasCrudAccessFor('Blog')) {
+            //         array_push($gallery_tab, [
+            //             'name' => 'Blogs',
+            //             'url' => url('admin/blogs'),
+            //         ]);
+            //     }
 
-                array_push($navigation, [
-                    'name' => 'Blog Posting',
-                    'icon' => 'comment',
-                    'sub' => $gallery_tab
-                ]);
-            }
+            //     array_push($navigation, [
+            //         'name' => 'Blog Posting',
+            //         'icon' => 'comment',
+            //         'sub' => $gallery_tab
+            //     ]);
+            // }
 
-            if ($this->hasCrudAccessFor('Product Category') || $this->hasCrudAccessFor('Product')) {
-                $products_tab = [];
+            // if ($this->hasCrudAccessFor('Product Category') || $this->hasCrudAccessFor('Product')) {
+            //     $products_tab = [];
 
-                if ($this->hasCrudAccessFor('Product Category')) {
-                    array_push($products_tab, [
-                        'name' => 'Product Categories',
-                        'url' => url('admin/product_categories'),
-                    ]);
-                }
+            //     if ($this->hasCrudAccessFor('Product Category')) {
+            //         array_push($products_tab, [
+            //             'name' => 'Product Categories',
+            //             'url' => url('admin/product_categories'),
+            //         ]);
+            //     }
 
-                if ($this->hasCrudAccessFor('Product')) {
-                    array_push($products_tab, [
-                        'name' => 'Products',
-                        'url' => url('admin/products'),
-                    ]);
-                }
+            //     if ($this->hasCrudAccessFor('Product')) {
+            //         array_push($products_tab, [
+            //             'name' => 'Products',
+            //             'url' => url('admin/products'),
+            //         ]);
+            //     }
 
-                array_push($navigation, [
-                    'name' => 'Products',
-                    'icon' => 'shopping_basket',
-                    'sub' => $products_tab
-                ]);
-            }
+            //     array_push($navigation, [
+            //         'name' => 'Products',
+            //         'icon' => 'shopping_basket',
+            //         'sub' => $products_tab
+            //     ]);
+            // }
 
-            if ($this->hasCrudAccessFor('Coupon Code')) {
-                array_push($navigation, [
-                    'name' => 'Coupon Codes',
-                    'url' => url('admin/coupon_codes'),
-                    'icon' => 'loyalty'
-                ]);
-            }
+            // if ($this->hasCrudAccessFor('Coupon Code')) {
+            //     array_push($navigation, [
+            //         'name' => 'Coupon Codes',
+            //         'url' => url('admin/coupon_codes'),
+            //         'icon' => 'loyalty'
+            //     ]);
+            // }
 
-            if ($this->hasCrudAccessFor('Tax')) {
-                array_push($navigation, [
-                    'name' => 'Taxes & Shipping',
-                    'url' => url('admin/taxes'),
-                    'icon' => 'attach_money'
-                ]);
-            }
+            // if ($this->hasCrudAccessFor('Tax')) {
+            //     array_push($navigation, [
+            //         'name' => 'Taxes & Shipping',
+            //         'url' => url('admin/taxes'),
+            //         'icon' => 'attach_money'
+            //     ]);
+            // }
 
-            if ($this->hasCrudAccessFor('Contact')) {
-                array_push($navigation, [
-                    'name' => 'Contacts',
-                    'url' => url('admin/contacts'),
-                    'icon' => 'phone'
-                ]);
-            }
+            // if ($this->hasCrudAccessFor('Contact')) {
+            //     array_push($navigation, [
+            //         'name' => 'Contacts',
+            //         'url' => url('admin/contacts'),
+            //         'icon' => 'phone'
+            //     ]);
+            // }
 
-            if ($this->hasCrudAccessFor('Newsletter')) {
-                array_push($navigation, [
-                    'name' => 'Newsletter Subscribers',
-                    'url' => url('admin/newsletters'),
-                    'icon' => 'email'
-                ]);
-            }
+            // if ($this->hasCrudAccessFor('Newsletter')) {
+            //     array_push($navigation, [
+            //         'name' => 'Newsletter Subscribers',
+            //         'url' => url('admin/newsletters'),
+            //         'icon' => 'email'
+            //     ]);
+            // }
             
             if ($this->hasCrudAccessFor('User') || $this->hasCrudAccessFor('Permission') || $this->hasCrudAccessFor('Permission Group') || $this->hasCrudAccessFor('Role')) {
                 $user_management_tab = [];
