@@ -1,5 +1,7 @@
 <?php
+
 namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 
 class PermissionGroupsTableSeeder extends Seeder
@@ -65,6 +67,7 @@ class PermissionGroupsTableSeeder extends Seeder
                 'updated_at' => '2021-01-01 00:00:00',
                 'deleted_at' => NULL,
             ),
+            6 => 
             array (
                 'id' => 7,
                 'name' => 'Pages',
@@ -72,6 +75,7 @@ class PermissionGroupsTableSeeder extends Seeder
                 'updated_at' => '2021-01-01 00:00:00',
                 'deleted_at' => NULL,
             ),
+            7 => 
             array (
                 'id' => 8,
                 'name' => 'Gallery Groups',
@@ -79,6 +83,7 @@ class PermissionGroupsTableSeeder extends Seeder
                 'updated_at' => '2021-01-01 00:00:00',
                 'deleted_at' => NULL,
             ),
+            8 => 
             array (
                 'id' => 9,
                 'name' => 'Gallery Images',
@@ -86,6 +91,7 @@ class PermissionGroupsTableSeeder extends Seeder
                 'updated_at' => '2021-01-01 00:00:00',
                 'deleted_at' => NULL,
             ),
+            9 => 
             array (
                 'id' => 10,
                 'name' => 'Blog Categories',
@@ -93,6 +99,7 @@ class PermissionGroupsTableSeeder extends Seeder
                 'updated_at' => '2021-01-01 00:00:00',
                 'deleted_at' => NULL,
             ),
+            10 => 
             array (
                 'id' => 11,
                 'name' => 'Blogs',
@@ -100,6 +107,7 @@ class PermissionGroupsTableSeeder extends Seeder
                 'updated_at' => '2021-01-01 00:00:00',
                 'deleted_at' => NULL,
             ),
+            11 => 
             array (
                 'id' => 12,
                 'name' => 'Contacts',
@@ -107,6 +115,7 @@ class PermissionGroupsTableSeeder extends Seeder
                 'updated_at' => '2021-01-01 00:00:00',
                 'deleted_at' => NULL,
             ),
+            12 => 
             array (
                 'id' => 13,
                 'name' => 'Newsletter Subscribers',
@@ -114,6 +123,7 @@ class PermissionGroupsTableSeeder extends Seeder
                 'updated_at' => '2021-01-01 00:00:00',
                 'deleted_at' => NULL,
             ),
+            13 => 
             array (
                 'id' => 14,
                 'name' => 'Menu',
@@ -121,6 +131,7 @@ class PermissionGroupsTableSeeder extends Seeder
                 'updated_at' => '2021-01-01 00:00:00',
                 'deleted_at' => NULL,
             ),
+            14 => 
             array (
                 'id' => 15,
                 'name' => 'Menu Dropdown',
@@ -128,6 +139,7 @@ class PermissionGroupsTableSeeder extends Seeder
                 'updated_at' => '2021-01-01 00:00:00',
                 'deleted_at' => NULL,
             ),
+            15 => 
             array (
                 'id' => 16,
                 'name' => 'Product Category',
@@ -135,6 +147,7 @@ class PermissionGroupsTableSeeder extends Seeder
                 'updated_at' => '2021-01-01 00:00:00',
                 'deleted_at' => NULL,
             ),
+            16 => 
             array (
                 'id' => 17,
                 'name' => 'Product',
@@ -142,6 +155,7 @@ class PermissionGroupsTableSeeder extends Seeder
                 'updated_at' => '2021-01-01 00:00:00',
                 'deleted_at' => NULL,
             ),
+            17 => 
             array (
                 'id' => 18,
                 'name' => 'Coupon Code',
@@ -149,6 +163,7 @@ class PermissionGroupsTableSeeder extends Seeder
                 'updated_at' => '2021-01-01 00:00:00',
                 'deleted_at' => NULL,
             ),
+            18 => 
             array (
                 'id' => 19,
                 'name' => 'Taxes',

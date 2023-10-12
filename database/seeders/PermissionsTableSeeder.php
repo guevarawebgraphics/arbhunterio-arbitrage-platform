@@ -100,7 +100,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            10 => 
+            9 => 
             array (
                 'id' => 11,
                 'name' => 'Restore Permission',
@@ -109,7 +109,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            11 => 
+            10 => 
             array (
                 'id' => 12,
                 'name' => 'Create Permission Group',
@@ -118,7 +118,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            12 => 
+            11 => 
             array (
                 'id' => 13,
                 'name' => 'Read Permission Group',
@@ -127,7 +127,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            13 => 
+            12 => 
             array (
                 'id' => 14,
                 'name' => 'Update Permission Group',
@@ -136,7 +136,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            14 => 
+            13 => 
             array (
                 'id' => 15,
                 'name' => 'Delete Permission Group',
@@ -145,7 +145,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            15 => 
+            14 => 
             array (
                 'id' => 16,
                 'name' => 'Restore Permission Group',
@@ -154,7 +154,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            16 => 
+            15 => 
             array (
                 'id' => 17,
                 'name' => 'Create User',
@@ -163,7 +163,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            17 => 
+            16 => 
             array (
                 'id' => 18,
                 'name' => 'Read User',
@@ -172,7 +172,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            18 => 
+            17 => 
             array (
                 'id' => 19,
                 'name' => 'Update User',
@@ -181,7 +181,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            19 => 
+            18 => 
             array (
                 'id' => 20,
                 'name' => 'Delete User',
@@ -190,7 +190,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            20 => 
+            19 => 
             array (
                 'id' => 21,
                 'name' => 'Restore User',
@@ -199,7 +199,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            21 => 
+            20 => 
             array (
                 'id' => 22,
                 'name' => 'Create System Setting',
@@ -208,7 +208,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            22 => 
+            21 => 
             array (
                 'id' => 23,
                 'name' => 'Read System Setting',
@@ -217,7 +217,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            23 => 
+            22 => 
             array (
                 'id' => 24,
                 'name' => 'Update System Setting',
@@ -226,7 +226,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            24 => 
+            23 => 
             array (
                 'id' => 25,
                 'name' => 'Delete System Setting',
@@ -235,7 +235,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            25 => 
+            24 => 
             array (
                 'id' => 26,
                 'name' => 'Restore System Setting',
@@ -244,7 +244,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            26 => 
+            25 => 
             array (
                 'id' => 27,
                 'name' => 'Read Activity Log',
@@ -253,7 +253,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            27 => 
+            26 => 
             array (
                 'id' => 28,
                 'name' => 'Create Page',
@@ -262,7 +262,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            28 => 
+            27 => 
             array (
                 'id' => 29,
                 'name' => 'Read Page',
@@ -271,7 +271,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            29 => 
+            28 => 
             array (
                 'id' => 30,
                 'name' => 'Update Page',
@@ -280,7 +280,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            30 => 
+            29 => 
             array (
                 'id' => 31,
                 'name' => 'Delete Page',
@@ -289,7 +289,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            31 => 
+            30 => 
             array (
                 'id' => 32,
                 'name' => 'Restore Page',
@@ -298,7 +298,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            32 => 
+            31 => 
             array (
                 'id' => 33,
                 'name' => 'Create Gallery Group',
@@ -307,7 +307,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            33 => 
+            32 => 
             array (
                 'id' => 34,
                 'name' => 'Read Gallery Group',
@@ -316,7 +316,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            34 => 
+            33 => 
             array (
                 'id' => 35,
                 'name' => 'Update Gallery Group',
@@ -325,7 +325,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            35 => 
+            34 => 
             array (
                 'id' => 36,
                 'name' => 'Delete Gallery Group',
@@ -334,7 +334,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            36 => 
+            35 => 
             array (
                 'id' => 37,
                 'name' => 'Restore Gallery Group',
@@ -343,7 +343,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            37 => 
+            36 => 
             array (
                 'id' => 38,
                 'name' => 'Create Gallery Image',
@@ -352,7 +352,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            38 => 
+            37 => 
             array (
                 'id' => 39,
                 'name' => 'Read Gallery Image',
@@ -361,7 +361,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            39 => 
+            38 => 
             array (
                 'id' => 40,
                 'name' => 'Update Gallery Image',
@@ -370,7 +370,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            40 => 
+            39 => 
             array (
                 'id' => 41,
                 'name' => 'Delete Gallery Image',
@@ -379,7 +379,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            41 => 
+            40 => 
             array (
                 'id' => 42,
                 'name' => 'Restore Gallery Image',
@@ -388,7 +388,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            42 => 
+            41 => 
             array (
                 'id' => 43,
                 'name' => 'Create Blog Category',
@@ -397,7 +397,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            43 => 
+            42 => 
             array (
                 'id' => 44,
                 'name' => 'Read Blog Category',
@@ -406,7 +406,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            44 => 
+            43 => 
             array (
                 'id' => 45,
                 'name' => 'Update Blog Category',
@@ -415,7 +415,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            45 => 
+            44 => 
             array (
                 'id' => 46,
                 'name' => 'Delete Blog Category',
@@ -424,7 +424,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            46 => 
+            45 => 
             array (
                 'id' => 47,
                 'name' => 'Restore Blog Category',
@@ -433,7 +433,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            47 => 
+            46 => 
             array (
                 'id' => 48,
                 'name' => 'Create Blog',
@@ -442,7 +442,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            48 => 
+            47 => 
             array (
                 'id' => 49,
                 'name' => 'Read Blog',
@@ -451,7 +451,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            49 => 
+            48 => 
             array (
                 'id' => 50,
                 'name' => 'Update Blog',
@@ -460,7 +460,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            50 => 
+            49 => 
             array (
                 'id' => 51,
                 'name' => 'Delete Blog',
@@ -469,7 +469,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            51 => 
+            50 => 
             array (
                 'id' => 52,
                 'name' => 'Restore Blog',
@@ -478,7 +478,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            52 => 
+            51 => 
             array (
                 'id' => 53,
                 'name' => 'Read Contact',
@@ -487,7 +487,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            53 => 
+            52 => 
             array (
                 'id' => 54,
                 'name' => 'Read Newsletter',
@@ -496,7 +496,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            54 => 
+            53 => 
             array (
                 'id' => 55,
                 'name' => 'Create Menu',
@@ -505,7 +505,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            55 => 
+            54 => 
             array (
                 'id' => 56,
                 'name' => 'Read Menu',
@@ -514,7 +514,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            56 => 
+            55 => 
             array (
                 'id' => 57,
                 'name' => 'Update Menu',
@@ -523,7 +523,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            57 => 
+            56 => 
             array (
                 'id' => 58,
                 'name' => 'Delete Menu',
@@ -532,7 +532,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            58 => 
+            57 => 
             array (
                 'id' => 59,
                 'name' => 'Restore Menu',
@@ -541,7 +541,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            59 => 
+            58 => 
             array (
                 'id' => 60,
                 'name' => 'Create Menu Dropdown',
@@ -550,7 +550,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            60 => 
+            59 => 
             array (
                 'id' => 61,
                 'name' => 'Read Menu Dropdown',
@@ -559,7 +559,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            61 => 
+            60 => 
             array (
                 'id' => 62,
                 'name' => 'Update Menu Dropdown',
@@ -568,7 +568,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            62 => 
+            61 => 
             array (
                 'id' => 63,
                 'name' => 'Delete Menu Dropdown',
@@ -577,7 +577,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            63 => 
+            62 => 
             array (
                 'id' => 64,
                 'name' => 'Restore Menu Dropdown',
@@ -586,7 +586,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            64 => 
+            63 => 
             array (
                 'id' => 65,
                 'name' => 'Create Product Category',
@@ -595,7 +595,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            65 => 
+            64 => 
             array (
                 'id' => 66,
                 'name' => 'Read Product Category',
@@ -604,7 +604,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            66 => 
+            65 => 
             array (
                 'id' => 67,
                 'name' => 'Update Product Category',
@@ -613,7 +613,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            67 => 
+            66 => 
             array (
                 'id' => 68,
                 'name' => 'Delete Product Category',
@@ -622,7 +622,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            68 => 
+            67 => 
             array (
                 'id' => 69,
                 'name' => 'Restore Product Category',
@@ -631,7 +631,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            69 => 
+            68 => 
             array (
                 'id' => 70,
                 'name' => 'Create Product',
@@ -640,7 +640,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            70 => 
+            69 => 
             array (
                 'id' => 71,
                 'name' => 'Read Product',
@@ -649,7 +649,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            71 => 
+            70 => 
             array (
                 'id' => 72,
                 'name' => 'Update Product',
@@ -658,7 +658,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            72 => 
+            71 => 
             array (
                 'id' => 73,
                 'name' => 'Delete Product',
@@ -667,7 +667,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            73 => 
+            72 => 
             array (
                 'id' => 74,
                 'name' => 'Restore Product',
@@ -676,7 +676,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            74 => 
+            73 => 
             array (
                 'id' => 75,
                 'name' => 'Create Coupon Code',
@@ -685,7 +685,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            75 => 
+            74 => 
             array (
                 'id' => 76,
                 'name' => 'Read Coupon Code',
@@ -694,7 +694,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            76 => 
+            75 => 
             array (
                 'id' => 77,
                 'name' => 'Update Coupon Code',
@@ -703,7 +703,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            77 => 
+            76 => 
             array (
                 'id' => 78,
                 'name' => 'Delete Coupon Code',
@@ -712,7 +712,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            78 => 
+            77 => 
             array (
                 'id' => 79,
                 'name' => 'Restore Coupon Code',
@@ -721,7 +721,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            79 => 
+            78 => 
             array (
                 'id' => 80,
                 'name' => 'Create Tax',
@@ -730,7 +730,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            80 => 
+            79 => 
             array (
                 'id' => 81,
                 'name' => 'Read Tax',
@@ -739,7 +739,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            81 => 
+            80 => 
             array (
                 'id' => 82,
                 'name' => 'Update Tax',
@@ -748,7 +748,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            82 => 
+            81 => 
             array (
                 'id' => 83,
                 'name' => 'Delete Tax',
@@ -757,7 +757,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2021-01-01 00:00:00',
                 'updated_at' => '2021-01-01 00:00:00',
             ),
-            83 => 
+            82 => 
             array (
                 'id' => 84,
                 'name' => 'Restore Tax',

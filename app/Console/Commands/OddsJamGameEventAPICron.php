@@ -9,6 +9,12 @@ use Carbon\Carbon;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 
+use App\Jobs\SendRequestOddsJamJob;
+use Illuminate\Support\Facades\Queue;
+
+use DateTime;
+use DateTimeZone;
+
 class OddsJamGameEventAPICron extends Command
 {
 
@@ -33,41 +39,44 @@ class OddsJamGameEventAPICron extends Command
      */
     public function handle()
     {   
-        $headers = ["Content-Type: application/json"];
-        $baseURL = url('api/game-listing');
-        $queryParams = [];
-
-        $url = $baseURL . '?' . http_build_query($queryParams);
-        
-        $response = $this->makeAPIRequest($url, $headers);
-        \Log::info('Cron: ' . json_encode($response) );
-
-        echo "Successfully retrieved!";
+        $dateTime = $this->timeInterval();
+        if ( !empty( $dateTime ) ) {
+            foreach ( $dateTime ?? [] as $date ) {
+                $job = new SendRequestOddsJamJob($date);
+                Queue::push($job);
+            }
+        }
     }
 
-    private function makeAPIRequest($url, $headers) {
-        try {
-            $curl = curl_init();
-            curl_setopt($curl, CURLOPT_URL, $url);
-            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($curl, CURLOPT_POST, false);
-            curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-            $json = curl_exec($curl);
+    private function timeInterval() {
 
-            if ($json === false) {
-                throw new \Exception(curl_error($curl));
-            }
+        // Create a DateTime object for the current date in the local timezone
+        $currentDate = new DateTime('now', new DateTimeZone(date_default_timezone_get()));
 
-            curl_close($curl);
-            return json_decode($json, true);
-        } catch (\Exception $e) {
-            \Log::error($e->getMessage());
-            return [
-                'data' => NULL,
-                'message' => $e->getMessage(),
-                'status' => false
+        $currentDate->setTime(0, 0, 0); // Set time to start of the day (12 am / 00:00)
+
+        $intervals = [];
+
+        for ($i = 0; $i < 24; $i++) {
+
+            // Create a clone of the DateTime object for the start of the current hour
+            $startOfHour = clone $currentDate;
+            $startOfHour->modify("+$i hour");
+
+            // Create a clone of the DateTime object for the end of the current hour
+            $endOfHour = clone $startOfHour;
+            $endOfHour->modify('+1 hour');
+
+            // Append to intervals array
+            $intervals[] = [
+                'start_date_after'  => $startOfHour->format(DateTime::ATOM), // ISO 8601 format
+                'start_date_before' => $endOfHour->format(DateTime::ATOM),
             ];
+
         }
+
+        return $intervals;
+
     }
 
 }
