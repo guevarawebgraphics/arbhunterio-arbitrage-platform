@@ -107,12 +107,8 @@ function getGames() {
                                 }
                             });
 
-                            console.log("Best 'over' selection:", over_selection_line);
-                            console.log("Best 'over' sports book(s) with the same highest bet_points:", over_sports_books.join(', '));
-                            console.log("Best 'under' selection:", under_selection_line);
-                            console.log("Best 'under' sports book(s) with the same highest bet_points:", under_sports_books.join(', '));
-
                             if (over_best_odds > 0 && under_best_odds > 0) {
+
                                 html += `<tr class="border-b hover:bg-[#1D2F41]">
                                     <td class="w-4 p-4">
                                         <div class="flex items-center">
@@ -164,6 +160,7 @@ function getGames() {
                                         ----
                                     </td>
                                 </tr>`;
+
                             }
                         });
                     }

@@ -16,6 +16,7 @@ class CreateSportsBooksTable extends Migration
         Schema::create('sportsbooks', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
+            $table->string('image_url')->nullable();
             $table->tinyInteger('is_active')->default(1);
             $table->timestamps();
             $table->softDeletes();
