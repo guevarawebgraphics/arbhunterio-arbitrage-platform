@@ -38,6 +38,24 @@ function sports_book_image(arr, sports_book) {
     }
     return imagesHTML;
 }
+function calculateProfit(oddsA, oddsB) {
+    // ( 1 - (1/2.5 + 1/2.5) * 100
+    // = 0.4 + 0.4
+    // = 1 - 0.8
+    // = 0.2
+    // = 0.2 * 100
+    // = 20
+
+    // Get the input values
+    var odds1 = parseFloat(oddsA);
+    var odds2 = parseFloat(oddsB);
+    
+    // Calculate the profit percentage
+    var profitPercentage = (1 - (1/odds1 + 1/odds2)) * 100;
+
+    // Display the result
+    return profitPercentage.toFixed(2);
+}
 
 function getGames() {
 
@@ -126,8 +144,12 @@ function getGames() {
                             var over_sports_book_images = sports_book_image(over_sports_books, sports_book);
                             var under_sports_book_images = sports_book_image(under_sports_books, sports_book);
 
+                            
+
 
                             if (over_best_odds > 0 && under_best_odds > 0) {
+
+                                var profit_percentage = calculateProfit(over_best_odds, under_best_odds);
 
                                 html += `<tr class="border-b hover:bg-[#1D2F41]">
                                     <td class="w-4 p-4">
@@ -138,7 +160,7 @@ function getGames() {
                                         </div>
                                     </td>
                                     <td class="px-6 py-4">
-                                        X%
+                                        ${profit_percentage}%
                                     </td>
                                     <td class="px-6 py-4">
                                         ${formattedDate}
