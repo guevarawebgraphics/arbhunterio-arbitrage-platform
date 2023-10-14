@@ -941,11 +941,9 @@
 
 <script>
     var sBaseURI = '{{ url('/') }}';
-    var sports_book_listings = "{{ getSportsBook() }}";
-    var decoded_json = decodeURIComponent(JSON.parse('"' + sports_book_listings + '"'));
-    var sports_book_array = JSON.parse(decoded_json);
-    console.log(sports_book_array);
 
+    var sports_book = {!! json_encode(getSportsBook()) !!};
+    console.log(sports_book);
 </script>
 
 {{Html::script('public/js/bjcdl/libraries/dashboard.js')}}

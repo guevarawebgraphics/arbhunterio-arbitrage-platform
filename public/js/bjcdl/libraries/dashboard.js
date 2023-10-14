@@ -21,7 +21,23 @@ function contains(arr, sportsBookName) {
         return item === sportsBookName;
     });
 }
-
+function sports_book_image(arr, sports_book) {
+    var imagesHTML = '';
+    if (arr.length > 0 ) {
+        $.each(arr, function (i, name) {
+            if ( name != '' ) {
+                var book = sports_book.find(function(item) {
+                    return item.name === name;
+                });
+                if (book) {
+                    imagesHTML += `<img class="rounded" width="24" src="${sBaseURI}/${book.image_url}" />`;
+                }
+                console.log(imagesHTML);
+            }
+        });
+    }
+    return imagesHTML;
+}
 
 function getGames() {
 
@@ -107,6 +123,10 @@ function getGames() {
                                 }
                             });
 
+                            var over_sports_book_images = sports_book_image(over_sports_books, sports_book);
+                            var under_sports_book_images = sports_book_image(under_sports_books, sports_book);
+
+
                             if (over_best_odds > 0 && under_best_odds > 0) {
 
                                 html += `<tr class="border-b hover:bg-[#1D2F41]">
@@ -148,11 +168,11 @@ function getGames() {
                                         <div class="flex flex-col">
                                             <div class="flex flex-row items-center gap-2">
                                                 <span>${over_best_odds}</span>
-                                                ${over_sports_books}
+                                                ${over_sports_book_images}
                                             </div>
                                             <div class="flex flex-row items-center gap-2">
                                                 <span>${under_best_odds}</span>
-                                                ${under_sports_books}
+                                                ${under_sports_book_images}
                                             </div>
                                         </div>
                                     </td>
