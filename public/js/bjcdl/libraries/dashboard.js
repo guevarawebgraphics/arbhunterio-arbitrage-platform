@@ -54,7 +54,7 @@ function calculateProfit(oddsA, oddsB) {
     var profitPercentage = (1 - (1/odds1 + 1/odds2)) * 100;
 
     // Display the result
-    return profitPercentage.toFixed(2);
+    return Math.abs(profitPercentage.toFixed(2));
 }
 
 function getGames() {
