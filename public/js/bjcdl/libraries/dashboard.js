@@ -144,9 +144,7 @@ function getGames() {
                             var over_sports_book_images = sports_book_image(over_sports_books, sports_book);
                             var under_sports_book_images = sports_book_image(under_sports_books, sports_book);
 
-                            
-
-
+                
                             if (over_best_odds > 0 && under_best_odds > 0) {
 
                                 var profit_percentage = calculateProfit(over_best_odds, under_best_odds);
