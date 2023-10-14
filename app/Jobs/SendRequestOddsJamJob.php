@@ -36,7 +36,7 @@ class SendRequestOddsJamJob implements ShouldQueue
     {
 
         $headers = ["Content-Type: application/json"];
-        $baseURL = url('api/game-listingv2');
+        $baseURL = url('api/game-listing');
         $data = $this->arrayDates;
 
         $queryParams = [
