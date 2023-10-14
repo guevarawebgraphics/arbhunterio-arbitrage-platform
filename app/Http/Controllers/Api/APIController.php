@@ -16,8 +16,17 @@ class APIController extends Controller
     use OddsJamAPITrait;
 
     public function getGames(Request $request) {
-        $data = OddsJamGameEventCronJob::first();
-        return json_decode($data->game_event_json);
+
+        // $data = OddsJamGameEventCronJob::first();
+        // return json_decode($data->game_event_json);
+
+        $file = public_path('game.json');
+
+        $existingData = file_get_contents($file);
+
+        $gamesExists = json_decode($existingData, true);
+
+        return $gamesExists;
     }
 
     public function getLeagues(Request $request) {
@@ -58,11 +67,10 @@ class APIController extends Controller
     }
 
     public function getGameScores(Request $request) {
-
+        
         $input = $request->all();
         $response = $this->gameScores($input);
         return $response;
-
     }
 
     public function getPlayerResults(Request $request) {
@@ -122,7 +130,7 @@ class APIController extends Controller
         return $response;
     }
  
-    public function getGameListing(Request $request) {
+    public function getGameListingOld(Request $request) {
 
         $input = ['start_date_before' => "2023-10-05T22:00:00-04:00"];
 
@@ -161,10 +169,12 @@ class APIController extends Controller
        return $gameArray;
     }
 
-    public function getGameListingV2(Request $request) {
+    public function getGameListing(Request $request) {
+
         $input = $request->all();
 
         $gameData = $this->games($input);
+
         $sportsBook = $this->defaultSporksBook();
 
         if (!$gameData['status'] || empty($gameData['data'])) {
@@ -172,7 +182,7 @@ class APIController extends Controller
         }
 
         $games = $gameData['data']['data'];
-        $games = array_slice($games, 0, 50); // Take only first 5 games
+        $games = array_slice($games, 0, 50); // Take only first 50 games (comment says 5, but code is taking 50)
 
         $gameArray = [];
         foreach ($games as $game) {
@@ -180,8 +190,6 @@ class APIController extends Controller
                 $gameArray[] = $this->fetchOddsData($game, $sportsBook);
             }
         }
- 
-        //  ------------------------------------------------------------------ //
 
         // Define the path to the file in the public directory
         $file = public_path('game.json');
@@ -197,11 +205,23 @@ class APIController extends Controller
             $gamesExists = [];
         }
 
-        // Your new game data
-        $newGame = $gameArray;
+        // Append the new games to the games array only if they don't exist
+        foreach ($gameArray as $game) {
+            $gameExists = false;
 
-        // Append the new game to the games array
-        $gamesExists[] = $newGame;  // This line ensures the new game is added as an object, not wrapped inside another array
+            // Check if game with the same ID already exists in $gamesExists
+            foreach ($gamesExists as $existingGame) {
+                if ($existingGame['game']['id'] == $game['game']['id']) {
+                    $gameExists = true;
+                    break;
+                }
+            }
+
+            // If game doesn't exist, append it
+            if (!$gameExists) {
+                $gamesExists[] = $game;
+            }
+        }
 
         // Convert the updated games array back to JSON
         $jsonData = json_encode($gamesExists, JSON_PRETTY_PRINT);
@@ -210,6 +230,7 @@ class APIController extends Controller
         file_put_contents($file, $jsonData);
 
         return $gameArray;
+
     }
 
     private function fetchOddsData($game, $sportsBook) {
