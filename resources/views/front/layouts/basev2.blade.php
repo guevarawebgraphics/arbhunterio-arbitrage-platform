@@ -95,7 +95,7 @@
     <script src="{{asset('public/js/jquery-1.12.4.min.js')}}"></script>
     {{Html::script('public/bsbmd/plugins/momentjs/moment.js')}}
     <script src="{{asset('public/assets/js/flowbite.min.js')}}"></script>
-    <script src="{{asset('public/assets/js/switch.js')}}"></script>
+    {{-- <script src="{{asset('public/assets/js/switch.js')}}"></script> --}}
 
     @yield('extra-script')
 
