@@ -19,14 +19,21 @@ class APIController extends Controller
 
         // $data = OddsJamGameEventCronJob::first();
         // return json_decode($data->game_event_json);
+        
+        try {
+            $file = public_path('game.json');
 
-        $file = public_path('game.json');
+            $existingData = file_get_contents($file);
 
-        $existingData = file_get_contents($file);
+            $gamesExists = json_decode($existingData, true);
 
-        $gamesExists = json_decode($existingData, true);
+            \Log::info('Success Games: ' . json_encode($gamesExists) );
 
-        return $gamesExists;
+            return $gamesExists;
+        } catch ( \Exception $e ) {
+            \Log::info('Error Games: ' . json_encode($e) );
+            return [];
+        }
     }
 
     public function getLeagues(Request $request) {
