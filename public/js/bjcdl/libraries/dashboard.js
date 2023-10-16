@@ -32,7 +32,7 @@ function sports_book_image(arr, sports_book) {
                 if (book) {
                     imagesHTML += `<img class="rounded" width="24" src="${sBaseURI}/${book.image_url}" />`;
                 }
-                console.log(imagesHTML);
+                // console.log(imagesHTML);
             }
         });
     }
@@ -87,7 +87,6 @@ function getGames() {
                             var home_odds = value.home_team_odds;
                             var away_odds = value.away_team_odds;
                             var market_name = val.label;
-
                             var over_best_odds = 0;
                             var under_best_odds = 0;
                             var over_selection_line = '';
@@ -95,32 +94,10 @@ function getGames() {
                             var over_sports_books = [];
                             var under_sports_books = [];
 
-                            // Iterate through home_odds[market_name]
-                            $.each(home_odds[market_name], function(index, obj) {
-                                if (obj.selection_line === 'over' && obj.bet_points >= over_best_odds) {
-                                    if (obj.bet_points > over_best_odds) {
-                                        over_best_odds = obj.bet_points;
-                                        over_sports_books = [obj.sports_book_name];
-                                        over_selection_line = obj.name;
-                                    } else if (!contains(over_sports_books, obj.sports_book_name)) {
-                                        over_sports_books.push(obj.sports_book_name);
-                                    }
-                                    
-                                } else if (obj.selection_line === 'under' && obj.bet_points >= under_best_odds) {
-                                    if (obj.bet_points > under_best_odds) {
-                                        under_best_odds = obj.bet_points;
-                                        under_sports_books = [obj.sports_book_name];
-                                        under_selection_line = obj.name;
-                                    } else if (!contains(under_sports_books, obj.sports_book_name)) {
-                                        under_sports_books.push(obj.sports_book_name);
-                                    }
-                                    
-                                }
-                            });
+                            var mergedOdds = Object.assign({}, home_odds[market_name], away_odds[market_name]);
 
-                            // Iterate through away_odds[market_name]
-                            $.each(away_odds[market_name], function(index, obj) {
-                                if (obj.selection_line === 'over' && obj.bet_points >= over_best_odds) {
+                             $.each(mergedOdds, function(index, obj) {
+                                if (obj.selection_line === 'over' && obj.bet_points >= over_best_odds && obj.is_live == false ) {
                                     if (obj.bet_points > over_best_odds) {
                                         over_best_odds = obj.bet_points;
                                         over_sports_books = [obj.sports_book_name];
@@ -129,7 +106,11 @@ function getGames() {
                                         over_sports_books.push(obj.sports_book_name);
                                     }
                                     
-                                } else if (obj.selection_line === 'under' && obj.bet_points >= under_best_odds) {
+                                }
+                             });
+                            
+                            $.each(mergedOdds, function(index, obj) {
+                                if (obj.selection_line === 'under' && obj.bet_points >= under_best_odds && obj.is_live == false ) {
                                     if (obj.bet_points > under_best_odds) {
                                         under_best_odds = obj.bet_points;
                                         under_sports_books = [obj.sports_book_name];
@@ -137,14 +118,56 @@ function getGames() {
                                     } else if (!contains(under_sports_books, obj.sports_book_name)) {
                                         under_sports_books.push(obj.sports_book_name);
                                     }
-                                    
                                 }
-                            });
+                             });
+
+                            // $.each(home_odds[market_name], function(index, obj) {
+                            //     if (obj.selection_line === 'over' && obj.bet_points >= over_best_odds) {
+                            //         if (obj.bet_points > over_best_odds) {
+                            //             over_best_odds = obj.bet_points;
+                            //             over_sports_books = [obj.sports_book_name];
+                            //             over_selection_line = obj.name;
+                            //         } else if (!contains(over_sports_books, obj.sports_book_name)) {
+                            //             over_sports_books.push(obj.sports_book_name);
+                            //         }
+                                    
+                            //     } else if (obj.selection_line === 'under' && obj.bet_points >= under_best_odds) {
+                            //         if (obj.bet_points > under_best_odds) {
+                            //             under_best_odds = obj.bet_points;
+                            //             under_sports_books = [obj.sports_book_name];
+                            //             under_selection_line = obj.name;
+                            //         } else if (!contains(under_sports_books, obj.sports_book_name)) {
+                            //             under_sports_books.push(obj.sports_book_name);
+                            //         }
+                                    
+                            //     }
+                            // });
+
+                            // $.each(away_odds[market_name], function(index, obj) {
+                            //     if (obj.selection_line === 'over' && obj.bet_points >= over_best_odds) {
+                            //         if (obj.bet_points > over_best_odds) {
+                            //             over_best_odds = obj.bet_points;
+                            //             over_sports_books = [obj.sports_book_name];
+                            //             over_selection_line = obj.name;
+                            //         } else if (!contains(over_sports_books, obj.sports_book_name)) {
+                            //             over_sports_books.push(obj.sports_book_name);
+                            //         }
+                                    
+                            //     } else if (obj.selection_line === 'under' && obj.bet_points >= under_best_odds) {
+                            //         if (obj.bet_points > under_best_odds) {
+                            //             under_best_odds = obj.bet_points;
+                            //             under_sports_books = [obj.sports_book_name];
+                            //             under_selection_line = obj.name;
+                            //         } else if (!contains(under_sports_books, obj.sports_book_name)) {
+                            //             under_sports_books.push(obj.sports_book_name);
+                            //         }
+                                    
+                            //     }
+                            // });
 
                             var over_sports_book_images = sports_book_image(over_sports_books, sports_book);
                             var under_sports_book_images = sports_book_image(under_sports_books, sports_book);
 
-                
                             if (over_best_odds > 0 && under_best_odds > 0) {
 
                                 var profit_percentage = calculateProfit(over_best_odds, under_best_odds);
