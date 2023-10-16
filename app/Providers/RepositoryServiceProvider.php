@@ -71,6 +71,10 @@ use App\Services\States\Repositories\StateRepository;
 use App\Services\States\Repositories\StateRepositoryInterface;
 use App\Services\CategoryPerProducts\Repositories\CategoryPerProductRepository;
 use App\Services\CategoryPerProducts\Repositories\CategoryPerProductRepositoryInterface;
+use App\Services\OddsJamGameEventCronJobs\Repositories\OddsJamGameEventCronJobRepository;
+use App\Services\OddsJamGameEventCronJobs\Repositories\OddsJamGameEventCronJobRepositoryInterface;
+use App\Services\SportsBooks\Repositories\SportsBookRepository;
+use App\Services\SportsBooks\Repositories\SportsBookRepositoryInterface;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -118,6 +122,8 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(CountryRepositoryInterface::class, CountryRepository::class);
         $this->app->bind(StateRepositoryInterface::class, StateRepository::class);
         $this->app->bind(CategoryPerProductRepositoryInterface::class, CategoryPerProductRepository::class);
+        $this->app->bind(OddsJamGameEventCronJobRepositoryInterface::class, OddsJamGameEventCronJobRepository::class);
+        $this->app->bind(SportsBookRepositoryInterface::class, SportsBookRepository::class);
     }
 
     /**

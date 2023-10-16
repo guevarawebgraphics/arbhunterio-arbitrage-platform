@@ -1,6 +1,6 @@
 # MY_CMS V2.0
 
--   [Developed by Guevara Web Graphics Studio](https://kingrgdev.com)
+-   [Developed by Guevara Web Graphics Studio](https://guevarawebgraphics.com.com)
 
 ## Requirements
 
@@ -86,3 +86,8 @@ $ curl -X POST 'http://127.0.0.1:8000/api/login' \
 1.0 - Native PHP
 2.0 - Basic Laravel (For application)
 2.1 - Full blast template
+
+## Setup Online Betting
+
+Run php artisan migrate:fresh --seed
+Run `php artisan oddsjam_game_event_api:cron`

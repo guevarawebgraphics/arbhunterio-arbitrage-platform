@@ -19,6 +19,7 @@
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.3",
         "laravelcollective/html": "^6.2",
+        "orangehill/iseed": "^3.0",
         "realrashid/sweet-alert": "^3.2",
         "spatie/laravel-activitylog": "^3.17",
         "spatie/laravel-permission": "^4.2",

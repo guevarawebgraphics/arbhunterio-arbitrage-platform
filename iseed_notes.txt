@@ -1,0 +1,5 @@
+#for permissions
+php artisan iseed permissions,permission_groups,role_has_permissions --force
+
+#clear permissions
+php artisan cache:forget laravelspatie.permission.cache && php artisan permission:cache-reset
