@@ -145,14 +145,6 @@ function getGames() {
                                         under_sports_books.push(obj.sports_book_name);
                                     }
                                 }
-
-
-                                if ( obj.selection_line === 'over' && obj.is_live == false ) {
-
-                                }
-                                if ( obj.selection_line === 'under' && obj.is_live == false ) {
-
-                                }
                                 
                             });
                             
