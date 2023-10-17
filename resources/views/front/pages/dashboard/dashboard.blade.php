@@ -516,6 +516,9 @@
                                 <th scope="col" class="px-6 py-3">
                                     Bets
                                 </th>
+                                 <th scope="col" class="px-6 py-3">
+                                    Best Odds
+                                </th>
                                 <th scope="col" class="px-6 py-3">
                                     Books
                                 </th>
