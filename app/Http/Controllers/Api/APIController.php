@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Traits\OddsJamAPITrait;
 use App\Services\OddsJamGameEventCronJobs\OddsJamGameEventCronJob;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 use DateTime;
 use DateTimeZone;
@@ -189,7 +190,7 @@ class APIController extends Controller
         }
 
         $games = $gameData['data']['data'];
-        $games = array_slice($games, 0, 50); // Take only first 50 games (comment says 5, but code is taking 50)
+        $games = array_slice($games, 0, 100); // Take only first 50 games (comment says 5, but code is taking 50)
 
         $gameArray = [];
         foreach ($games as $game) {
@@ -270,5 +271,29 @@ class APIController extends Controller
             $grouped[$item['market_name']][] = $item;
         }
         return $grouped;
+    }
+
+
+    public function getGameListingPaginate(Request $request) {
+        // Define the path to the file in the public directory
+        $filePath = public_path('game.json');
+
+        // Read the existing content
+        $existingData = File::get($filePath);
+
+        // Decode the JSON data to an array
+        $gamesExists = json_decode($existingData, true);
+
+        // Paginate the data
+        $perPage = $request->input('per_page', 10); // Number of items per page
+        $currentPage = $request->input('page', 1); // Current page
+        $pagedData = array_slice($gamesExists, ($currentPage - 1) * $perPage, $perPage);
+
+        return response()->json([
+            'data' => $pagedData,
+            'current_page' => $currentPage,
+            'per_page' => $perPage,
+            'total' => count($gamesExists),
+        ]);
     }
 }

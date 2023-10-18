@@ -44,3 +44,4 @@ Route::get('/players', '\App\Http\Controllers\Api\APIController@getPlayers')->na
 
 // Detailed Game Listing
 Route::get('/game-listing', '\App\Http\Controllers\Api\APIController@getGameListing')->name('api.game.listing');
+Route::get('/game-listing/paginate', '\App\Http\Controllers\Api\APIController@getGameListingPaginate')->name('api.game.listing.paginate');
