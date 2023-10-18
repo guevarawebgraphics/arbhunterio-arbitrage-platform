@@ -57,7 +57,7 @@ class OddsJamGameEventAPICron extends Command
 
         $intervals = [];
 
-        for ($i = 0; $i < 24; $i++) {
+        for ($i = 0; $i < 48; $i++) {
 
             // Create a clone of the DateTime object for the start of the current hour
             $startOfHour = clone $currentDate;
