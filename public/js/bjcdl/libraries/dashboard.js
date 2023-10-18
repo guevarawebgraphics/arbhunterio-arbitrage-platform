@@ -150,8 +150,22 @@ function getGames() {
 
     var currentDateISO8601 = moment().format('YYYY-MM-DDTHH:mm:ss');
     // console.log(currentDateISO8601);
+    var loading_html = `<tr>
+            <!-- colspan is set to 9 since there are 9 columns in the table -->
+            <td colspan="9" class="px-6 py-3 text-center">
+            <center><img src="${sBaseURI}/public/images/loading2.gif" style="width: 25px; height: auto;" />
+            Loading content..</center>
+            </td>
+        </tr>`;
 
-    console.log('Loading...');
+    var no_record_found = `<tr>
+            <!-- colspan is set to 9 since there are 9 columns in the table -->
+            <td colspan="9" class="px-6 py-3 text-center">
+            <center>No record found..</center>
+            </td>
+        </tr>`;
+    
+    $("#arbitrage_body").html(loading_html);
     $.ajax({
         url: sBaseURI + '/api/games',
         method: 'GET',
@@ -262,8 +276,12 @@ function getGames() {
                             // Must be greater than 0 and Over and Under Best Odds must be multiply to 4 and result must be greater than or equal to 4
                             if (over_best_odds > 0 && under_best_odds > 0 && ( (over_best_odds * under_best_odds) >= 4 ) && over_selection_line && under_selection_line  ) {
                                 is_html = '1';
-                            } else if ( home_best_odds > 0 && away_best_odds > 0 &&  ( (home_best_odds * away_best_odds) >= 4 ) && home_selection_line && away_selection_line ) {
+                            } else if ( ( (home_best_odds * away_best_odds) >= 4 ) && home_selection_line && away_selection_line ) {
+                                // home_best_odds > 0 && away_best_odds > 0 &&  
                                 is_html = '2';
+                            } else {
+                                // if ( (home_best_odds * away_best_odds) >= 4  )
+                                is_html = '3'
                             }
 
                             if ( is_html != "0" ) {
@@ -297,10 +315,10 @@ function getGames() {
                                     <td class="px-6 py-4">
                                         <div class="flex flex-col">
                                             <span>
-                                                ${is_html == 1 ? over_selection_line : home_selection_line }
+                                                ${is_html == 1 ? over_selection_line : ( is_html == 2 ? home_selection_line : value?.game?.home_team_info?.team_name ) }
                                             </span>
                                             <span>
-                                                ${is_html == 1 ? under_selection_line : away_selection_line }
+                                                ${is_html == 1 ? under_selection_line : ( is_html == 2 ? away_selection_line : value?.game?.away_team_info?.team_name ) }
                                             </span>
                                         </div>
                                     </td>
@@ -335,6 +353,8 @@ function getGames() {
                 });
 
                 $("#arbitrage_body").html(html);
+            } else {
+                $("#arbitrage_body").html(no_record_found);
             }
 
         },
@@ -347,6 +367,7 @@ function getGames() {
         },
         error: function(xhr, status, error) {
             console.log(error);
+            $("#arbitrage_body").html(no_record_found);
         }
     });
 }

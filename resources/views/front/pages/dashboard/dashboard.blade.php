@@ -689,7 +689,7 @@
 
 <script>
     var sBaseURI = '{{ url('/') }}';
-
+    var loading_image = "{{url('public/images/loading2.gif')}}";
     var sports_book = {!! json_encode(getSportsBook()) !!};
     console.log(sports_book);
 </script>
