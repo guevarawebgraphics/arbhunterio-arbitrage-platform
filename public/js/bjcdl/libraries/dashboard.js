@@ -21,6 +21,7 @@ function contains(arr, sportsBookName) {
         return item === sportsBookName;
     });
 }
+
 function sports_book_image(arr, sports_book) {
     var imagesHTML = '';
     if (arr.length > 0 ) {
