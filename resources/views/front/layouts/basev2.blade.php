@@ -21,7 +21,7 @@
     
     
     <link href="{{asset('public/css/app.css')}}" rel="stylesheet">
-
+    <script src="{{ asset('public/js/bundle.js') }}"></script>
     <style>       
         body{
             background-color: #09131E;
@@ -99,5 +99,12 @@
 
     @yield('extra-script')
 
+    <script>
+        Echo.channel('odds-updates')
+        .listen('.NewOddsReceived', (e) => {
+            console.log(e);
+        });
+    </script>
+    
 </body>
 </html>

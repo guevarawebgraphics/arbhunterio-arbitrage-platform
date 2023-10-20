@@ -10,9 +10,9 @@
     "require": {
         "php": "^7.3|^8.0",
         "anhskohbo/no-captcha": "^3.3",
+        "beyondcode/laravel-websockets": "^1.14",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
-        "guzzlehttp/guzzle": "^7.0.1",
         "laracasts/flash": "^3.2",
         "laravel/framework": "^8.40",
         "laravel/helpers": "^1.4",
@@ -20,6 +20,7 @@
         "laravel/ui": "^3.3",
         "laravelcollective/html": "^6.2",
         "orangehill/iseed": "^3.0",
+        "react/http": "^1.9",
         "realrashid/sweet-alert": "^3.2",
         "spatie/laravel-activitylog": "^3.17",
         "spatie/laravel-permission": "^4.2",

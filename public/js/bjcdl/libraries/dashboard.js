@@ -276,11 +276,9 @@ function getGames() {
                             // Must be greater than 0 and Over and Under Best Odds must be multiply to 4 and result must be greater than or equal to 4
                             if (over_best_odds > 0 && under_best_odds > 0 && ( (over_best_odds * under_best_odds) >= 4 ) && over_selection_line && under_selection_line  ) {
                                 is_html = '1';
-                            } else if ( ( (home_best_odds * away_best_odds) >= 4 ) && home_selection_line && away_selection_line ) {
-                                // home_best_odds > 0 && away_best_odds > 0 &&  
+                            } else if ( home_best_odds > 0 && away_best_odds > 0 && ( (home_best_odds * away_best_odds) >= 4 ) && home_selection_line && away_selection_line ) {
                                 is_html = '2';
-                            } else {
-                                // if ( (home_best_odds * away_best_odds) >= 4  )
+                            } else if ( (home_best_odds * away_best_odds) >= 4  ) {
                                 is_html = '3'
                             }
 
