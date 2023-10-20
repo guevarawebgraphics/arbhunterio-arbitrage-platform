@@ -840,4 +840,140 @@ trait OddsJamAPITrait
             ];
         }
     }
+
+    function findMatchingBets($dataObj1, $dataObj2, $type) {
+
+        if ($type == 1) {
+            // Convert the object to an array.
+            $dataArray = array_values($dataObj1);
+
+            $overs = array_filter($dataArray, function($item) {
+                return $item['selection_line'] === "over";
+            });
+
+            $unders = array_filter($dataArray, function($item) {
+                return $item['selection_line'] === "under";
+            });
+
+            $matchingPairs = [];
+
+            foreach ($overs as $over) {
+                foreach ($unders as $under) {
+                    if (abs($over['selection_points']) === abs($under['selection_points'])) {
+                        $matchingPairs[] = ['over' => $over, 'under' => $under];
+                    }
+                }
+            }
+
+            if (count($matchingPairs) === 0) {
+                return null;
+            }
+
+            $highestSelectionPoint = max(array_map(function($pair) {
+                return abs($pair['over']['selection_points']);
+            }, $matchingPairs));
+
+            $highestPair = array_filter($matchingPairs, function($pair) use ($highestSelectionPoint) {
+                return abs($pair['over']['selection_points']) === $highestSelectionPoint;
+            });
+
+            return array_values($highestPair)[0];
+
+        } elseif ($type == 2 && $dataObj1 && $dataObj2) {
+            // Convert the object to an array.
+            $dataArray1 = array_values($dataObj1);
+            $dataArray2 = array_values($dataObj2);
+
+            $homes = array_filter($dataArray1, function($item) {
+                return $item['selection_line'] != "over" && $item['selection_line'] != "under";
+            });
+
+            $aways = array_filter($dataArray2, function($item) {
+                return $item['selection_line'] != "over" && $item['selection_line'] != "under";
+            });
+
+            $matchingPairs = [];
+
+            foreach ($homes as $home) {
+                $matched = false;
+
+                if ($home['selection_points'] > 0) {
+                    foreach ($aways as $away) {
+                        if ($home['selection_points'] === -$away['selection_points']) {
+                            $matchingPairs[] = ['home' => $home, 'away' => $away];
+                            $matched = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (!$matched && $home['selection_points'] < 0) {
+                    foreach ($aways as $away) {
+                        if (-$home['selection_points'] === $away['selection_points']) {
+                            $matchingPairs[] = ['home' => $home, 'away' => $away];
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (count($matchingPairs) === 0) {
+                return null;
+            }
+
+            $highestSelectionPoint = max(array_map(function($pair) {
+                return abs($pair['home']['selection_points']);
+            }, $matchingPairs));
+
+            $highestPair = array_filter($matchingPairs, function($pair) use ($highestSelectionPoint) {
+                return abs($pair['home']['selection_points']) === $highestSelectionPoint;
+            });
+
+            return array_values($highestPair)[0];
+        }
+    }
+
+    function sports_book_image($arr, $sports_book) {
+        $imagesHTML = '';
+        
+        // Convert Eloquent Collection to array
+        $sports_book_array = $sports_book->toArray();
+        
+        if (count($arr) > 0) {
+            foreach ($arr as $name) {
+                if ($name != '') {
+                    $book = array_filter($sports_book_array, function($item) use ($name) {
+                        return $item['name'] === $name;
+                    });
+
+                    // Using current() to get the first item from the filtered array.
+                    $book = current($book);
+
+                    if ($book) {
+                        $imagesHTML .= '<img class="rounded" width="24" src="' . url($book['image_url']) . '" />';
+                    }
+                }
+            }
+        }
+        return $imagesHTML;
+    }
+
+    function calculateProfit($oddsA, $oddsB) {
+        // Convert the input values to float
+        $odds1 = floatval($oddsA);
+        $odds2 = floatval($oddsB);
+        
+        // Check for division by zero
+        if ($odds1 == 0 || $odds2 == 0) {
+            return 0;
+        }
+
+        // Calculate the profit percentage
+        $profitPercentage = (1 - (1 / $odds1 + 1 / $odds2)) * 100;
+
+        // Return the result rounded to two decimal places
+        return abs(round($profitPercentage, 2));
+    }
+
+
 }
