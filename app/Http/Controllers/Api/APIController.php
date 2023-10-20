@@ -334,6 +334,7 @@ class APIController extends Controller
 
     public function oddsPushStream()
     {
+        
         $url = 'https://api-external.oddsjam.com/api/v2/stream/odds?market=Moneyline&key='.config('services.oddsjam.key').'&start_date_before=2024-02-11T16%3A35%3A00-05%3A00&sports_book=10bet&game_id=39804-16218-24-06&sportsbooks=bwin&sportsbooks=partypoker';
 
         $curl = curl_init();
