@@ -55,6 +55,7 @@ class APIController extends Controller
         $sports_book = getSportsBook();
 
         foreach ( $gamesExists ?? [] as $value ) { 
+
             foreach ( $value['markets'] ?? [] as $val ) {
 
                 $dateTime = new DateTime($value['game']['start_date']);
@@ -182,35 +183,38 @@ class APIController extends Controller
 
                 $sports_book_images_down =  $is_html == 1 ? $under_sports_book_images : $away_sports_book_images;
 
-                array_push(
-                    $games,
-                    [
-                        'game_id'   =>  $value['game']['id'],
-                        'profit_percentage' =>  $profit_percentage,
-                        'formattedDate' =>  $formattedDate,
-                        'home_team' =>  $value['game']['home_team'],
-                        'away_team' =>  $value['game']['away_team'],
-                        'sports'    =>  $value['game']['sport'],
-                        'league'    =>  $value['game']['league'],
-                        'league'    =>  $value['game']['league'],
-                        'market'    =>  $val['label'],
-                        'selection_line'    =>  [
-                            'over' =>  $selection_line_up,
-                            'under'   => $selection_line_down,
-                        ],
-                        'best_odds' =>[
-                            'over'  =>  $best_odds_up,
-                            'under'  =>  $best_odds_down,
-                        ],
-                        'sports_book'   =>  [
-                            'over'  =>  $sports_book_images_up,
-                            'under' =>  $sports_book_images_down
+                if ($best_odds_up > 0 && $best_odds_down > 0 && ( $best_odds_up * $best_odds_down >= 0 ) ) {
+                    array_push(
+                        $games,
+                        [
+                            'game_id'   =>  $value['game']['id'],
+                            'profit_percentage' =>  $profit_percentage,
+                            'formattedDate' =>  $formattedDate,
+                            'home_team' =>  $value['game']['home_team'],
+                            'away_team' =>  $value['game']['away_team'],
+                            'sports'    =>  $value['game']['sport'],
+                            'league'    =>  $value['game']['league'],
+                            'league'    =>  $value['game']['league'],
+                            'market'    =>  $val['label'],
+                            'selection_line'    =>  [
+                                'over' =>  $selection_line_up,
+                                'under'   => $selection_line_down,
+                            ],
+                            'best_odds' =>[
+                                'over'  =>  $best_odds_up,
+                                'under'  =>  $best_odds_down,
+                            ],
+                            'sports_book'   =>  [
+                                'over'  =>  $sports_book_images_up,
+                                'under' =>  $sports_book_images_down
+                            ]
                         ]
-                    ]
-                );
+                    );
 
-                $counter++;
+                    $counter++;
+                }
             }
+
         }
         
         // Paginate the data
