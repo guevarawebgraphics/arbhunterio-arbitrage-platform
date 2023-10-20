@@ -156,3 +156,4 @@ function getSports() {
 
     return $data;
 }
+

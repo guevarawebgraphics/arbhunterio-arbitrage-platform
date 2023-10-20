@@ -49,8 +49,6 @@ class SendRequestOddsJamJob implements ShouldQueue
         $url = $baseURL . '?' . http_build_query($queryParams);
 
         $response = $this->makeAPIRequest($url, $headers);
-
-        \Log::info('Oddsjam Response: ' . json_encode($response) ); 
         
     }
 }

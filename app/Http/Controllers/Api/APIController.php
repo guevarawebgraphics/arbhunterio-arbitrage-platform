@@ -334,18 +334,36 @@ class APIController extends Controller
 
     public function oddsPushStream()
     {
-        
-        $url = 'https://api-external.oddsjam.com/api/v2/stream/odds?market=Moneyline&key='.config('services.oddsjam.key').'&start_date_before=2024-02-11T16%3A35%3A00-05%3A00&sports_book=10bet&game_id=39804-16218-24-06&sportsbooks=bwin&sportsbooks=partypoker';
+        $sportsbooks = '';
+        $sports = getSports();
+
+        $league_input = [];
+        $league_input['sports'] = $sports;
+        $league_api = $this->leagues($league_input);
+        $league = '';
+
+        foreach (getSportsBook() ?? [] as $field) {
+            $sportsbooks .= '&sportsbooks=' . urlencode($field->name);
+        }
+
+        foreach ( $league_api['data'] ?? [] as $field) {
+            $league .= '&league=' . urlencode($field);
+        }
+
+        $start_date_before = '2023-10-21T13:00:00-04:00';
+        $start_date_after = '2023-10-31T13:00:00-04:00';
+
+        $url = 'https://api-external.oddsjam.com/api/v2/stream/odds?market_name=Moneyline&key=' . urlencode(config('services.oddsjam.key')) . $league . '&start_date_before=' . urlencode($start_date_before) . '&start_date_after=' . urlencode($start_date_after) . $sportsbooks;
 
         $curl = curl_init();
         curl_setopt_array($curl, [
             CURLOPT_URL => $url,
             CURLOPT_RETURNTRANSFER => 1,
             CURLOPT_FOLLOWLOCATION => 1,
-            CURLOPT_WRITEFUNCTION => function($ch, $str) {
+            CURLOPT_WRITEFUNCTION => function ($ch, $str) {
                 $data = trim($str);
                 if ($data !== "") {
-                    echo "$data\n" . "<br>";
+                    echo "<strong>Response:</strong> $data\n" . "<br><br>";
                     ob_flush();  // Use this to flush the output buffer to ensure real-time streaming
                     flush();     // Use this to flush system output buffer
                 }
@@ -356,6 +374,7 @@ class APIController extends Controller
         curl_exec($curl);
         curl_close($curl);
     }
+
 
     /*
     * End of Major Functions
