@@ -16,6 +16,12 @@ class APIController extends Controller
 {
     use OddsJamAPITrait;
 
+
+    /*
+    * Major Functions
+    *
+    */
+
     public function getGamesOld(Request $request) {
 
         // $data = OddsJamGameEventCronJob::first();
@@ -230,107 +236,6 @@ class APIController extends Controller
         ]);
     }
 
-    public function getLeagues(Request $request) {
-
-        $input = $request->all();
-        $response = $this->leagues($input);
-        return $response;
-
-    }
-
-    public function getUpcomingGameOdds(Request $request) {
-
-        $input = $request->all();
-        $response = $this->upcomingGameOdds($input);
-        return $response;
-    }
-
-    public function getFutureOdds(Request $request) {
-
-        $input = $request->all();
-        $response = $this->futureOdds($input);
-        return $response;
-
-    }
-
-    public function getFutures(Request $request) {
-        $input = $request->all();
-        $response = $this->futures($input);
-        return $response;
-    }
-
-    public function getBestGrader(Request $request) {
-
-        $input = $request->all();
-        $response = $this->bestGrader($input);
-        return $response;
-
-    }
-
-    public function getGameScores(Request $request) {
-        
-        $input = $request->all();
-        $response = $this->gameScores($input);
-        return $response;
-    }
-
-    public function getPlayerResults(Request $request) {
-
-        $input = $request->all();
-        $response = $this->playerResults($input);
-        return $response;
-
-    }
-
-    public function getTeams(Request $request) {
-
-        $input = $request->all();
-        $response = $this->teams($input);
-        return $response;
-
-
-    }
-
-    public function getPlayers(Request $request) {
-
-        $input = $request->all();
-        $response = $this->players($input);
-        return $response;
-
-    }
-
-    public function getMarketCategories(Request $request) {
-
-        $input = $request->all();
-        $input['sports'] = [];
-        foreach( getSports() ?? [] as $field) {
-            array_push( $input['sports'], $field );
-        }
-        $response = $this->marketCategories($input);
-        return $response;
-
-    }
-
-    public function getMarkets(Request $request) {
-
-        $input = $request->all();
-        $response = $this->markets($input);
-        return $response;
-
-    }
-
-    public function getUpcomingOddsPushStreams(Request $request) {
-        $input = $request->all();
-        $response = $this->upcomingOddsPushStreams($input);
-        return $response;
-    }
-
-    public function getSportsBook(Request $request) {
-        $input = $request->all();
-        $response = $this->sportsBook($input);
-        return $response;
-    }
- 
     public function getGameListing(Request $request) {
 
         $input = $request->all();
@@ -449,5 +354,111 @@ class APIController extends Controller
 
         curl_exec($curl);
         curl_close($curl);
+    }
+
+    /*
+    * End of Major Functions
+    * 
+    */
+
+    public function getLeagues(Request $request) {
+
+        $input = $request->all();
+        $response = $this->leagues($input);
+        return $response;
+
+    }
+
+    public function getUpcomingGameOdds(Request $request) {
+
+        $input = $request->all();
+        $response = $this->upcomingGameOdds($input);
+        return $response;
+    }
+
+    public function getFutureOdds(Request $request) {
+
+        $input = $request->all();
+        $response = $this->futureOdds($input);
+        return $response;
+
+    }
+
+    public function getFutures(Request $request) {
+        $input = $request->all();
+        $response = $this->futures($input);
+        return $response;
+    }
+
+    public function getBestGrader(Request $request) {
+
+        $input = $request->all();
+        $response = $this->bestGrader($input);
+        return $response;
+
+    }
+
+    public function getGameScores(Request $request) {
+        
+        $input = $request->all();
+        $response = $this->gameScores($input);
+        return $response;
+    }
+
+    public function getPlayerResults(Request $request) {
+
+        $input = $request->all();
+        $response = $this->playerResults($input);
+        return $response;
+
+    }
+
+    public function getTeams(Request $request) {
+
+        $input = $request->all();
+        $response = $this->teams($input);
+        return $response;
+
+
+    }
+
+    public function getPlayers(Request $request) {
+
+        $input = $request->all();
+        $response = $this->players($input);
+        return $response;
+
+    }
+
+    public function getMarketCategories(Request $request) {
+
+        $input = $request->all();
+        $input['sports'] = [];
+        foreach( getSports() ?? [] as $field) {
+            array_push( $input['sports'], $field );
+        }
+        $response = $this->marketCategories($input);
+        return $response;
+
+    }
+
+    public function getMarkets(Request $request) {
+
+        $input = $request->all();
+        $response = $this->markets($input);
+        return $response;
+
+    }
+
+    public function getUpcomingOddsPushStreams(Request $request) {
+        $input = $request->all();
+        $response = $this->upcomingOddsPushStreams($input);
+        return $response;
+    }
+
+    public function getSportsBook(Request $request) {
+        $input = $request->all();
+        $response = $this->sportsBook($input);
+        return $response;
     }
 }
