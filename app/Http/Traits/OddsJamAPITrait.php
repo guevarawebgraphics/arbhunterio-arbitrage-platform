@@ -82,9 +82,8 @@ trait OddsJamAPITrait
 
 
             $response = json_decode($json, true);
-           
             $output = [
-                $response,
+                'data' =>   $response['data'],
                 'message'   =>  'Successfully processed..',
                 'status'    => true
             ];
