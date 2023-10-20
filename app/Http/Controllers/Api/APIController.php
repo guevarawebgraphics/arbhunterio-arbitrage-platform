@@ -59,7 +59,7 @@ class APIController extends Controller
             foreach ( $value['markets'] ?? [] as $val ) {
 
                 $dateTime = new DateTime($value['game']['start_date']);
-                $formattedDate = $dateTime->format('D, M j [at] g:i A');
+                $formattedDate = $dateTime->format('D, M j at g:i A');
 
                 $home_odds = $value['home_team_odds'];
                 $away_odds = $value['away_team_odds'];
@@ -218,7 +218,7 @@ class APIController extends Controller
         }
         
         // Paginate the data
-        $perPage = $request->input('per_page', 10000); // Number of items per page
+        $perPage = $request->input('per_page', 1000000); // Number of items per page
         $currentPage = $request->input('page', $request->page ? $request->page : 1 ); // Current page
         $pagedData = array_slice($games, ($currentPage - 1) * $perPage, $perPage);
 
