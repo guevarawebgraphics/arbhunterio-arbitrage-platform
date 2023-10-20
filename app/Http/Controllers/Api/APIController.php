@@ -9,6 +9,7 @@ use App\Services\OddsJamGameEventCronJobs\OddsJamGameEventCronJob;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 
+
 use DateTime;
 use DateTimeZone;
 
@@ -138,45 +139,6 @@ class APIController extends Controller
         return $response;
     }
  
-    public function getGameListingOld(Request $request) {
-
-        $input = ['start_date_before' => "2023-10-05T22:00:00-04:00"];
-
-        // Get the current date without the time
-        $currentDate = new \DateTime();
-        $currentDateString = $currentDate->format('Y-m-d');
-
-        // Extract the time and timezone from the input string
-        $timeParts = explode('T', $input['start_date_before'])[1];
-
-        // Combine the current date with the extracted time
-        $input['start_date_before'] = $currentDateString . 'T' . $timeParts;
-
-
-        $gameData = $this->games($input);
-        $sportsBook = $this->defaultSporksBook();
-
-        if (!$gameData['status'] || empty($gameData['data'])) {
-            return [];
-        }
-
-        $games = $gameData['data']['data'];
-        $games = array_slice($games, 0, 15); // Take only first 5 games
-
-        $gameArray = [];
-        foreach ($games as $game) {
-            if (isset($game['home_team_info']) && isset($game['away_team_info'])) {
-                $gameArray[] = $this->fetchOddsData($game, $sportsBook);
-            }
-        }
-
-        \DB::table('oddsjamgameeventcronjobs')->where('id', 1 )->update([
-            'game_event_json'   =>    json_encode($gameArray)
-        ]);
-        
-       return $gameArray;
-    }
-
     public function getGameListing(Request $request) {
 
         $input = $request->all();
@@ -273,7 +235,27 @@ class APIController extends Controller
         return $grouped;
     }
 
+    public function oddsPushStream()
+    {
+        $curl = curl_init();
 
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => 'https://api-external.oddsjam.com/api/v2/stream/odds?market=Moneyline&key='.config('services.oddsjam.key').'&start_date_before=2024-02-11T16%3A35%3A00-05%3A00&sports_book=10bet&game_id=39804-16218-24-06&sportsbooks=bwin&sportsbooks=partypoker',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'GET',
+        ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+        \Log::info('Streaming: ' . $response );
+    }
+    
     public function getGameListingPaginate(Request $request) {
         // Define the path to the file in the public directory
         $filePath = public_path('game.json');

@@ -16,4 +16,5 @@ mix.js('resources/js/app.js', 'public/js')
         // add here
         require("tailwindcss"),
     ])
+    .babel(['public/js/echo.js'], 'public/js/echo.js')
     .sourceMaps();
