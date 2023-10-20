@@ -9,7 +9,6 @@ use App\Services\OddsJamGameEventCronJobs\OddsJamGameEventCronJob;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 
-
 use DateTime;
 use DateTimeZone;
 
@@ -237,25 +236,28 @@ class APIController extends Controller
 
     public function oddsPushStream()
     {
+        $url = 'https://api-external.oddsjam.com/api/v2/stream/odds?market=Moneyline&key='.config('services.oddsjam.key').'&start_date_before=2024-02-11T16%3A35%3A00-05%3A00&sports_book=10bet&game_id=39804-16218-24-06&sportsbooks=bwin&sportsbooks=partypoker';
+
         $curl = curl_init();
+        curl_setopt_array($curl, [
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_FOLLOWLOCATION => 1,
+            CURLOPT_WRITEFUNCTION => function($ch, $str) {
+                $data = trim($str);
+                if ($data !== "") {
+                    echo "$data\n" . "<br>";
+                    ob_flush();  // Use this to flush the output buffer to ensure real-time streaming
+                    flush();     // Use this to flush system output buffer
+                }
+                return strlen($str);
+            }
+        ]);
 
-        curl_setopt_array($curl, array(
-        CURLOPT_URL => 'https://api-external.oddsjam.com/api/v2/stream/odds?market=Moneyline&key='.config('services.oddsjam.key').'&start_date_before=2024-02-11T16%3A35%3A00-05%3A00&sports_book=10bet&game_id=39804-16218-24-06&sportsbooks=bwin&sportsbooks=partypoker',
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_ENCODING => '',
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 0,
-        CURLOPT_FOLLOWLOCATION => true,
-        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        CURLOPT_CUSTOMREQUEST => 'GET',
-        ));
-
-        $response = curl_exec($curl);
-
+        curl_exec($curl);
         curl_close($curl);
-        \Log::info('Streaming: ' . $response );
     }
-    
+
     public function getGameListingPaginate(Request $request) {
         // Define the path to the file in the public directory
         $filePath = public_path('game.json');
