@@ -182,7 +182,7 @@
                             <div class="flex min-w-0 flex-1 items-center justify-center gap-1.5">
                                 <div class="h-4 w-4"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z" clip-rule="evenodd"></path></svg>
                                 </div>
-                                <div class="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap">Play</div>
+                                <div class="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap" id="playButton">Play</div>
                             </div>
                         </button>
                     </div>
