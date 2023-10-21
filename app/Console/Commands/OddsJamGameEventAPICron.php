@@ -54,7 +54,6 @@ class OddsJamGameEventAPICron extends Command
         $currentDate = new DateTime('now', new DateTimeZone(date_default_timezone_get()));
         // $currentDate = new DateTime('2023-10-22', new DateTimeZone(date_default_timezone_get()));
 
-
         $currentDate->setTime(0, 0, 0); // Set time to start of the day (12 am / 00:00)
 
         $intervals = [];

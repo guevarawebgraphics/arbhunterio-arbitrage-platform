@@ -8,6 +8,7 @@ use App\Http\Traits\OddsJamAPITrait;
 use App\Services\OddsJamGameEventCronJobs\OddsJamGameEventCronJob;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 use DateTime;
 use DateTimeZone;
@@ -224,16 +225,18 @@ class APIController extends Controller
         }
         
         // Paginate the data
-        $perPage = $request->input('per_page', 1000000); // Number of items per page
-        $currentPage = $request->input('page', $request->page ? $request->page : 1 ); // Current page
+        $perPage = $request->input('per_page', 15); // Number of items per page
+        $currentPage = $request->input('page', 1); // Current page
+
+        // Slice the array data based on the current page and items per page
         $pagedData = array_slice($games, ($currentPage - 1) * $perPage, $perPage);
 
-        return response()->json([
-            'data' => $pagedData,
-            'current_page' => $currentPage,
-            'per_page' => $perPage,
-            'total' => count($games),
+        // Create our paginator and pass it to the view
+        $paginator = new LengthAwarePaginator($pagedData, count($games), $perPage, $currentPage, [
+            'path' => LengthAwarePaginator::resolveCurrentPath(),
         ]);
+
+        return response()->json($paginator->toArray());
     }
 
     public function getGameListing(Request $request) {
@@ -332,7 +335,7 @@ class APIController extends Controller
         return $grouped;
     }
 
-    public function oddsPushStream()
+    public function oddsPushStream(Request $request)
     {
         $sportsbooks = '';
         $sports = getSports();
@@ -342,6 +345,8 @@ class APIController extends Controller
         $league_api = $this->leagues($league_input);
         $league = '';
 
+        $game_ids = '';
+
         foreach (getSportsBook() ?? [] as $field) {
             $sportsbooks .= '&sportsbooks=' . urlencode($field->name);
         }
@@ -350,10 +355,13 @@ class APIController extends Controller
             $league .= '&league=' . urlencode($field);
         }
 
+        foreach ( $request->game_ids ?? [] as $field) {
+            $game_ids .= '&game_id=' . urlencode($field);
+        }
+
         $start_date_before = '2023-10-21T13:00:00-04:00';
         $start_date_after = '2023-10-31T13:00:00-04:00';
-
-        $url = 'https://api-external.oddsjam.com/api/v2/stream/odds?market_name=Moneyline&key=' . urlencode(config('services.oddsjam.key')) . $league . '&start_date_before=' . urlencode($start_date_before) . '&start_date_after=' . urlencode($start_date_after) . $sportsbooks;
+        $url = 'https://api-external.oddsjam.com/api/v2/stream/odds?market_name=Moneyline&key=' . urlencode(config('services.oddsjam.key')) . $game_ids . $league . '&start_date_before=' . urlencode($start_date_before) . '&start_date_after=' . urlencode($start_date_after) . $sportsbooks;
 
         $curl = curl_init();
         curl_setopt_array($curl, [
@@ -363,7 +371,7 @@ class APIController extends Controller
             CURLOPT_WRITEFUNCTION => function ($ch, $str) {
                 $data = trim($str);
                 if ($data !== "") {
-                    echo "<strong>Response:</strong> $data\n" . "<br><br>";
+                    echo "$data\n";
                     ob_flush();  // Use this to flush the output buffer to ensure real-time streaming
                     flush();     // Use this to flush system output buffer
                 }
