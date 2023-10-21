@@ -11,6 +11,7 @@ use Illuminate\Queue\SerializesModels;
 use App\Http\Traits\OddsJamAPITrait;
 use App\Services\GameOdds\GameOdds;
 use Illuminate\Support\Facades\File;
+use App\Events\NewOddsReceived;
 
 class StoreOddsStreamJob implements ShouldQueue
 {
@@ -47,6 +48,8 @@ class StoreOddsStreamJob implements ShouldQueue
             $bet->type = $raw_query->type;
 
             $gameodds = GameOdds::where('uid', $bet->id)->whereNull('deleted_at')->first();
+
+            event(new NewOddsReceived($bet));
 
             if (!empty($gameodds)) {
                 
@@ -97,7 +100,6 @@ class StoreOddsStreamJob implements ShouldQueue
 
             }
 
-            \Log::info('Stream: ' . json_encode($raw_query) );
 
         }
 
