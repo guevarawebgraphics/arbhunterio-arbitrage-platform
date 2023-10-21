@@ -128,7 +128,7 @@ class APIController extends Controller
         file_put_contents($file, $jsonData);
 
         return $gameArray;
-
+        
     }
 
     private function fetchOddsData($game, $sportsBook) {
