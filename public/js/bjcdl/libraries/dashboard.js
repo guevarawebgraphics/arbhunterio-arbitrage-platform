@@ -16,6 +16,7 @@ async function getGames(pageID) {
             if (response.data.length > 0) {
                 
                 $.each(response.data, function (i, val) {
+
                     html += `<tr class="border-b hover:bg-[#1D2F41]">
                         <td class="w-4 p-4">
                             <div class="flex items-center">

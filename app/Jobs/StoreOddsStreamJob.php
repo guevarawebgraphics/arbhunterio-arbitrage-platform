@@ -51,51 +51,53 @@ class StoreOddsStreamJob implements ShouldQueue
             if (!empty($gameodds)) {
                 
                 GameOdds::where('uid', $bet->id)->update([
-                    'bet_name'  =>  $bet->bet_name,
-                    'bet_points'    =>  $bet->bet_points,
-                    'bet_price' =>  $bet->bet_price,
-                    'bet_type'  =>  $bet->bet_type,
-                    'game_id'   =>  $bet->game_id,
-                    'is_live'   =>  $bet->is_live,
-                    'is_main'   =>  $bet->is_main,
-                    'league'    =>  $bet->league,
-                    'player_id' =>  $bet->player_id,
-                    'selection' =>  $bet->selection,
-                    'selection_line'    =>  $bet->selection_line,
-                    'selection_points'  =>  $bet->selection_points,
-                    'sport' =>  $bet->sport,
-                    'sportsbook'    =>  $bet->sportsbook,
-                    'timestamp' =>  $bet->timestamp,
-                    'entry_id'  =>  $bet->entry_id,
-                    'type'  =>  $bet->type
+                    'bet_name'  =>  $bet->bet_name, 
+                    'bet_points'=>  $bet->bet_points, 
+                    'bet_price' =>  $bet->bet_price,  
+                    'bet_type'  =>  $bet->bet_type, 
+                    'game_id'   =>  $bet->game_id, 
+                    'is_live'   =>  $bet->is_live, 
+                    'is_main'   =>  $bet->is_main, 
+                    'league'    =>  $bet->league, 
+                    'player_id' =>  $bet->player_id, 
+                    'selection' =>  $bet->selection, 
+                    'selection_line'    =>  $bet->selection_line, 
+                    'selection_points'  =>  $bet->selection_points, 
+                    'sport' =>  $bet->sport, 
+                    'sportsbook'    =>  $bet->sportsbook, 
+                    'timestamp' =>  $bet->timestamp, 
+                    'entry_id'  =>  $bet->entry_id, 
+                    'type'  =>  $bet->type 
                 ]);
 
             } else {
 
                 $input = [
-                    'bet_name'  =>  $bet->bet_name,
-                    'bet_points'    =>  $bet->bet_points,
-                    'bet_price' =>  $bet->bet_price,
-                    'bet_type'  =>  $bet->bet_type,
-                    'game_id'   =>  $bet->game_id,
-                    'uid'   =>  $bet->id,
-                    'is_live'   =>  $bet->is_live,
-                    'is_main'   =>  $bet->is_main,
-                    'league'    =>  $bet->league,
-                    'player_id' =>  $bet->player_id,
-                    'selection' =>  $bet->selection,
-                    'selection_line'    =>  $bet->selection_line,
-                    'selection_points'  =>  $bet->selection_points,
-                    'sport' =>  $bet->sport,
-                    'sportsbook'    =>  $bet->sportsbook,
-                    'timestamp' =>  $bet->timestamp,
-                    'entry_id'  =>  $bet->entry_id,
-                    'type'  =>  $bet->type
+                    'bet_name'  =>  $bet->bet_name, 
+                    'bet_points'    =>  $bet->bet_points, 
+                    'bet_price' =>  $bet->bet_price, 
+                    'bet_type'  =>  $bet->bet_type, 
+                    'game_id'   =>  $bet->game_id, 
+                    'uid'   =>  $bet->id, 
+                    'is_live'   =>  $bet->is_live, 
+                    'is_main'   =>  $bet->is_main, 
+                    'league'    =>  $bet->league, 
+                    'player_id' =>  $bet->player_id, 
+                    'selection' =>  $bet->selection, 
+                    'selection_line'    =>  $bet->selection_line, 
+                    'selection_points'  =>  $bet->selection_points, 
+                    'sport' =>  $bet->sport, 
+                    'sportsbook'    =>  $bet->sportsbook, 
+                    'timestamp' =>  $bet->timestamp, 
+                    'entry_id'  =>  $bet->entry_id, 
+                    'type'  =>  $bet->type 
                 ];
                 
                 $create_odds = GameOdds::create($input);
 
             }
+
+            \Log::info('Stream: ' . json_encode($raw_query) );
 
         }
 
