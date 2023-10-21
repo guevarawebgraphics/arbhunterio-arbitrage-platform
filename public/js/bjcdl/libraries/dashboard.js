@@ -1,6 +1,6 @@
 
-function getGames(pageID) {
-    
+async function getGames(pageID) {
+
     $("#arbitrage_body").html(loading_html);
 
     $.ajax({
@@ -85,10 +85,10 @@ function getGames(pageID) {
                 $.each(response.links, function (i, val) {
 
                     var is_active = val.active ? 'active' : '';
-                    var url = val.url ? val.url : 'javascript:void(0);';
+                    var url = val.url ? sBaseURI + '/dashboard?page=' + val.label : 'javascript:void(0);';
                     
                     pagination += `<li>
-                        <a href="javascript:void(0);" onClick="getGames(${val.label})" class="flex items-center ${is_active} justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">${val.label}</a>
+                        <a href="${url}" class="flex items-center ${is_active} justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">${val.label}</a>
                     </li>`;
 
                 });
@@ -118,4 +118,25 @@ function getGames(pageID) {
     });
 }
 
-getGames(1);
+getGames(pageID);
+
+// Server side pagination
+// var table = $('#arbitrage-table').DataTable({
+//     ajax: sBaseURI + '/dashboard',
+//     serverSide: true,
+//     processing: true,
+//     aaSorting:[[1,"desc"]],
+//     columns: [
+//         {data: 'id', name: 'id'},
+//         {data: 'percent', name: 'percent'},
+//         {data: 'event_date', name: 'event_date'},
+//         {data: 'event', name: 'event'},
+//         {data: 'market', name: 'market'},
+//         {data: 'bets', name: 'bets'},
+//         {data: 'best_odds', name: 'best_odds'},
+//         {data: 'books', name: 'books'},
+//         {data: 'updated', name: 'updated'},
+//     ]
+// });
+
+

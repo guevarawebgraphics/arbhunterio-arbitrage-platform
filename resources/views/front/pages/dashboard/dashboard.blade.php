@@ -505,7 +505,7 @@
             <div class="relative hidden md:block">
 
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                    <table class="w-full text-sm text-left text-[#86A5B1] dark:text-gray-400">
+                    <table class="w-full text-sm text-left text-[#86A5B1] dark:text-gray-400" id="arbitrage-table">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 ">
                             <tr>
                                 <th scope="col" class="p-4">
@@ -658,6 +658,8 @@
 
 
 @section('extra-script')
+{{-- {{Html::style('public/css/jquery.dataTables.min.css')}}
+{{Html::script('public/js/jquery.dataTables.min.js')}} --}}
 <script>
 
         function showFilter(){
@@ -705,6 +707,7 @@
     var sBaseURI = '{{ url('/') }}';
     var loading_image = "{{url('public/images/loading2.gif')}}";
     var sports_book = {!! json_encode(getSportsBook()) !!};
+    var pageID = {!! isset($_GET['page']) ? $_GET['page'] : 1 !!};
     
     var loading_html = `<tr>
             <!-- colspan is set to 9 since there are 9 columns in the table -->
