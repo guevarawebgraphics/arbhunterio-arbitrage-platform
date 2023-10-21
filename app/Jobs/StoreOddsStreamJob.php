@@ -49,7 +49,7 @@ class StoreOddsStreamJob implements ShouldQueue
             $gameodds = GameOdds::where('uid', $bet->id)->whereNull('deleted_at')->first();
 
             if (!empty($gameodds)) {
-
+                
                 GameOdds::where('uid', $bet->id)->update([
                     'bet_name'  =>  $bet->bet_name,
                     'bet_points'    =>  $bet->bet_points,

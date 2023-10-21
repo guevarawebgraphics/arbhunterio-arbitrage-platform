@@ -22,8 +22,8 @@ class CreateGameOddsTable extends Migration
             $table->string('bet_type')->nullable();
             $table->string('game_id')->nullable();
             $table->string('uid')->nullable();
-            $table->string('is_live')->default( false );
-            $table->string('is_main')->default( false );
+            $table->string('is_live')->default('false');
+            $table->string('is_main')->default('false');
             $table->string('league')->nullable();
             $table->string('player_id')->nullable();
             $table->string('selection')->nullable();
