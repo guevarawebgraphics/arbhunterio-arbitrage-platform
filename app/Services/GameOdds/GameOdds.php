@@ -71,6 +71,7 @@ class GameOdds extends Model
         'timestamp',
         'entry_id',
         'type',
+        'market',
         'is_active'
     ];
 }

@@ -34,11 +34,11 @@ class CreateGameOddsTable extends Migration
             $table->string('timestamp')->nullable();
             $table->string('entry_id')->nullable();
             $table->string('type')->nullable();
-
+            $table->string('market')->nullable();
             $table->tinyInteger('is_active')->default(1);
-
             $table->timestamps();
             $table->softDeletes();
+
         });
     }
 
