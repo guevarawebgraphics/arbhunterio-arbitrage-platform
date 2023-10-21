@@ -26,7 +26,6 @@ class StoreOddsStreamJob implements ShouldQueue
     {
         $this->jsonData = $jsonData;
     }
-
     /**
      * Execute the job.
      * 
@@ -61,6 +60,4 @@ class StoreOddsStreamJob implements ShouldQueue
         // Write the updated content back to the file
         File::put($filePath, $jsonData);
     }
-
-
 }
