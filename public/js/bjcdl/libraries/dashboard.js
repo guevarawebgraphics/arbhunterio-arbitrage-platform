@@ -1,26 +1,10 @@
 
-function getGames() {
-
-   
-    var loading_html = `<tr>
-            <!-- colspan is set to 9 since there are 9 columns in the table -->
-            <td colspan="9" class="px-6 py-3 text-center">
-            <center><img src="${sBaseURI}/public/images/loading2.gif" style="width: 25px; height: auto;" />
-            Loading content..</center>
-            </td>
-        </tr>`;
-
-    var no_record_found = `<tr>
-            <!-- colspan is set to 9 since there are 9 columns in the table -->
-            <td colspan="9" class="px-6 py-3 text-center">
-            <center>No record found..</center>
-            </td>
-        </tr>`;
+function getGames(pageID) {
     
     $("#arbitrage_body").html(loading_html);
 
     $.ajax({
-        url: sBaseURI + '/api/games',
+        url: sBaseURI + '/api/games?page=' + pageID,
         method: 'GET',
         data: {
             _token: $('meta[name="csrf-token"]').attr('content')
@@ -29,8 +13,6 @@ function getGames() {
 
             var html = '';
 
-            console.log('Response ', response.data);
-            
             if (response.data.length > 0) {
                 
                 $.each(response.data, function (i, val) {
@@ -96,6 +78,27 @@ function getGames() {
                 });
 
                 $("#arbitrage_body").html(html);
+
+
+                var pagination = `<ul class="inline-flex -space-x-px text-base h-10">`;
+                
+                $.each(response.links, function (i, val) {
+
+                    var is_active = val.active ? 'active' : '';
+                    var url = val.url ? val.url : 'javascript:void(0);';
+                    
+                    pagination += `<li>
+                        <a href="javascript:void(0);" onClick="getGames(${val.label})" class="flex items-center ${is_active} justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">${val.label}</a>
+                    </li>`;
+
+                });
+                
+                pagination += `</ul>`;
+            
+                $("#pagination-listings").html(pagination);
+
+
+
             } else {
                 $("#arbitrage_body").html(no_record_found);
             }
@@ -115,4 +118,4 @@ function getGames() {
     });
 }
 
-getGames();
+getGames(1);

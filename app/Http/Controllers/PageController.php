@@ -57,6 +57,7 @@ class PageController extends Controller
                 $seo_meta = $this->getSeoMeta($page);
             }
         }
+        
         return view('front.pages.view-handler', compact('page', 'seo_meta'));
     }
 }
