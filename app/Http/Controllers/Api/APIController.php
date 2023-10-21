@@ -9,6 +9,9 @@ use App\Services\OddsJamGameEventCronJobs\OddsJamGameEventCronJob;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use Illuminate\Pagination\LengthAwarePaginator;
+use App\Jobs\StoreOddsStreamJob;
+use Illuminate\Support\Facades\Queue;
+
 
 use DateTime;
 use DateTimeZone;
@@ -171,7 +174,6 @@ class APIController extends Controller
         $league = '';
 
         $game_ids = '';
-        $file = public_path('odds.json');
 
         foreach (getSportsBook() ?? [] as $field) {
             $sportsbooks .= '&sportsbooks=' . urlencode($field->name);
@@ -199,9 +201,17 @@ class APIController extends Controller
             CURLOPT_WRITEFUNCTION => function ($ch, $str) {
                 $data = trim($str);
                 if ($data !== "") {
-                    echo "$data\n";
-                    ob_flush();  // Use this to flush the output buffer to ensure real-time streaming
-                    flush();     // Use this to flush system output buffer
+                    if (preg_match('/data: (\{.*\})/', $data, $matches)) {
+                        $jsonData = $matches[1];
+
+                        $job = new StoreOddsStreamJob($jsonData);
+                        Queue::push($job);
+
+                        echo "$jsonData\n" . "<br><br>";
+                        ob_flush();  // Use this to flush the output buffer to ensure real-time streaming
+                        flush();     // Use this to flush system output buffer
+                    }
+                    
                 }
                 return strlen($str);
             }
