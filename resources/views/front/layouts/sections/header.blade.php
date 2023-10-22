@@ -3,15 +3,15 @@
 
 @if( !in_array(url()->current() , [ 
         url('dashboard'),  
-        url('account-details'), 
-        url('account-details/overview'),
-        url('account-details/general-settings'),
-        url('account-details/manage-subscription'),
-        url('account-details/manage-filters'),
-        url('account-details/bet-tracker-notifications'),
-        url('account-details/bankroll-settings'),
-        url('account-details/manage-injury-notifications'),
-        url('account-details/betting-tool-notifications'),
+        url('settings'), 
+        url('settings/overview'),
+        url('settings/general-settings'),
+        url('settings/manage-subscription'),
+        url('settings/manage-filters'),
+        url('settings/bet-tracker-notifications'),
+        url('settings/bankroll-settings'),
+        url('settings/manage-injury-notifications'),
+        url('settings/betting-tool-notifications'),
     ] ))
     <!-- Header-->
     <header class="bg-dark py-5">

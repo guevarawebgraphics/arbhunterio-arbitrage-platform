@@ -1,7 +1,7 @@
 <div class="dashboard__tab-menu">
     <ul class="nav flex-colum nav-pills">
         <li class="nav-item">
-            <a class="nav-link {{ request()->is('account-details/overview') ? 'active' : '' }}" href="{{ url('account-details/overview') }}">
+            <a class="nav-link {{ request()->is('settings/overview') ? 'active' : '' }}" href="{{ url('settings/overview') }}">
                 <div class="row align-items-center">
                     <div class="col-md-3">
                         <div class="icon">
@@ -15,7 +15,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link {{ request()->is('account-details/general-settings') ? 'active' : '' }}" href="{{ url('account-details/general-settings') }}">
+            <a class="nav-link {{ request()->is('settings/general-settings') ? 'active' : '' }}" href="{{ url('settings/general-settings') }}">
                 <div class="row">
                     <div class="col-md-3">
                         <div class="icon">
@@ -29,7 +29,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link {{ request()->is('account-details/manage-subscription') ? 'active' : '' }}" href="{{ url('account-details/manage-subscription') }}">
+            <a class="nav-link {{ request()->is('settings/manage-subscription') ? 'active' : '' }}" href="{{ url('settings/manage-subscription') }}">
                 <div class="row">
                     <div class="col-md-3">
                         <div class="icon">
@@ -43,7 +43,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link {{ request()->is('account-details/manage-filters') ? 'active' : '' }}" href="{{ url('account-details/manage-filters') }}">
+            <a class="nav-link {{ request()->is('settings/manage-filters') ? 'active' : '' }}" href="{{ url('settings/manage-filters') }}">
                 <div class="row">
                     <div class="col-md-3">
                         <div class="icon">
@@ -57,7 +57,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link {{ request()->is('account-details/bet-tracker-notifications') ? 'active' : '' }}" href="{{ url('account-details/bet-tracker-notifications') }}">
+            <a class="nav-link {{ request()->is('settings/bet-tracker-notifications') ? 'active' : '' }}" href="{{ url('settings/bet-tracker-notifications') }}">
                 <div class="row">
                     <div class="col-md-3">
                         <div class="icon">
@@ -71,7 +71,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link {{ request()->is('account-details/bankroll-settings') ? 'active' : '' }}" href="{{ url('account-details/bankroll-settings') }}">
+            <a class="nav-link {{ request()->is('settings/bankroll-settings') ? 'active' : '' }}" href="{{ url('settings/bankroll-settings') }}">
                 <div class="row">
                     <div class="col-md-3">
                         <div class="icon">
@@ -85,7 +85,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link {{ request()->is('account-details/manage-injury-notifications') ? 'active' : '' }}" href="{{ url('account-details/manage-injury-notifications') }}">
+            <a class="nav-link {{ request()->is('settings/manage-injury-notifications') ? 'active' : '' }}" href="{{ url('settings/manage-injury-notifications') }}">
                 <div class="row">
                     <div class="col-md-3">
                         <div class="icon">
@@ -99,7 +99,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link {{ request()->is('account-details/betting-tool-notifications') ? 'active' : '' }}" href="{{ url('account-details/betting-tool-notifications') }}">
+            <a class="nav-link {{ request()->is('settings/betting-tool-notifications') ? 'active' : '' }}" href="{{ url('settings/betting-tool-notifications') }}">
                 <div class="row">
                     <div class="col-md-3">
                         <div class="icon">
