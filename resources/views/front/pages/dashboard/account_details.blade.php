@@ -32,6 +32,9 @@
     .saveChangesBtn {
         background-color: #156077;
     }
+    .settingsColor {
+        color: #2E6B92;
+    }
 </style>
 
 <div class="flex">

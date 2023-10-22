@@ -2,7 +2,6 @@
     <div class="col-md-12">
         <div class="card mb-3">
             <div class="card-header">
-                {{-- <span class="ml-3 text-white text-sm font-bold">Overview</span> --}}
                 <span class="self-center text-2xl font-black whitespace-nowrap text-white">Overview</span>
                 <p class="text-gray-400 text-sm my-4">Update your personal information</p>
             </div>
