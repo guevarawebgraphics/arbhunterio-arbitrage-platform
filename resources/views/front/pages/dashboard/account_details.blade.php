@@ -35,6 +35,21 @@
     .settingsColor {
         color: #2E6B92;
     }
+
+    .settingsCard {
+        border-radius: 5px;
+        border: 1px solid #364558 !important;
+        background-color: #202F42;
+        padding: 2%;
+    }
+
+    .successBadge {
+        background-color: #607F56;
+        padding: 3px;
+        border-radius: 10px;
+        border: 1px solid #fff !important;
+        color: #fff;
+    }
 </style>
 
 <div class="flex">

@@ -1,49 +1,23 @@
-<div class="row">
+<div class="row settings-card mb-3">
     <div class="col-md-12">
-        <div class="card mb-3">
-            <div class="card-header">
-                <h3>Manage Subscription</h3>
+        <div class="card">
+            <div class="card-header mb-5">
+                <span class="self-center text-2xl font-black whitespace-nowrap text-white">Manage Subscription</span>
             </div>
-            <div class="card-body">
-                <div class="row mb-3">
-                    <div class="col-md-12">
-                        <p><b>Your Subscriptions</b></p>
-                        <div class="row">
-                            <div class="col-md-8">
-                                <div class="alert alert-secondary">
-                                    <p><b>Platinum (Yearly)</b> <span class="badge bg-success text-decoration-none link-light">Trial</span></p>
-                                    <p><b class="text-muted"><s>$9990</s> $2500.00 per year</b> <span class="badge bg-success text-decoration-none link-light">75% off</span></p>
-                                    <p><small>Your trial will end and you will be billed on October 6, 2023</small></p>
-                                    <p><b>···· 5913</b> <i class="bi bi-pencil"></i></p>
-                                    <button class="btn btn-primary btn-sm">Contact Us</button>
-                                </div>
-                            </div>
-                        </div>
+            
+            <div class="row">
+                <form>
+                    <div class="grid gap-6 mb-6 md:grid-cols-2 mb-3">
+                        <div class="p-3">
+                            <label for="" class="block mb-2 text-sm font-medium text-gray-900 text-white">Your Subscriptions</label>
 
-                        <div class="col-md-12">
-                            <p><b>Payment Methods</b></p>
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <div class="alert alert-secondary">
-                                        <p class="text-muted">Expires on 4/2028</p>
-                                        <p><b>···· 5913</b></p>
-                                        <hr>
-                                        <button class="btn btn-primary btn-sm">Add Payment Method</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-12">
-                            <p><b>Billing History</b></p>
-                            <div class="row">
-                                <div class="col-md-8">
-                                    
-                                </div>
+                            <div class="settingsCard">
+                                <span class="text-white font-medium">Platinum (Yearly)</span> <span class="successBadge">Trial</span>
                             </div>
                         </div>
                     </div>
-                </div>
+                </form>
+
             </div>
         </div>
     </div>
