@@ -1916,12 +1916,6 @@ body {
 }
 
 
-.hover\:bg-\[\#1D2F41\]:hover {
-  --tw-bg-opacity: 1;
-  background-color: rgb(29 47 65 / var(--tw-bg-opacity));
-}
-
-
 .hover\:bg-\[\#3d546b\]:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(61 84 107 / var(--tw-bg-opacity));

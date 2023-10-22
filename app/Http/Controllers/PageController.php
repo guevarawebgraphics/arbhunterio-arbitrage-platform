@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Services\Pages\Repositories\PageRepositoryInterface;
 use App\Http\Traits\SystemSettingTrait;
+use App\Http\Traits\OddsJamAPITrait;
 
 class PageController extends Controller
 {
-    use SystemSettingTrait;
+    use SystemSettingTrait, OddsJamAPITrait;
     //
     /**
      * Display a listing of the resource.
@@ -57,6 +58,7 @@ class PageController extends Controller
                 $seo_meta = $this->getSeoMeta($page);
             }
         }
+        
         return view('front.pages.view-handler', compact('page', 'seo_meta'));
     }
 }

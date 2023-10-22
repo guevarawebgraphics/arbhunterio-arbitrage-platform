@@ -52,12 +52,13 @@ class OddsJamGameEventAPICron extends Command
 
         // Create a DateTime object for the current date in the local timezone
         $currentDate = new DateTime('now', new DateTimeZone(date_default_timezone_get()));
+        // $currentDate = new DateTime('2023-10-22', new DateTimeZone(date_default_timezone_get()));
 
         $currentDate->setTime(0, 0, 0); // Set time to start of the day (12 am / 00:00)
 
         $intervals = [];
 
-        for ($i = 0; $i < 24; $i++) {
+        for ($i = 0; $i < 48; $i++) {
 
             // Create a clone of the DateTime object for the start of the current hour
             $startOfHour = clone $currentDate;
