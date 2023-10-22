@@ -60,7 +60,7 @@
                         </div>
                         <div class="p-3">
                             <label for="state" class="block mb-2 text-sm font-medium text-gray-900 text-white">State</label>
-                            <select id="state" name="state" required>
+                            <select id="state" name="state" style="width: 100%;" required>
                                 <option value="Alabama">Alabama</option>
                                 <option value="Alaska">Alaska</option>
                                 <option value="Arizona">Arizona</option>
@@ -138,7 +138,7 @@
                         </div>
                         <div class="p-3">
                             <label for="odds_format" class="block mb-2 text-sm font-medium text-gray-900 text-white">Odds format</label>
-                            <select id="odds_format" name="odds_format" required>
+                            <select id="odds_format" name="odds_format" style="width: 100%;" required>
                                 <option value="Decimal">Decimal</option>
                                 <option value="American">American</option>
                                 <option value="Fractional">Fractional</option>
