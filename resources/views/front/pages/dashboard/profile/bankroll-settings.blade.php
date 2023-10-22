@@ -1,27 +1,39 @@
-<div class="row">
+<div class="row settings-card mb-3">
     <div class="col-md-12">
-        <div class="card mb-3">
-            <div class="card-header">
-                <h3>Bankroll Settings</h3>
-                <small class="text-muted">Change your bankroll settings</small>
+        <div class="card">
+            <div class="card-header mb-5">
+                <span class="self-center text-2xl font-black whitespace-nowrap text-white">Bankroll Settings</span>
+                <p class="text-gray-400 text-sm my-4">Change your bankroll settings</p>
             </div>
-            <div class="card-body">
-                <div class="row mb-3">
-                    <div class="col-md-12 mb-3">
-                        <label><b>Bankroll</b></label>
-                        <input type="text" class="form-control" placeholder="4000">
+            
+            <div class="row">
+                <form>
+                    <div class="p-3 mb-3">
+                        <label for="" class="block  text-sm font-medium text-white">Bankroll</label>
+                        <input type="number" style="width: 100%;">
                     </div>
-                    <div class="col-md-12">
-                        <label><b>Kelly Multiplier</b></label>
-                        <input type="text" class="form-control" placeholder="0.5">
+                    <div class="p-3 mb-3">
+                        <label for="" class="block  text-sm font-medium text-white">Kelly Multiplier</label>
+                        <input type="number" style="width: 100%;">
                     </div>
-                </div>
-            </div>
-            <div class="card-footer">
-                <div style="float: right !important;">
-                    <button class="btn btn-secondary">Cancel</button>
-                    <button class="btn btn-primary">Save Changes</button>
-                </div>
+                    <hr>
+                    <br>
+                    <div class="text-right">
+                        <button 
+                            type="button"
+                            class="text-white border border-gray-300 bg-gray-500 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-900 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+                        >
+                            Cancel
+                        </button>
+                        <button 
+                            type="button" 
+                            class="text-gray saveChangesBtn hover:bg-blue-500 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                        >
+                            Save Changes
+                        </button>
+                    </div>
+                </form>
+
             </div>
         </div>
     </div>
