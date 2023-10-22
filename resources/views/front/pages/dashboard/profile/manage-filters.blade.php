@@ -1,26 +1,32 @@
-<div class="row">
+<div class="row settings-card mb-3">
     <div class="col-md-12">
-        <div class="card mb-3">
-            <div class="card-header">
-                <h3>Manage Filters</h3>
-                <small class="text-muted">Manage filters for the books we provide</small>
+        <div class="card">
+            <div class="card-header mb-5">
+                <span class="self-center text-2xl font-black whitespace-nowrap text-white">Manage Filters</span>
+                <p class="text-gray-400 text-sm my-4">Manage filters for the books we provide</p>
             </div>
-            <div class="card-body">
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label><b>Books to Exclude</b></label>
-                        
-                        <select class="form-control">
-                            <option>Books to Exclude</option>
-                        </select>
+            
+            <div class="row">
+                <form>
+                    <label for="" class="block mb-2 text-sm font-medium text-gray-900 text-white">Books to exclude</label>
+                    <hr>
+                    <br>
+                    <div class="text-right">
+                        <button 
+                            type="button"
+                            class="text-white border border-gray-300 bg-gray-500 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-900 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+                        >
+                            Cancel
+                        </button>
+                        <button 
+                            type="button" 
+                            class="text-gray saveChangesBtn hover:bg-blue-500 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                        >
+                            Save Changes
+                        </button>
                     </div>
-                </div>
-            </div>
-            <div class="card-footer">
-                <div style="float: right !important;">
-                    <button class="btn btn-secondary">Cancel</button>
-                    <button class="btn btn-primary">Save Changes</button>
-                </div>
+                </form>
+
             </div>
         </div>
     </div>

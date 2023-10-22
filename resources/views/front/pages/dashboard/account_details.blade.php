@@ -44,11 +44,38 @@
     }
 
     .successBadge {
-        background-color: #607F56;
-        padding: 3px;
-        border-radius: 10px;
-        border: 1px solid #fff !important;
-        color: #fff;
+        background-color: #324E1C;
+        padding: 5px;
+        border-radius: 15px;
+        border: 1px solid #B3DA7E !important;
+        color: #B3DA7E;
+        font-weight: bold;
+    }
+
+    .dangerBadge {
+        background-color: #6F1313;
+        padding: 5px;
+        border-radius: 15px;
+        border: 1px solid #FFADA2 !important;
+        color: #FFADA2;
+        font-weight: bold;
+    }
+    .settingsBtn {
+        background-color: #1D2F41;
+        border: 1px solid #0099D2;
+        color: #0099D2;
+        border-radius: 5px;
+        padding: 5px;
+    }
+    .settingsBtn:hover {
+        background-color: #09131E;
+        transition-delay: 0.2s;
+    }
+    .settingsCard table tr td {
+        padding: 10px;
+    }
+    .settingsCard table tr {
+        border-bottom: 1px solid gray;
     }
 </style>
 
