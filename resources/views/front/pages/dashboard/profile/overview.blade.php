@@ -1,4 +1,4 @@
-<div class="row settings-card">
+<div class="row settings-card mb-3">
     <div class="col-md-12">
         <div class="card mb-3">
             <div class="card-header">
@@ -168,10 +168,32 @@
                             </button>
                         </div>
                     </div>
-                    <hr>
+                    <hr class="mb-3">
+                    <div class="text-right">
+                        <button 
+                            type="button"
+                            class="text-white border border-gray-300 bg-gray-500 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-900 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+                        >
+                            Cancel
+                        </button>
+                        <button 
+                            type="button" 
+                            class="text-gray saveChangesBtn hover:bg-blue-500 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                        >
+                            Save Changes
+                        </button>
+                    </div>
+
                 </form>
 
             </div>
         </div>
     </div>
+</div>
+
+<div class="row settings-card">
+    <span class="text-white">
+        Download the <b>OddsJam App</b>, and get push<br>
+        notifications <b>directly to your phone.</b>
+    </span>
 </div>

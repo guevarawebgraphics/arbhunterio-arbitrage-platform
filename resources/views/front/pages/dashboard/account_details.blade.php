@@ -19,6 +19,19 @@
         background-color: #13212F;
         padding: 2%;
     }
+    input {
+        background-color: #202F42 !important;
+        border: 1px solid #364558 !important;
+        color: #fff !important;
+    }
+    select {
+        background-color: #202F42 !important;
+        border: 1px solid #364558 !important;
+        color: #fff !important;
+    }
+    .saveChangesBtn {
+        background-color: #156077;
+    }
 </style>
 
 <div class="flex">
