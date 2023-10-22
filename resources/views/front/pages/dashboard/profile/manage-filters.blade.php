@@ -9,6 +9,7 @@
             <div class="row">
                 <form>
                     <label for="" class="block mb-2 text-sm font-medium text-gray-900 text-white">Books to exclude</label>
+                        <input id="form-tags-1" name="tags-1" type="text" placeholder="Books to exclude">
                     <hr>
                     <br>
                     <div class="text-right">
