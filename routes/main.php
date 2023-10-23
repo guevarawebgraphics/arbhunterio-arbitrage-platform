@@ -92,6 +92,11 @@ Route::group(
         'uses' => '\App\Http\Controllers\UserController@bettingToolNotificationsAccountDetails',
         'as' => 'settings.betting_injury_notifications',
     ]);
+
+    Route::post('/settings/update-profile', [
+        'uses' => '\App\Http\Controllers\UserController@settingsUpdateProfile',
+        'as' => 'settings.update_profile',
+    ]);
     
 });
 

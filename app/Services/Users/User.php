@@ -44,6 +44,15 @@ class User extends Authenticatable
         'password',
         'phone',
         'profile_image',
+        'state',
+        'odds_format',
+        'enable_push_notification',
+        'books_to_exclude',
+        'clv_notification_enabled',
+        'clv_notification_threshold',
+        'bankroll',
+        'kelly_multiplier',
+        'injury_email_notification',
         'is_active'
     ];
 

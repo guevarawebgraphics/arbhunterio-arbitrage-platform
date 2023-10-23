@@ -188,4 +188,26 @@ class UserController extends Controller
 
         return view('front.pages.dashboard.account_details', compact('page','seo_meta', 'view'));
     }
+
+    public function settingsUpdateProfile(Request $request)
+    {
+        $this->validate($request, [
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'state' => 'required',
+            'odds_format' => 'required',
+        ]);
+
+        $user = $this->userRepository->get(auth()->user()->id);
+        $user->first_name = $request->first_name;
+        $user->last_name = $request->last_name;
+        $user->phone = $request->phone;
+        $user->state = $request->state;
+        $user->odds_format = $request->odds_format;
+        $user->save();
+
+        $view = 'overview';
+
+        return redirect()->route('settings.overview')->with('success', 'Personal information updated successfully')->with('view', $view);
+    }
 }
