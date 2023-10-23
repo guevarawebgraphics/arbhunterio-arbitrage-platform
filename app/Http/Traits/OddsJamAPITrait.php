@@ -6,6 +6,8 @@ use App\Services\SportsBooks\SportsBook;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use Illuminate\Pagination\LengthAwarePaginator;
+use App\Services\Games\Game;
+use App\Services\GameOdds\GameOdds;
 use URL;
 
 use DateTime;
@@ -1038,8 +1040,9 @@ trait OddsJamAPITrait
     }
 
     function findMatchingBets($dataObj1, $dataObj2, $type) {
-
+       
         if ($type == 1) {
+
             // Convert the object to an array.
             $dataArray = array_values($dataObj1);
 
@@ -1076,6 +1079,8 @@ trait OddsJamAPITrait
             return array_values($highestPair)[0];
 
         } elseif ($type == 2 && $dataObj1 && $dataObj2) {
+
+
             // Convert the object to an array.
             $dataArray1 = array_values($dataObj1);
             $dataArray2 = array_values($dataObj2);
