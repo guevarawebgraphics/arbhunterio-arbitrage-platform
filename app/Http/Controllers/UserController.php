@@ -213,6 +213,46 @@ class UserController extends Controller
                 return redirect()->route('settings.overview')->with('success', 'Personal information updated successfully')->with('view', $view);
                 break;
             case 'bet-tracker-notifications':
+                $this->validate($request, [
+                    'clv_notification_threshold' => 'required',
+                ]);
+
+                $user = $this->userRepository->get(auth()->user()->id);
+                $user->clv_notification_threshold = $request->clv_notification_threshold;
+                $user->clv_notification_enabled = isset($request->clv_notification_enabled) ? 1 : 0;
+                $user->save();
+
+                $view = 'bet-tracker-notifications';
+                
+                return redirect()->route('settings.bet_tracker_notifications')->with('success', 'Bet Tracker Notification updated successfully')->with('view', $view);
+                break;
+            case 'bankroll-settings':
+                $this->validate($request, [
+                    'kelly_multiplier' => 'required',
+                    'bankroll' => 'required'
+                ]);
+
+                $user = $this->userRepository->get(auth()->user()->id);
+                $user->bankroll = $request->bankroll;
+                $user->kelly_multiplier = $request->kelly_multiplier;
+                $user->save();
+
+                $view = 'bankroll-settings';
+                
+                return redirect()->route('settings.bankroll_settings')->with('success', 'Bankroll Settings updated successfully')->with('view', $view);
+                break;
+            case 'manage-injury-notifications':
+                $this->validate($request, [
+                    'injury_email_notification' => 'required',
+                ]);
+
+                $user = $this->userRepository->get(auth()->user()->id);
+                $user->injury_email_notification = $request->injury_email_notification;
+                $user->save();
+
+                $view = 'manage-injury-notifications';
+                
+                return redirect()->route('settings.manage_injury_notifications')->with('success', 'Manage Injury Notifications updated successfully')->with('view', $view);
                 break;
         }
     }
