@@ -1050,21 +1050,22 @@ trait OddsJamAPITrait
                 $mergedOdds = $homeMarketOdds->merge($awayMarketOdds);
 
                 foreach ($mergedOdds as $index => $obj) {
+                    
                     if ($obj->selection_line === 'over' && $obj->bet_points >= $over_best_odds && $obj->is_live == false) {
                         if ($obj->bet_points > $over_best_odds) {
                             $over_best_odds = $obj->bet_points;
-                            $over_sports_books = [$obj->sports_book_name];
-                        } elseif (!in_array($obj->sports_book_name, $over_sports_books)) {
-                            $over_sports_books[] = $obj->sports_book_name;
+                            $over_sports_books = [$obj->sportsbook];
+                        } elseif (!in_array($obj->sportsbook, $over_sports_books)) {
+                            $over_sports_books[] = $obj->sportsbook;
                         }
                     }
                     
                     if ($obj->selection_line === 'under' && $obj->bet_points >= $under_best_odds && $obj->is_live == false) {
                         if ($obj->bet_points > $under_best_odds) {
                             $under_best_odds = $obj->bet_points;
-                            $under_sports_books = [$obj->sports_book_name];
-                        } elseif (!in_array($obj->sports_book_name, $under_sports_books)) {
-                            $under_sports_books[] = $obj->sports_book_name;
+                            $under_sports_books = [$obj->sportsbook];
+                        } elseif (!in_array($obj->sportsbook, $under_sports_books)) {
+                            $under_sports_books[] = $obj->sportsbook;
                         }
                     }
                 }
@@ -1082,9 +1083,9 @@ trait OddsJamAPITrait
                     if (!isset($obj->selection_line) || ($obj->selection_line != 'over' && $obj->selection_line != 'under')) {
                         if ($obj->bet_points > $home_best_odds) {
                             $home_best_odds = $obj->bet_points;
-                            $home_sports_books = [$obj->sports_book_name];
-                        } elseif (!in_array($obj->sports_book_name, $home_sports_books)) {
-                            $home_sports_books[] = $obj->sports_book_name;
+                            $home_sports_books = [$obj->sportsbook];
+                        } elseif (!in_array($obj->sportsbook, $home_sports_books)) {
+                            $home_sports_books[] = $obj->sportsbook;
                         }
                     }
                 }
@@ -1093,9 +1094,9 @@ trait OddsJamAPITrait
                     if (!isset($obj->selection_line) || ($obj->selection_line != 'over' && $obj->selection_line != 'under')) {
                         if ($obj->bet_points > $away_best_odds) {
                             $away_best_odds = $obj->bet_points;
-                            $away_sports_books = [$obj->sports_book_name];
-                        } elseif (!in_array($obj->sports_book_name, $away_sports_books)) {
-                            $away_sports_books[] = $obj->sports_book_name;
+                            $away_sports_books = [$obj->sportsbook];
+                        } elseif (!in_array($obj->sportsbook, $away_sports_books)) {
+                            $away_sports_books[] = $obj->sportsbook;
                         }
                     }
                 }
@@ -1148,7 +1149,7 @@ trait OddsJamAPITrait
 
                 if ($best_odds_up > 0 && $best_odds_down > 0 && ( $best_odds_up * $best_odds_down >= 0 ) ) {
                     array_push(
-                        $games,
+                        $gamesArray,
                         [
                             'game_id'   =>  $value->uid,
                             'profit_percentage' =>  $profit_percentage,
@@ -1179,7 +1180,7 @@ trait OddsJamAPITrait
             }
 
         }
-        
+
         return $gamesArray;
     }
 
