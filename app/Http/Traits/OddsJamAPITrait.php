@@ -40,7 +40,7 @@ trait OddsJamAPITrait
 
         $response = $this->makeAPIRequest($url, $headers);
 
-        \Log::info($response);
+        // \Log::info($response);
 
         return $response =  [
             'data' => $response,
@@ -659,7 +659,7 @@ trait OddsJamAPITrait
 
             // Using Laravel's http_build_query function
             $url = $baseURL . '?' . http_build_query($queryParams) . $sportsbooks;
-            \Log::info($url);
+            // \Log::info($url);
 
             curl_setopt($curl, CURLOPT_URL, $url );
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -684,7 +684,7 @@ trait OddsJamAPITrait
 
             $response = json_decode($json, true);
 
-            \Log::info($url);
+            // \Log::info($url);
            
             $output = [
                 $response,
@@ -1001,6 +1001,17 @@ trait OddsJamAPITrait
 
         return $games;
     }
+
+    public function gameIds(){
+        $filePath = public_path('game.json');
+
+        // Read the existing content
+        $existingData = File::get($filePath);
+
+        // Decode the JSON data to an array
+        $gamesExists = json_decode($existingData, true);
+    }
+    
     private function makeAPIRequest($url, $headers) {
         try {
             $curl = curl_init();

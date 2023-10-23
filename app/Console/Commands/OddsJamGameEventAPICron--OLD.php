@@ -40,7 +40,7 @@ class OddsJamGameEventAPICron extends Command
         $url = $baseURL . '?' . http_build_query($queryParams);
         
         $response = $this->makeAPIRequest($url, $headers);
-        \Log::info('Cron: ' . json_encode($response) );
+        // \Log::info('Cron: ' . json_encode($response) );
 
         echo "Successfully retrieved!";
     }
