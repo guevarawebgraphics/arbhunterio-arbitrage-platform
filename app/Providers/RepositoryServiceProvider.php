@@ -75,6 +75,9 @@ use App\Services\OddsJamGameEventCronJobs\Repositories\OddsJamGameEventCronJobRe
 use App\Services\OddsJamGameEventCronJobs\Repositories\OddsJamGameEventCronJobRepositoryInterface;
 use App\Services\SportsBooks\Repositories\SportsBookRepository;
 use App\Services\SportsBooks\Repositories\SportsBookRepositoryInterface;
+use App\Services\Games\Repositories\GameRepository;
+use App\Services\Games\Repositories\GameRepositoryInterface;
+
 
 use Illuminate\Support\ServiceProvider;
 
@@ -105,6 +108,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(MenuRepositoryInterface::class, MenuRepository::class);
         $this->app->bind(MenuDropdownRepositoryInterface::class, MenuDropdownRepository::class);
         //ecommerce
+        
         $this->app->bind(UserAddressDetailRepositoryInterface::class, UserAddressDetailRepository::class);
         $this->app->bind(ProductCategoryRepositoryInterface::class, ProductCategoryRepository::class);
         $this->app->bind(ProductRepositoryInterface::class, ProductRepository::class);
@@ -124,6 +128,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(CategoryPerProductRepositoryInterface::class, CategoryPerProductRepository::class);
         $this->app->bind(OddsJamGameEventCronJobRepositoryInterface::class, OddsJamGameEventCronJobRepository::class);
         $this->app->bind(SportsBookRepositoryInterface::class, SportsBookRepository::class);
+        $this->app->bind(GameRepositoryInterface::class, GameRepository::class);
     }
 
     /**

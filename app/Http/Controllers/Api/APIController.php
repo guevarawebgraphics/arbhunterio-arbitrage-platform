@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Traits\OddsJamAPITrait;
 use App\Services\OddsJamGameEventCronJobs\OddsJamGameEventCronJob;
+use App\Services\Games\Game;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\Queue;
 
 use DateTime;
 use DateTimeZone;
+use DateInterval;
 
 class APIController extends Controller
 {
@@ -38,11 +40,11 @@ class APIController extends Controller
 
             $gamesExists = json_decode($existingData, true);
 
-            \Log::info('Success Games: ' . json_encode($gamesExists) );
+            // \Log::info('Success Games: ' . json_encode($gamesExists) );
 
             return $gamesExists;
         } catch ( \Exception $e ) {
-            \Log::info('Error Games: ' . json_encode($e) );
+            // \Log::info('Error Games: ' . json_encode($e) );
             return [];
         }
 
@@ -67,7 +69,7 @@ class APIController extends Controller
         return response()->json($paginator->toArray());
     }
 
-    public function getGameListing(Request $request) {
+     public function getGameListing(Request $request) {
 
         $input = $request->all();
 
@@ -80,56 +82,163 @@ class APIController extends Controller
         }
 
         $games = $gameData['data']['data'];
-        $games = array_slice($games, 0, 100); // Take only first 50 games (comment says 5, but code is taking 50)
+        $games = array_slice($games, 0, 1000); 
 
-        $gameArray = [];
         foreach ($games as $game) {
-            if (isset($game['home_team_info']) && isset($game['away_team_info'])) {
-                $gameArray[] = $this->fetchOddsData($game, $sportsBook);
+
+            $checkExists = Game::where('uid', $game['id'])->first();
+
+            $market_input = [];
+            $market_input['game_id']    =   $game['id'];
+            $market_input['sportsbook'] =   $sportsBook;
+            $markets = $this->markets($market_input);
+
+            if ( !empty($checkExists) ) {
+
+                Game::where('uid', $game['id'] )->update([
+                    'start_date'    => $game['start_date'],
+                    'home_team' => $game['home_team'],
+                    'away_team' => $game['away_team'],
+                    'is_live'   => $game['is_live'], 
+                    'is_popular'    => $game['is_popular'],   
+                    'tournament'    => $game['tournament'],     
+                    'status'    => $game['status'],     
+                    'sport' => $game['sport'],       
+                    'league'    => $game['league'],    
+                    'home_team_info'    => json_encode($game['home_team_info']) && json_encode($game['home_team_info']) != "null" ? json_encode($game['home_team_info']) : NULL,  
+                    'away_team_info'    => json_encode($game['away_team_info']) && json_encode($game['away_team_info']) != "null" ? json_encode($game['away_team_info']) : NULL,  
+                    'markets'   => json_encode($markets[0]['data'])
+                ]);
+
+            } else {
+                Game::create([
+                    'uid'   =>  $game['id'],
+                    'start_date'    => $game['start_date'],
+                    'home_team' => $game['home_team'],
+                    'away_team' => $game['away_team'],
+                    'is_live'   => $game['is_live'], 
+                    'is_popular'    => $game['is_popular'],   
+                    'tournament'    => $game['tournament'],     
+                    'status'    => $game['status'],     
+                    'sport' => $game['sport'],       
+                    'league'    => $game['league'],    
+                    'home_team_info'    => json_encode($game['home_team_info']) && json_encode($game['home_team_info']) != "null" ? json_encode($game['home_team_info']) : NULL,  
+                    'away_team_info'    => json_encode($game['away_team_info']) && json_encode($game['away_team_info']) != "null" ? json_encode($game['away_team_info']) : NULL,  
+                    'markets'   => json_encode($markets[0]['data'])
+                ]);
             }
+
+            
         }
 
-        // Define the path to the file in the public directory
-        $file = public_path('game.json');
-
-        // Read the existing content
-        $existingData = file_get_contents($file);
-
-        // Decode the JSON data to an array
-        $gamesExists = json_decode($existingData, true);
-
-        // If the file was empty or not a valid JSON, initialize an empty array
-        if (!is_array($gamesExists)) {
-            $gamesExists = [];
-        }
-
-        // Append the new games to the games array only if they don't exist
-        foreach ($gameArray as $game) {
-            $gameExists = false;
-
-            // Check if game with the same ID already exists in $gamesExists
-            foreach ($gamesExists as $existingGame) {
-                if ($existingGame['game']['id'] == $game['game']['id']) {
-                    $gameExists = true;
-                    break;
-                }
-            }
-
-            // If game doesn't exist, append it
-            if (!$gameExists) {
-                $gamesExists[] = $game;
-            }
-        }
-
-        // Convert the updated games array back to JSON
-        $jsonData = json_encode($gamesExists, JSON_PRETTY_PRINT);
-
-        // Save the updated JSON data back to the file
-        file_put_contents($file, $jsonData);
-
-        return $gameArray;
+        return "Successfully retrieved!";
         
     }
+
+
+    // public function getGameListing(Request $request) {
+
+    //     $input = $request->all();
+
+    //     $gameData = $this->games($input);
+
+    //     $sportsBook = $this->defaultSporksBook();
+
+    //     if (!$gameData['status'] || empty($gameData['data'])) {
+    //         return [];
+    //     }
+
+    //     $games = $gameData['data']['data'];
+    //     $games = array_slice($games, 0, 1000); 
+
+    //     // $gameArray = [];
+    //     foreach ($games as $game) {
+    //         // if (isset($game['home_team_info']) && isset($game['away_team_info'])) {
+    //         //     $gameArray[] = $this->fetchOddsData($game, $sportsBook);
+    //         // }
+
+    //         // $checkExists = Game::where('uid',   $game['id'] )->first();
+    //         // if ( !empty( $checkExists ) ) {
+    //         //     Game::where('uid', $game['id'] )->update([
+    //         //         'start_date'    => $game['start_date'],
+    //         //         'home_team' => $game['home_team'],
+    //         //         'away_team' => $game['away_team'],
+    //         //         'is_live'   => $game['is_live'], 
+    //         //         'is_popular'    => $game['is_popular'],   
+    //         //         'tournament'    => $game['tournament'],     
+    //         //         'status'    => $game['status'],     
+    //         //         'sport' => $game['sport'],       
+    //         //         'league'    => $game['league'],    
+    //         //         'home_team_info'    => $game['home_team_info'],  
+    //         //         'away_team_info'    => $game['away_team_info'],  
+    //         //         'markets'   => NULL
+    //         //     ]);
+    //         // } else {
+    //             Game::create([
+    //                 'uid'   =>  $game['id'],
+    //                 'start_date'    => $game['start_date'],
+    //                 'home_team' => $game['home_team'],
+    //                 'away_team' => $game['away_team'],
+    //                 'is_live'   => $game['is_live'], 
+    //                 'is_popular'    => $game['is_popular'],   
+    //                 'tournament'    => $game['tournament'],     
+    //                 'status'    => $game['status'],     
+    //                 'sport' => $game['sport'],       
+    //                 'league'    => $game['league'],    
+    //                 'home_team_info'    => json_encode($game['home_team_info']) && json_encode($game['home_team_info']) != "null" ? json_encode($game['home_team_info']) : NULL,  
+    //                 'away_team_info'    => json_encode($game['away_team_info']) && json_encode($game['away_team_info']) != "null" ? json_encode($game['away_team_info']) : NULL,  
+    //                 'markets'   => NULL
+    //             ]);
+    //         // }
+
+    //         \Log::info('Games: ' . json_encode($game['id']) );
+            
+
+    //     }
+
+    //     return "Successfully retrieved!";
+
+    //     // // Define the path to the file in the public directory
+    //     // $file = public_path('game.json');
+
+    //     // // Read the existing content
+    //     // $existingData = file_get_contents($file);
+
+    //     // // Decode the JSON data to an array
+    //     // $gamesExists = json_decode($existingData, true);
+
+    //     // // If the file was empty or not a valid JSON, initialize an empty array
+    //     // if (!is_array($gamesExists)) {
+    //     //     $gamesExists = [];
+    //     // }
+
+    //     // // Append the new games to the games array only if they don't exist
+    //     // foreach ($gameArray as $game) {
+    //     //     $gameExists = false;
+
+    //     //     // Check if game with the same ID already exists in $gamesExists
+    //     //     foreach ($gamesExists as $existingGame) {
+    //     //         if ($existingGame['game']['id'] == $game['game']['id']) {
+    //     //             $gameExists = true;
+    //     //             break;
+    //     //         }
+    //     //     }
+
+    //     //     // If game doesn't exist, append it
+    //     //     if (!$gameExists) {
+    //     //         $gamesExists[] = $game;
+    //     //     }
+    //     // }
+
+    //     // // Convert the updated games array back to JSON
+    //     // $jsonData = json_encode($gamesExists, JSON_PRETTY_PRINT);
+
+    //     // // Save the updated JSON data back to the file
+    //     // file_put_contents($file, $jsonData);
+
+    //     // return $gameArray;
+        
+    // }
 
     private function fetchOddsData($game, $sportsBook) {
         $upcomingGameOddsInput = [
@@ -165,34 +274,49 @@ class APIController extends Controller
 
     public function oddsPushStream(Request $request)
     {
+        $batchSize = 10;
+
         $sportsbooks = '';
         $sports = getSports();
-
         $league_input = [];
         $league_input['sports'] = $sports;
         $league_api = $this->leagues($league_input);
+        $games = Game::orderBy('created_at', 'ASC')->get();
         $league = '';
-
-        $game_ids = '';
+        $game_ids_array = [];
 
         foreach (getSportsBook() ?? [] as $field) {
             $sportsbooks .= '&sportsbooks=' . urlencode($field->name);
         }
 
-        foreach ( $league_api['data'] ?? [] as $field) {
-            $league .= '&league=' . urlencode($field);
+        // foreach ($league_api['data'] ?? [] as $field) {
+        //     $league .= '&league=' . urlencode($field);
+        // }
+
+        foreach ($games ?? [] as $field) {
+            $game_ids_array[] = 'game_id=' . urlencode($field->uid);
         }
 
-        foreach ( $request->game_ids ?? [] as $field) {
-            $game_ids .= '&game_id=' . urlencode($field);
+        $current_time = new DateTime('now', new DateTimeZone('America/New_York'));
+        $start_date_before = $current_time->format('Y-m-d\TH:i:sP');
+        $current_time->add(new DateInterval('P2D')); // Add 2 days (48 hours)
+        $start_date_after = $current_time->format('Y-m-d\TH:i:sP');
+
+        $base_url = 'https://api-external.oddsjam.com/api/v2/stream/odds?key=' . urlencode(config('services.oddsjam.key')) . $league . '&start_date_before=' . $start_date_before . '&start_date_after=' . $start_date_after . $sportsbooks;
+       
+        // Split game IDs into batches and process each batch
+        $batches = array_chunk($game_ids_array, $batchSize);
+
+        foreach ($batches as $batch) {
+            $url = $base_url . '&' . implode('&', $batch);
+            $this->fetchOddsPushStreamData($url);
         }
 
-        $start_date_before = '2023-10-21T13:00:00-04:00';
+    }
 
-        $start_date_after = '2023-10-31T13:00:00-04:00';
-        
-        $url = 'https://api-external.oddsjam.com/api/v2/stream/odds?market_name=Moneyline&key=' . urlencode(config('services.oddsjam.key')) . $game_ids . $league . '&start_date_before=' . urlencode($start_date_before) . '&start_date_after=' . urlencode($start_date_after) . $sportsbooks;
-
+    private function fetchOddsPushStreamData($url)
+    {
+        // dd($url);
         $curl = curl_init();
         curl_setopt_array($curl, [
             CURLOPT_URL => $url,
@@ -203,15 +327,14 @@ class APIController extends Controller
                 if ($data !== "") {
                     if (preg_match('/data: (\{.*\})/', $data, $matches)) {
                         $jsonData = $matches[1];
-
                         $job = new StoreOddsStreamJob($jsonData);
                         Queue::push($job);
-
+                        
                         echo "$jsonData\n" . "<br><br>";
                         ob_flush();  // Use this to flush the output buffer to ensure real-time streaming
                         flush();     // Use this to flush system output buffer
                     }
-                    
+
                 }
                 return strlen($str);
             }
@@ -220,6 +343,7 @@ class APIController extends Controller
         curl_exec($curl);
         curl_close($curl);
     }
+
 
 
     /*

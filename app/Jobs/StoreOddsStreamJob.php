@@ -70,7 +70,8 @@ class StoreOddsStreamJob implements ShouldQueue
                     'sportsbook'    =>  $bet->sportsbook, 
                     'timestamp' =>  $bet->timestamp, 
                     'entry_id'  =>  $bet->entry_id, 
-                    'type'  =>  $bet->type 
+                    'type'  =>  $bet->type, 
+                    'market'    =>   $bet->bet_type
                 ]);
 
             } else {
@@ -93,12 +94,14 @@ class StoreOddsStreamJob implements ShouldQueue
                     'sportsbook'    =>  $bet->sportsbook, 
                     'timestamp' =>  $bet->timestamp, 
                     'entry_id'  =>  $bet->entry_id, 
-                    'type'  =>  $bet->type 
+                    'market'    =>   $bet->bet_type
                 ];
                 
                 $create_odds = GameOdds::create($input);
 
             }
+
+            \Log::info('Odds ID: ' . $bet->id);
 
 
         }

@@ -17,18 +17,18 @@ class CreateGameOddsTable extends Migration
             
             $table->bigIncrements('id');
             $table->longtext('bet_name')->nullable();
-            $table->decimal('bet_points', 8,2 )->default(0.00);
-            $table->integer('bet_price')->default(0.00);
+            $table->decimal('bet_points', 8,2 )->default(0.00)->nullable();
+            $table->integer('bet_price')->default(0.00)->nullable();
             $table->string('bet_type')->nullable();
             $table->string('game_id')->nullable();
             $table->string('uid')->nullable();
-            $table->string('is_live')->default('false');
-            $table->string('is_main')->default('false');
+            $table->string('is_live')->default('false')->nullable();
+            $table->string('is_main')->default('false')->nullable();
             $table->string('league')->nullable();
             $table->string('player_id')->nullable();
             $table->string('selection')->nullable();
             $table->string('selection_line')->nullable();
-            $table->decimal('selection_points')->default(0.00);
+            $table->decimal('selection_points')->default(0.00)->nullable();
             $table->longtext('sport')->nullable();
             $table->longtext('sportsbook')->nullable();
             $table->string('timestamp')->nullable();
