@@ -191,23 +191,29 @@ class UserController extends Controller
 
     public function settingsUpdateProfile(Request $request)
     {
-        $this->validate($request, [
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'state' => 'required',
-            'odds_format' => 'required',
-        ]);
+        switch ($request->view) {
+            case 'overview':                
+                $this->validate($request, [
+                    'first_name' => 'required',
+                    'last_name' => 'required',
+                    'state' => 'required',
+                    'odds_format' => 'required',
+                ]);
 
-        $user = $this->userRepository->get(auth()->user()->id);
-        $user->first_name = $request->first_name;
-        $user->last_name = $request->last_name;
-        $user->phone = $request->phone;
-        $user->state = $request->state;
-        $user->odds_format = $request->odds_format;
-        $user->save();
+                $user = $this->userRepository->get(auth()->user()->id);
+                $user->first_name = $request->first_name;
+                $user->last_name = $request->last_name;
+                $user->phone = $request->phone;
+                $user->state = $request->state;
+                $user->odds_format = $request->odds_format;
+                $user->save();
 
-        $view = 'overview';
+                $view = 'overview';
 
-        return redirect()->route('settings.overview')->with('success', 'Personal information updated successfully')->with('view', $view);
+                return redirect()->route('settings.overview')->with('success', 'Personal information updated successfully')->with('view', $view);
+                break;
+            case 'bet-tracker-notifications':
+                break;
+        }
     }
 }

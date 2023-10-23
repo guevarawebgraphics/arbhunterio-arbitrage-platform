@@ -26,6 +26,7 @@
                 @endif
                 <form method="post" action="{{ route('settings.update_profile') }}">
                     @csrf
+                    <input type="hidden" name="view" value="overview">
                     <div class="grid gap-6 mb-6 md:grid-cols-2 mb-3">
                         <div class="p-3">
                             <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 text-white">First name</label>
