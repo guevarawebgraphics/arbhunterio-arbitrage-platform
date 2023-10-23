@@ -156,49 +156,6 @@ class APIController extends Controller
                 $gameArray[] = $this->fetchOddsData($game, $sportsBook);
             }
 
-            $checkExists = Game::where('uid', $game['id'])->first();
-
-            $market_input = [];
-            $market_input['game_id']    =   $game['id'];
-            $market_input['sportsbook'] =   $sportsBook;
-            $markets = $this->markets($market_input);
-
-            if ( !empty($checkExists) ) {
-
-                Game::where('uid', $game['id'] )->update([
-                    'start_date'    => $game['start_date'],
-                    'home_team' => $game['home_team'],
-                    'away_team' => $game['away_team'],
-                    'is_live'   => $game['is_live'], 
-                    'is_popular'    => $game['is_popular'],   
-                    'tournament'    => $game['tournament'],     
-                    'status'    => $game['status'],     
-                    'sport' => $game['sport'],       
-                    'league'    => $game['league'],    
-                    'home_team_info'    => json_encode($game['home_team_info']) && json_encode($game['home_team_info']) != "null" ? json_encode($game['home_team_info']) : NULL,  
-                    'away_team_info'    => json_encode($game['away_team_info']) && json_encode($game['away_team_info']) != "null" ? json_encode($game['away_team_info']) : NULL,  
-                    'markets'   => json_encode($markets[0]['data'])
-                ]);
-
-            } else {
-                Game::create([
-                    'uid'   =>  $game['id'],
-                    'start_date'    => $game['start_date'],
-                    'home_team' => $game['home_team'],
-                    'away_team' => $game['away_team'],
-                    'is_live'   => $game['is_live'], 
-                    'is_popular'    => $game['is_popular'],   
-                    'tournament'    => $game['tournament'],     
-                    'status'    => $game['status'],     
-                    'sport' => $game['sport'],       
-                    'league'    => $game['league'],    
-                    'home_team_info'    => json_encode($game['home_team_info']) && json_encode($game['home_team_info']) != "null" ? json_encode($game['home_team_info']) : NULL,  
-                    'away_team_info'    => json_encode($game['away_team_info']) && json_encode($game['away_team_info']) != "null" ? json_encode($game['away_team_info']) : NULL,  
-                    'markets'   => json_encode($markets[0]['data'])
-                ]);
-            }
-            
-
         }
         
 
@@ -258,6 +215,44 @@ class APIController extends Controller
         $awayTeamOdds = $this->groupOddsByMarket($this->upcomingGameOdds($upcomingGameOddsInput));
 
         $marketName = $this->markets($upcomingGameOddsInput);
+
+        $checkExists = Game::where('uid', $game['id'])->first();
+
+        if ( !empty($checkExists) ) {
+
+            Game::where('uid', $game['id'] )->update([
+                'start_date'    => $game['start_date'],
+                'home_team' => $game['home_team'],
+                'away_team' => $game['away_team'],
+                'is_live'   => $game['is_live'], 
+                'is_popular'    => $game['is_popular'],   
+                'tournament'    => $game['tournament'],     
+                'status'    => $game['status'],     
+                'sport' => $game['sport'],       
+                'league'    => $game['league'],    
+                'home_team_info'    => json_encode($game['home_team_info']),  
+                'away_team_info'    => json_encode($game['away_team_info']),  
+                'markets'   => json_encode($marketName[0]['data'])
+            ]);
+
+        } else {
+            Game::create([
+                'uid'   =>  $game['id'],
+                'start_date'    => $game['start_date'],
+                'home_team' => $game['home_team'],
+                'away_team' => $game['away_team'],
+                'is_live'   => $game['is_live'], 
+                'is_popular'    => $game['is_popular'],   
+                'tournament'    => $game['tournament'],     
+                'status'    => $game['status'],     
+                'sport' => $game['sport'],       
+                'league'    => $game['league'],    
+                'home_team_info'    => json_encode($game['home_team_info']),  
+                'away_team_info'    => json_encode($game['away_team_info']),  
+                'markets'   => json_encode($marketName[0]['data'])
+            ]);
+
+        }
 
         return [
             'game' => $game,
