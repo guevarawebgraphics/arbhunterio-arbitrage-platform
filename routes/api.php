@@ -22,6 +22,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 // Upcoming Games & Odds
 Route::get('/games', '\App\Http\Controllers\Api\APIController@getGames')->name('api.games');
+Route::get('/games/test', '\App\Http\Controllers\Api\APIController@getGamesTest')->name('api.games.test');
+
 Route::get('/leagues', '\App\Http\Controllers\Api\APIController@getLeagues')->name('api.leagues');
 Route::get('/upcoming-odds', '\App\Http\Controllers\Api\APIController@getUpcomingGameOdds')->name('api.upcoming.game.odds');
 Route::get('/market-categories', '\App\Http\Controllers\Api\APIController@getMarketCategories')->name('api.market.categories');

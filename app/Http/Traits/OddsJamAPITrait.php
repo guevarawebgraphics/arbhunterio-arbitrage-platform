@@ -1004,6 +1004,185 @@ trait OddsJamAPITrait
         return $games;
     }
 
+    public function gamesPerMarketsTest($data) {
+
+        $gamesExists = Game::whereNull('deleted_at')->orderBy('created_at','DESC')->get();
+
+        $counter = 0;
+
+        $games = [];
+
+        $sports_book = getSportsBook();
+
+        $gamesArray = [];
+
+        foreach ( $gamesExists ?? [] as $value ) { 
+
+            foreach ( json_decode($value->markets) ?? [] as $val ) {
+
+                $dateTime = new DateTime($value->start_date);
+                $formattedDate = $dateTime->format('D, M j at g:i A');
+
+                $home_odds = GameOdds::where('game_id', $value->uid )->where('bet_type', $val->label)->where('team_type', 0)->orderBy('created_at','DESC')->get();
+                $away_odds = GameOdds::where('game_id', $value->uid )->where('bet_type', $val->label)->where('team_type', 1)->orderBy('created_at','DESC')->get();
+
+                $market_name = $val->label;
+
+                $over_best_odds = 0;
+                $under_best_odds = 0;
+                $over_selection_line = '';
+                $under_selection_line = '';
+                $over_sports_books = [];
+                $under_sports_books = [];
+
+
+                // NON - Over and Under Variables
+                $home_best_odds = 0;
+                $away_best_odds = 0;
+                $home_selection_line = '';
+                $away_selection_line = '';
+                $home_sports_books = [];
+                $away_sports_books = [];
+
+                $homeMarketOdds = $home_odds ?? [];
+                $awayMarketOdds = $away_odds ?? [];
+
+                $mergedOdds = $homeMarketOdds->merge($awayMarketOdds);
+
+                foreach ($mergedOdds as $index => $obj) {
+                    if ($obj->selection_line === 'over' && $obj->bet_points >= $over_best_odds && $obj->is_live == false) {
+                        if ($obj->bet_points > $over_best_odds) {
+                            $over_best_odds = $obj->bet_points;
+                            $over_sports_books = [$obj->sports_book_name];
+                        } elseif (!in_array($obj->sports_book_name, $over_sports_books)) {
+                            $over_sports_books[] = $obj->sports_book_name;
+                        }
+                    }
+                    
+                    if ($obj->selection_line === 'under' && $obj->bet_points >= $under_best_odds && $obj->is_live == false) {
+                        if ($obj->bet_points > $under_best_odds) {
+                            $under_best_odds = $obj->bet_points;
+                            $under_sports_books = [$obj->sports_book_name];
+                        } elseif (!in_array($obj->sports_book_name, $under_sports_books)) {
+                            $under_sports_books[] = $obj->sports_book_name;
+                        }
+                    }
+                }
+
+                $found_matched_over_under = $this->findMatchingBets($mergedOdds->toArray(), null, 1);
+                
+                $over_selection_line = isset($found_matched_over_under['over']['bet_name']) ? $found_matched_over_under['over']['bet_name'] : null;
+                $under_selection_line = isset($found_matched_over_under['under']['bet_name']) ? $found_matched_over_under['under']['bet_name'] : null;
+               
+
+                $over_sports_book_images = $this->sports_book_image($over_sports_books, $sports_book);
+                $under_sports_book_images = $this->sports_book_image($under_sports_books, $sports_book);
+
+                foreach ($homeMarketOdds ?? [] as $index => $obj) {
+                    if (!isset($obj->selection_line) || ($obj->selection_line != 'over' && $obj->selection_line != 'under')) {
+                        if ($obj->bet_points > $home_best_odds) {
+                            $home_best_odds = $obj->bet_points;
+                            $home_sports_books = [$obj->sports_book_name];
+                        } elseif (!in_array($obj->sports_book_name, $home_sports_books)) {
+                            $home_sports_books[] = $obj->sports_book_name;
+                        }
+                    }
+                }
+
+                foreach ($awayMarketOdds  ?? [] as $index => $obj) {
+                    if (!isset($obj->selection_line) || ($obj->selection_line != 'over' && $obj->selection_line != 'under')) {
+                        if ($obj->bet_points > $away_best_odds) {
+                            $away_best_odds = $obj->bet_points;
+                            $away_sports_books = [$obj->sports_book_name];
+                        } elseif (!in_array($obj->sports_book_name, $away_sports_books)) {
+                            $away_sports_books[] = $obj->sports_book_name;
+                        }
+                    }
+                }
+
+                $home_away_found_matched_over_under = $this->findMatchingBets($homeMarketOdds->toArray(), $awayMarketOdds->toArray(), 2);
+
+                $home_selection_line = isset($home_away_found_matched_over_under['home']['name']) ? $home_away_found_matched_over_under['home']['name'] : null;
+                $away_selection_line = isset($home_away_found_matched_over_under['away']['name']) ? $home_away_found_matched_over_under['away']['name'] : null;
+
+                // Sports Book Dynamic Images
+                $home_sports_book_images = $this->sports_book_image($home_sports_books, $sports_book);
+                $away_sports_book_images = $this->sports_book_image($away_sports_books, $sports_book);
+
+
+                $is_html = '0';
+
+                // Must be greater than 0 and Over and Under Best Odds must be multiplied by 4 and result must be greater than or equal to 4
+                if ($over_best_odds > 0 && $under_best_odds > 0 && (($over_best_odds * $under_best_odds) >= 4) && $over_selection_line && $under_selection_line) {
+                    $is_html = '1';
+                } elseif ($home_best_odds > 0 && $away_best_odds > 0 && (($home_best_odds * $away_best_odds) >= 4) && $home_selection_line && $away_selection_line) {
+                    $is_html = '2';
+                } elseif (($home_best_odds * $away_best_odds) >= 4) {
+                    $is_html = '3';
+                }
+
+                $profit_percentage = ($is_html == '1') 
+                ? $this->calculateProfit($over_best_odds, $under_best_odds) 
+                : $this->calculateProfit($home_best_odds, $away_best_odds);
+
+
+                $selection_line_up = ($is_html == 1) 
+                                    ? $over_selection_line 
+                                        : (($is_html == 2) 
+                                            ? $home_selection_line 
+                                            : $value->home_team ?? null);
+
+                $selection_line_down =  ($is_html == 1) 
+                                        ? $under_selection_line 
+                                        : (($is_html == 2) 
+                                            ? $away_selection_line 
+                                            : $value->away_team ?? null);
+
+                $best_odds_up = $is_html == 1 ? $over_best_odds : $home_best_odds;
+
+                $best_odds_down = $is_html == 1 ? $under_best_odds : $away_best_odds;
+
+                $sports_book_images_up = $is_html == 1 ? $over_sports_book_images : $home_sports_book_images;
+
+                $sports_book_images_down =  $is_html == 1 ? $under_sports_book_images : $away_sports_book_images;
+
+                if ($best_odds_up > 0 && $best_odds_down > 0 && ( $best_odds_up * $best_odds_down >= 0 ) ) {
+                    array_push(
+                        $games,
+                        [
+                            'game_id'   =>  $value->uid,
+                            'profit_percentage' =>  $profit_percentage,
+                            'formattedDate' =>  $formattedDate,
+                            'home_team' =>  $value->home_team,
+                            'away_team' =>  $value->away_team,
+                            'sports'    =>  $value->sport,
+                            'league'    =>  $value->league,
+                            'market'    =>  $market_name,
+                            'selection_line'    =>  [
+                                'over' =>  $selection_line_up,
+                                'under'   => $selection_line_down,
+                            ],
+                            'best_odds' =>[
+                                'over'  =>  $best_odds_up,
+                                'under'  =>  $best_odds_down,
+                            ],
+                            'sports_book'   =>  [
+                                'over'  =>  $sports_book_images_up,
+                                'under' =>  $sports_book_images_down
+                            ]
+                        ]
+                    );
+
+                    $counter++;
+                }
+                
+            }
+
+        }
+        
+        return $gamesArray;
+    }
+
     public function gameIds(){
         $filePath = public_path('game.json');
 

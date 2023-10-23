@@ -72,6 +72,7 @@ class GameOdds extends Model
         'entry_id',
         'type',
         'market',
+        'team_type',
         'is_active'
     ];
 }

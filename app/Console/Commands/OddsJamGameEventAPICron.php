@@ -39,6 +39,12 @@ class OddsJamGameEventAPICron extends Command
      */
     public function handle()
     {   
+        // $sportsBook = getSportsBook();
+        // $sb = '';
+        // foreach ($sportsBook ?? [] as $value) {
+        //     $sb .= '&sportsbooks='.urlencode($value->name);
+        // }
+        // \Log::info($sb);
         $dateTime = $this->timeInterval();
         if ( !empty( $dateTime ) ) {
             foreach ( $dateTime ?? [] as $date ) {
