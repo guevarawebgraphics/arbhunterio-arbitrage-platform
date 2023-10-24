@@ -101,7 +101,7 @@ class StoreOddsStreamJob implements ShouldQueue
 
             }
 
-            \Log::info('Odds ID: ' . $bet->id);
+            // \Log::info('Odds ID: ' . $bet->id);
 
 
         }

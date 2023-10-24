@@ -119,6 +119,7 @@ class APIController extends Controller
     }
 
     private function fetchOddsData($game, $sportsBook) {
+        
         $upcomingGameOddsInput = [
             'game_id' => $game['id'],
             'team_id' => $game['home_team_info']['id'],
@@ -176,144 +177,13 @@ class APIController extends Controller
 
         }
 
-
-
-        foreach( $homeTeamOdds ?? [] as $market ) {
-
-            foreach ( $market ?? [] as $value ) {
-
-
-                $gameodds = GameOdds::where('uid', $value['id'])->whereNull('deleted_at')->first();
-
-                event(new NewOddsReceived($value));
-
-                if (!empty($gameodds)) {
-                    
-                    GameOdds::where('uid', $value['id'])->update([
-                        'bet_name'  =>  $value['name'],
-                        'bet_points'=>  $value['bet_points'],
-                        'bet_price' =>  $value['price'], 
-                        'bet_type'  =>  $value['market_name'],
-                        'game_id'   =>  $game['id'],
-                        'is_live'   =>  $value['is_live'],
-                        'is_main'   =>  $value['is_main'],
-                        'league'    =>  null,
-                        'player_id' =>  $value['player_id'],
-                        'selection' =>  $value['selection'],
-                        'selection_line'    =>  $value['selection_line'],
-                        'selection_points'  =>  $value['selection_points'],
-                        'sport' =>  NULL,
-                        'sportsbook'    =>  $value['sports_book_name'],
-                        'timestamp' =>  $value['timestamp'],
-                        'entry_id'  =>  NULL,
-                        'market'    =>   $value['market_name'],
-                        'team_type'   =>  0
-                    ]);
-
-                } else {
-
-                    $input = [
-                        'bet_name'  =>  $value['name'],
-                        'bet_points'=>  $value['bet_points'],
-                        'bet_price' =>  $value['price'], 
-                        'bet_type'  =>  $value['market_name'],
-                        'game_id'   =>  $game['id'],
-                        'is_live'   =>  $value['is_live'],
-                        'is_main'   =>  $value['is_main'],
-                        'league'    =>  null,
-                        'player_id' =>  $value['player_id'],
-                        'selection' =>  $value['selection'],
-                        'selection_line'    =>  $value['selection_line'],
-                        'selection_points'  =>  $value['selection_points'],
-                        'sport' =>  NULL,
-                        'sportsbook'    =>  $value['sports_book_name'],
-                        'timestamp' =>  $value['timestamp'],
-                        'entry_id'  =>  NULL,
-                        'market'    =>   $value['market_name'],
-                        'uid'   =>  $value['id'], 
-                        'team_type'   =>  0
-                        
-                    ];
-                    
-                    $create_odds = GameOdds::create($input);
-
-                }
-                
-            }
-
-        }
-
-        foreach( $awayTeamOdds ?? [] as $market ) {
-
-            foreach ( $market ?? [] as $value ) {
-
-
-                $gameodds = GameOdds::where('uid', $value['id'])->whereNull('deleted_at')->first();
-
-                event(new NewOddsReceived($value));
-
-                if (!empty($gameodds)) {
-                    
-                    GameOdds::where('uid', $value['id'])->update([
-                        'bet_name'  =>  $value['name'],
-                        'bet_points'=>  $value['bet_points'],
-                        'bet_price' =>  $value['price'], 
-                        'bet_type'  =>  $value['market_name'],
-                        'game_id'   =>  $game['id'],
-                        'is_live'   =>  $value['is_live'],
-                        'is_main'   =>  $value['is_main'],
-                        'league'    =>  null,
-                        'player_id' =>  $value['player_id'],
-                        'selection' =>  $value['selection'],
-                        'selection_line'    =>  $value['selection_line'],
-                        'selection_points'  =>  $value['selection_points'],
-                        'sport' =>  NULL,
-                        'sportsbook'    =>  $value['sports_book_name'],
-                        'timestamp' =>  $value['timestamp'],
-                        'entry_id'  =>  NULL,
-                        'market'    =>   $value['market_name'],
-                        'team_type'   =>  1
-                    ]);
-
-                } else {
-
-                    $input = [
-                        'bet_name'  =>  $value['name'],
-                        'bet_points'=>  $value['bet_points'],
-                        'bet_price' =>  $value['price'], 
-                        'bet_type'  =>  $value['market_name'],
-                        'game_id'   =>  $game['id'],
-                        'is_live'   =>  $value['is_live'],
-                        'is_main'   =>  $value['is_main'],
-                        'league'    =>  null,
-                        'player_id' =>  $value['player_id'],
-                        'selection' =>  $value['selection'],
-                        'selection_line'    =>  $value['selection_line'],
-                        'selection_points'  =>  $value['selection_points'],
-                        'sport' =>  NULL,
-                        'sportsbook'    =>  $value['sports_book_name'],
-                        'timestamp' =>  $value['timestamp'],
-                        'entry_id'  =>  NULL,
-                        'market'    =>   $value['market_name'],
-                        'uid'   =>  $value['id'], 
-                        'team_type'   =>  1
-                        
-                    ];
-                    
-                    $create_odds = GameOdds::create($input);
-
-                }
-                
-            }
-
-        }
-
         return [
             'game' => $game,
             'home_team_odds' => $homeTeamOdds,
             'away_team_odds' => $awayTeamOdds,
             'markets'   =>  $marketName[0]['data']
         ];
+
     }
 
     private function processTeamOdds($teamOdds, $teamType, $game) {
@@ -346,9 +216,11 @@ class APIController extends Controller
 
                 if (!empty($gameodds)) {
                     GameOdds::where('uid', $value['id'])->update($input);
+                    \Log::info('Updated Odds : ' . json_encode($input) );
                 } else {
                     $input['uid'] = $value['id'];
                     $create_odds = GameOdds::create($input);
+                    \Log::info('Created Odds : ' . json_encode($create_odds) );
                 }
             }
         }

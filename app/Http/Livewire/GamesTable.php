@@ -17,12 +17,27 @@ class GamesTable extends Component
 
     protected $paginationTheme = 'tailwind'; // or 'tailwind', based on your preference
 
+    protected $listeners = ['echo:odds-updates,NewOddsReceived' => 'refreshTable'];
+
+    private $games = [];
+
+    public function mount()
+    {
+        $this->games = $this->gamesPerMarketsV2([]);
+    }
+
     public function render()
     {
-
-        $games = $this->gamesPerMarketsV2([]);
-
-        return view('livewire.games-table', ['games' => $games]);
-
+        // dd($this->games);
+        return view('livewire.games-table', ['games' => $this->games]);
     }
+
+    public function refreshTable()
+    {
+        // This will refresh the data by re-fetching from the database.
+        $this->mount();
+        \Log::info('Data Table Refreshed: ' . date('H:i a',strtotime( now() )) );
+    }
+
+
 }

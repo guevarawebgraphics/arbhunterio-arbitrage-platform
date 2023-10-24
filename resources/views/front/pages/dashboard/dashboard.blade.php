@@ -9,6 +9,7 @@
 </style>
 
 <div class="flex">
+
     <!-- filter -->
     <div class="flex-none w-0 sm:w-14 ">
         @include('front.layouts.sections.sidebar')
@@ -509,7 +510,7 @@
                     <livewire:games-table />
                 </div>
 
-                <nav aria-label="Page navigation example my-0" id="pagination-listings"></nav>
+                {{-- <nav aria-label="Page navigation example my-0" id="pagination-listings"></nav> --}}
 
             </div>
             <!-- end table-->

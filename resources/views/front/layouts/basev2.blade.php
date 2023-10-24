@@ -98,60 +98,16 @@
     {{Html::script('public/bsbmd/plugins/momentjs/moment.js')}}
     <script src="{{asset('public/assets/js/flowbite.min.js')}}"></script>
     <script src="{{asset('public/assets/js/switch.js')}}"></script>
-
+    
     @yield('extra-script')
 
     @livewireScripts
 
     <script>
-
-        // Listen for the Play button click
-        // $(document).on('click','#playButton', function () {
-        //     alert(123);
-        //     window.Echo.channel('odds-updates')
-        //     .listen('NewOddsReceived', (e) => {
-        //         console.log(e);
-        //     });
-        // });
-
-
-
-        // Listen for the Play button click
-        const playButton = document.getElementById('playButton');
-        let eventSource;
-
-        playButton.addEventListener('click', function() {
-
-            // Open a new connection to the streaming endpoint
-            const eventSource = new EventSource('/api/odds-push-streams');
-
-
-            if (eventSource) {
-                eventSource.close(); // Close any existing connection
-            }
-            eventSource.onopen = function(event) {
-                console.log("Connection opened");
-            };
-
-            eventSource.onmessage = function(event) {
-                const data = JSON.parse(event.data);
-                console.log(data.message);
-            };
-
-            eventSource.onerror = function(error) {
-                console.error('EventSource failed:', error);
-                eventSource.close();
-            };
+        Echo.channel('odds-updates')
+        .listen('NewOddsReceived', (event) => {
+            console.log(event);
         });
-
-        // Optionally, you can add another button to stop the stream
-        const stopButton = document.getElementById('stopButton');
-        stopButton.addEventListener('click', function() {
-            if (eventSource) {
-                eventSource.close();
-            }
-        });
-
     </script>
 
     

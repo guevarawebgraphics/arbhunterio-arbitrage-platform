@@ -11,6 +11,8 @@ window.Echo = new Echo({
     wsHost: window.location.hostname,
     wsPort: 6001,
     wssPort: 6001,
-    enabledTransports: ['ws', 'wss'],
+    forceTLS: false,
+    encrypted: true,
+    enabledTransports: ['ws','wss'],
     authEndpoint: 'broadcasting/auth',
 });  

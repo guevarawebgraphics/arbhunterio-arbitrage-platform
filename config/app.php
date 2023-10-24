@@ -182,7 +182,8 @@ return [
         App\Providers\RepositoryServiceProvider::class,
         Anhskohbo\NoCaptcha\NoCaptchaServiceProvider::class,
 
-         Orangehill\Iseed\IseedServiceProvider::class,
+        Orangehill\Iseed\IseedServiceProvider::class,
+        Livewire\LivewireServiceProvider::class,
     ],
 
     /*

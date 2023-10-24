@@ -54,7 +54,7 @@ return [
     |
     */
 
-    'asset_url' => null,
+    'asset_url' => env('LIVEWIRE_ASSET_URL', '/public'),
 
     /*
     |--------------------------------------------------------------------------
@@ -68,7 +68,7 @@ return [
     |
     */
 
-    'app_url' => null,
+    'app_url' => env('APP_URL'),
 
     /*
     |--------------------------------------------------------------------------
@@ -82,6 +82,19 @@ return [
     */
 
     'middleware_group' => 'web',
+
+    'echo' => [
+        'initialize' => true,
+        'apps' => [
+            [
+                'broadcaster' => 'pusher', // or any other driver you are using
+                'key' => env('PUSHER_APP_KEY'),
+                'cluster' => env('PUSHER_APP_CLUSTER'),
+                'encrypted' => true,
+                'namespace' => 'App.Events',
+            ],
+        ],
+    ],
 
     /*
     |--------------------------------------------------------------------------
