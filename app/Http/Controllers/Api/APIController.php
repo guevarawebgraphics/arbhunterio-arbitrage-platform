@@ -50,20 +50,7 @@ class APIController extends Controller
     public function getGamesTest(Request $request) {
         // Define the path to the file in the public directory
         $games = $this->gamesPerMarketsTest([]);
-        
-        // Paginate the data
-        $perPage = $request->input('per_page', 15); // Number of items per page
-        $currentPage = $request->input('page', 1); // Current page
-
-        // Slice the array data based on the current page and items per page
-        $pagedData = array_slice($games, ($currentPage - 1) * $perPage, $perPage);
-
-        // Create our paginator and pass it to the view
-        $paginator = new LengthAwarePaginator($pagedData, count($games), $perPage, $currentPage, [
-            'path' => LengthAwarePaginator::resolveCurrentPath(),
-        ]);
-
-        return response()->json($paginator->toArray());
+        return $games;
     }
 
     public function getGameListing(Request $request) {
