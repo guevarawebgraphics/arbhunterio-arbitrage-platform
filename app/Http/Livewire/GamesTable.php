@@ -15,7 +15,7 @@ class GamesTable extends Component
 {
     use WithPagination, OddsJamAPITrait;
 
-    protected $paginationTheme = 'tailwind'; // or 'tailwind', based on your preference
+    protected $paginationTheme = 'tailwind'; // 'tailwind' or 'bootstrap', based on your preference
 
     protected $listeners = ['echo:odds-updates,NewOddsReceived' => 'refreshTable'];
 

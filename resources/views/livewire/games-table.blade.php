@@ -96,8 +96,9 @@
         </tbody>
     </table>
     <!-- Livewire pagination links -->
+    @if( !empty(  $games ) )
     <div>
         {!! $games->links() !!}
     </div>
-
+    @endif
 </div>
