@@ -506,41 +506,7 @@
             <div class="relative hidden md:block">
 
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                    <table class="w-full text-sm text-left text-[#86A5B1] dark:text-gray-400" id="arbitrage-table">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 ">
-                            <tr>
-                                <th scope="col" class="p-4">
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Percent
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Event Date
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Event
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Market
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Bets
-                                </th>
-                                 <th scope="col" class="px-6 py-3">
-                                    Best Odds
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Books
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Updated
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody class="text-white" id="arbitrage_body">
-                            
-                        </tbody>
-                    </table>
+                    <livewire:games-table />
                 </div>
 
                 <nav aria-label="Page navigation example my-0" id="pagination-listings"></nav>

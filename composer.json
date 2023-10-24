@@ -19,6 +19,7 @@
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.3",
         "laravelcollective/html": "^6.2",
+        "livewire/livewire": "^2.0",
         "orangehill/iseed": "^3.0",
         "react/http": "^1.9",
         "realrashid/sweet-alert": "^3.2",

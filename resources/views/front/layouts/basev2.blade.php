@@ -27,6 +27,8 @@
             background-color: #09131E;
         }
     </style>
+
+    @livewireStyles
 </head>
 <body class="font-body">
     <nav class="bg-white border-gray-200 ">
@@ -99,6 +101,8 @@
 
     @yield('extra-script')
 
+    @livewireScripts
+
     <script>
 
         // Listen for the Play button click
@@ -149,6 +153,7 @@
         });
 
     </script>
+
     
 </body>
 </html>

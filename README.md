@@ -91,3 +91,9 @@ $ curl -X POST 'http://127.0.0.1:8000/api/login' \
 
 Run php artisan migrate:fresh --seed
 Run `php artisan oddsjam_game_event_api:cron`
+
+## Additional Dependencies
+
+1. composer require livewire/livewire:^2.0
+
+2. Laravel Queue & Websockets
