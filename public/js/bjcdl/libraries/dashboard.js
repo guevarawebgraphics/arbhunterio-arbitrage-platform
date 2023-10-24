@@ -4,7 +4,7 @@ async function getGames(pageID) {
     $("#arbitrage_body").html(loading_html);
 
     $.ajax({
-        url: sBaseURI + '/api/games?page=' + pageID,
+        url: sBaseURI + '/api/games/v2?page=' + pageID,
         method: 'GET',
         data: {
             _token: $('meta[name="csrf-token"]').attr('content')

@@ -47,9 +47,9 @@ class APIController extends Controller
         return response()->json($paginator->toArray());
     }
 
-    public function getGamesTest(Request $request) {
+    public function getGamesV2(Request $request) {
         // Define the path to the file in the public directory
-        $games = $this->gamesPerMarketsTest([]);
+        $games = $this->gamesPerMarketsV2([]);
         return $games;
     }
 

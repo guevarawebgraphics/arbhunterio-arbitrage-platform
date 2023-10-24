@@ -1004,7 +1004,7 @@ trait OddsJamAPITrait
         return $games;
     }
 
-    public function gamesPerMarketsTest($data) {
+    public function gamesPerMarketsV2($data) {
         $perPage = 5;
         
         $currentPage = LengthAwarePaginator::resolveCurrentPage();
