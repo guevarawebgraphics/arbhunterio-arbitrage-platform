@@ -122,22 +122,22 @@
 // getGames(pageID);
 
 // Server side pagination
-// var table = $('#arbitrage-table').DataTable({
-//     ajax: sBaseURI + '/dashboard',
-//     serverSide: true,
-//     processing: true,
-//     aaSorting:[[1,"desc"]],
-//     columns: [
-//         {data: 'id', name: 'id'},
-//         {data: 'percent', name: 'percent'},
-//         {data: 'event_date', name: 'event_date'},
-//         {data: 'event', name: 'event'},
-//         {data: 'market', name: 'market'},
-//         {data: 'bets', name: 'bets'},
-//         {data: 'best_odds', name: 'best_odds'},
-//         {data: 'books', name: 'books'},
-//         {data: 'updated', name: 'updated'},
-//     ]
-// });
+var table = $('#arbitrage-table').DataTable({
+    ajax: sBaseURI + '/dashboard',
+    serverSide: true,
+    processing: true,
+    aaSorting:[[1,"desc"]],
+    columns: [
+        {data: 'id', name: 'id'},
+        {data: 'percent', name: 'percent'},
+        {data: 'event_date', name: 'event_date'},
+        {data: 'event', name: 'event'},
+        {data: 'market', name: 'market'},
+        {data: 'bets', name: 'bets'},
+        {data: 'best_odds', name: 'best_odds'},
+        {data: 'books', name: 'books'},
+        {data: 'updated', name: 'updated'},
+    ]
+});
 
-
+console.log('table: ' + table);

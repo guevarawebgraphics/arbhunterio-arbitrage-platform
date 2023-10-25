@@ -75,4 +75,8 @@ class GameOdds extends Model
         'team_type',
         'is_active'
     ];
+
+    public function games() {
+        return $this->belongsTo('App\Services\Games\Game', 'uid', 'game_id');
+    }
 }

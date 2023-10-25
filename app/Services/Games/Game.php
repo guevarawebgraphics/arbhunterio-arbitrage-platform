@@ -30,7 +30,8 @@ class Game extends Model
         'league',
         'home_team_info',
         'away_team_info',
-        'markets'];
+        'markets'
+    ];
 
     protected static $logName = 'games';
 
@@ -60,4 +61,9 @@ class Game extends Model
         'markets',
         'is_active'
     ];
+
+    public function gameodds()
+    {
+        return $this->hasMany('App\Services\GameOdds\GameOdds', 'uid','game_id');
+    }
 }

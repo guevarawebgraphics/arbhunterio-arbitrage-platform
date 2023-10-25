@@ -71,7 +71,7 @@ class StoreOddsStreamJob implements ShouldQueue
                     'timestamp' =>  $bet->timestamp, 
                     'entry_id'  =>  $bet->entry_id, 
                     'type'  =>  $bet->type, 
-                    'market'    =>   $bet->bet_type
+                    'market'    =>   $bet->bet_type,
                 ]);
 
             } else {
@@ -94,6 +94,7 @@ class StoreOddsStreamJob implements ShouldQueue
                     'sportsbook'    =>  $bet->sportsbook, 
                     'timestamp' =>  $bet->timestamp, 
                     'entry_id'  =>  $bet->entry_id, 
+                    'type'  =>  $bet->type, 
                     'market'    =>   $bet->bet_type
                 ];
                 

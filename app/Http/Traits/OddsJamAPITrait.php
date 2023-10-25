@@ -9,7 +9,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use App\Services\Games\Game;
 use App\Services\GameOdds\GameOdds;
 use URL;
-
+use DB;
 use DateTime;
 use DateTimeZone;
 
@@ -823,6 +823,7 @@ trait OddsJamAPITrait
         return $data;
     }
 
+    // JSON Version
     public function gamesPerMarkets($data) {
         $filePath = public_path('game.json');
 
@@ -1004,6 +1005,7 @@ trait OddsJamAPITrait
         return $games;
     }
 
+    // All in one array
     public function gamesPerMarketsV2($data) {
         $perPage = 5;
         
@@ -1018,7 +1020,8 @@ trait OddsJamAPITrait
         $gamesArray = [];
 
         while (count($gamesArray) < $perPage) {
-            $gamesExists = Game::whereNull('deleted_at')->orderBy('created_at', 'DESC')->skip(($currentPage - 1) * $perPage)->take($perPage)->get();
+            // $gamesExists = Game::whereNull('deleted_at')->orderBy('created_at', 'DESC')->skip(($currentPage - 1) * $perPage)->take($perPage)->get();
+            $gamesExists = Game::whereNull('deleted_at')->orderBy('created_at', 'DESC')->get();
 
             // If no more games, just break
             if (!$gamesExists->count()) {
@@ -1155,7 +1158,7 @@ trait OddsJamAPITrait
 
                         $sports_book_images_down =  $is_html == 1 ? $under_sports_book_images : $away_sports_book_images;
 
-                        if ($best_odds_up > 0 && $best_odds_down > 0 && ( $best_odds_up * $best_odds_down >= 0 ) ) {
+                        // if ($best_odds_up > 0 && $best_odds_down > 0 && ( $best_odds_up * $best_odds_down >= 0 ) ) {
 
                             array_push(
                                 $gamesArray,
@@ -1187,7 +1190,7 @@ trait OddsJamAPITrait
 
                             $counter++;
 
-                        }
+                        // }
                         
                     }
 
@@ -1199,9 +1202,56 @@ trait OddsJamAPITrait
 
         $totalGames = Game::whereNull('deleted_at')->count(); // Total number of games for the paginator
 
-        $paginator = new LengthAwarePaginator($gamesArray, $totalGames, $perPage);
+        usort($gamesArray, function($a, $b) {
+            return $b['profit_percentage'] <=> $a['profit_percentage'];
+        });
 
-        return $paginator;
+        // $paginator = new LengthAwarePaginator($gamesArray, $totalGames, $perPage);
+
+        return $gamesArray;
+    }
+    
+    // Minimized Query
+    public function gamesPerMarketsV3($data) {
+
+        $gamesArray = GameOdds::query()
+            ->withTrashed()
+            ->from('gameodds as go')
+            ->leftJoin('games as g', 'g.uid', '=', 'go.game_id')
+            ->select(
+                'g.uid',
+                'g.start_date',
+                'g.home_team',
+                'g.away_team',
+                'go.bet_type',
+                'g.sport',
+                'g.league',
+                \DB::raw('MAX(CASE WHEN go.selection_line = "over" THEN IF(go.selection_points,go.selection_points,0) ELSE 0 END) as over_selection_points'),
+                \DB::raw('MAX(CASE WHEN go.selection_line = "under" THEN IF(go.selection_points,go.selection_points,0) ELSE 0 END) as under_selection_points'),
+
+                \DB::raw('MAX(CASE WHEN go.selection_line not in ("over","under") THEN IF(go.selection_points,go.selection_points,0) ELSE 0 END) as highest_selection_points'),
+                \DB::raw('MIN(CASE WHEN go.selection_line not in ("over","under") THEN IF(go.selection_points,go.selection_points,0) ELSE 0 END) as lowest_selection_points'),
+                
+                \DB::raw('CASE WHEN go.selection_line IN ("over","under") THEN 1 ELSE 0 END as has_selection_line')
+            )
+            ->havingRaw('( over_selection_points * under_selection_points >= 4 ) OR ( highest_selection_points * lowest_selection_points >= 4 ) ')
+            ->groupBy(
+                'g.uid',
+                'g.start_date',
+                'g.home_team',
+                'g.away_team',
+                'go.bet_type',
+                'g.sport',
+                'g.league',
+                'has_selection_line'
+            );
+
+
+        return $gamesArray;
+
+
+
+       
     }
 
     public function gameIds(){
@@ -1357,7 +1407,7 @@ trait OddsJamAPITrait
             }
         }
         return $imagesHTML;
-    }
+    }    
 
     function calculateProfit($oddsA, $oddsB) {
         // Convert the input values to float
@@ -1375,7 +1425,5 @@ trait OddsJamAPITrait
         // Return the result rounded to two decimal places
         return abs(round($profitPercentage, 2));
     }
-
-    
 
 }

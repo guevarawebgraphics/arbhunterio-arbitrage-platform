@@ -35,11 +35,11 @@ class CreateGameOddsTable extends Migration
             $table->string('entry_id')->nullable();
             $table->string('type')->default(0);
             $table->string('market')->nullable();
-            $table->string('team_type')->nullable()->comment('0=Home; 1=Away;');
+            $table->string('team_type')->default(0)->nullable()->comment('0=Home; 1=Away;');
             $table->tinyInteger('is_active')->default(1);
             $table->timestamps();
             $table->softDeletes();
-
+            
         });
     }
 
