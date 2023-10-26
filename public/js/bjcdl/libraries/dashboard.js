@@ -140,4 +140,7 @@ var table = $('#arbitrage-table').DataTable({
     ]
 });
 
-console.log('table: ' + table);
+Echo.channel('odds-updates')
+.listen('NewOddsReceived', (event) => {
+    table.draw();
+});

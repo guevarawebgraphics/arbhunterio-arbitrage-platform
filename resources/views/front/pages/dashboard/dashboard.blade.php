@@ -736,5 +736,4 @@
 
 {{Html::script('public/js/bjcdl/libraries/dashboard.js')}}
 
-    
 @endsection

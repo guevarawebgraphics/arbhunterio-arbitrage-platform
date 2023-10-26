@@ -27,8 +27,6 @@
             background-color: #09131E;
         }
     </style>
-
-    @livewireStyles
 </head>
 <body class="font-body">
     <nav class="bg-white border-gray-200 ">
@@ -101,15 +99,5 @@
     
     @yield('extra-script')
 
-    @livewireScripts
-
-    <script>
-        Echo.channel('odds-updates')
-        .listen('NewOddsReceived', (event) => {
-            console.log(event);
-        });
-    </script>
-
-    
 </body>
 </html>

@@ -1225,16 +1225,16 @@ trait OddsJamAPITrait
                 'g.away_team',
                 'go.bet_type',
                 'g.sport',
-                'g.league',
-                \DB::raw('MAX(CASE WHEN go.selection_line = "over" THEN IF(go.selection_points,go.selection_points,0) ELSE 0 END) as over_selection_points'),
-                \DB::raw('MAX(CASE WHEN go.selection_line = "under" THEN IF(go.selection_points,go.selection_points,0) ELSE 0 END) as under_selection_points'),
+                'g.league'
 
-                \DB::raw('MAX(CASE WHEN go.selection_line not in ("over","under") THEN IF(go.selection_points,go.selection_points,0) ELSE 0 END) as highest_selection_points'),
-                \DB::raw('MIN(CASE WHEN go.selection_line not in ("over","under") THEN IF(go.selection_points,go.selection_points,0) ELSE 0 END) as lowest_selection_points'),
+                // \DB::raw('MAX(CASE WHEN go.selection_line = "over" THEN IF(go.selection_points,go.selection_points,0) ELSE 0 END) as over_selection_points'),
+                // \DB::raw('MAX(CASE WHEN go.selection_line = "under" THEN IF(go.selection_points,go.selection_points,0) ELSE 0 END) as under_selection_points'),
+                // \DB::raw('MAX(CASE WHEN go.selection_line not in ("over","under") THEN IF(go.selection_points,go.selection_points,0) ELSE 0 END) as highest_selection_points'),
+                // \DB::raw('MIN(CASE WHEN go.selection_line not in ("over","under") THEN IF(go.selection_points,go.selection_points,0) ELSE 0 END) as lowest_selection_points'),
+                // \DB::raw('CASE WHEN go.selection_line IN ("over","under") THEN 1 ELSE 0 END as has_selection_line')
                 
-                \DB::raw('CASE WHEN go.selection_line IN ("over","under") THEN 1 ELSE 0 END as has_selection_line')
             )
-            ->havingRaw('( over_selection_points * under_selection_points >= 4 ) OR ( highest_selection_points * lowest_selection_points >= 4 ) ')
+            // ->havingRaw('( over_selection_points * under_selection_points >= 4 ) OR ( highest_selection_points * lowest_selection_points >= 4 ) ')
             ->groupBy(
                 'g.uid',
                 'g.start_date',
@@ -1243,7 +1243,7 @@ trait OddsJamAPITrait
                 'go.bet_type',
                 'g.sport',
                 'g.league',
-                'has_selection_line'
+                // 'has_selection_line'
             );
 
 

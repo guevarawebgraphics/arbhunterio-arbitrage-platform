@@ -130,11 +130,9 @@ function dropdown($menu) {
     return \App\Services\MenuDropdowns\MenuDropdown::where('is_active', 1)->where('menu_id', $menu->id)->orderBy('order_number')->get();
 }
 
-
 function getSportsBook() {
     return \App\Services\SportsBooks\SportsBook::where('is_active', 1)->whereNull('deleted_at')->orderBy('id','ASC')->get();
 }
-
 
 function getSports() {
     $data = [
@@ -155,4 +153,19 @@ function getSports() {
     ];
 
     return $data;
+}
+
+function convertAmericanToDecimalOdds(int $americanOdds = NULL): float
+{
+    $formula = 0.00;
+    if ($americanOdds > 0) {
+        $formula = ($americanOdds / 100) + 1;
+    }
+
+    if ($americanOdds < 0) {
+        $formula = (100 / abs($americanOdds)) + 1;
+    }
+
+    // Return a default value (e.g. for 0 odds)
+    return number_format($formula, 2, '.', '');
 }

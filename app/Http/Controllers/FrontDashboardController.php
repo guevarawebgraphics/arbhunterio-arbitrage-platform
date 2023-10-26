@@ -80,47 +80,74 @@ class FrontDashboardController extends Controller
                 })
                 ->addColumn('bets', function ($row) {
 
-                    if ($row->has_selection_line == 1) {
-                        $odds1 = GameOdds::where('game_id', $row->uid)->where('bet_type', $row->bet_type)->get();
-                        $found_matched_over_under = $this->findMatchingBets($odds1->toArray(), null, 1);
+                    $bet_up = '';
+                    $bet_down = '';
+                    $query1 = null;
+                    $query2 = null;
+                    $type = null;
 
-                        $over_selection_line = isset($found_matched_over_under['over']['bet_name']) ? $found_matched_over_under['over']['bet_name'] : null;
-                        $under_selection_line = isset($found_matched_over_under['under']['bet_name']) ? $found_matched_over_under['under']['bet_name'] : null;
-                    } else {
-                        $odds1 = GameOdds::where('game_id', $row->uid)->where('bet_type', $row->bet_type)->where('team_type', 0)->get();
-                        $odds2 = GameOdds::where('game_id', $row->uid)->where('bet_type', $row->bet_type)->where('team_type', 1)->get();
-                        $found_matched_over_under = $this->findMatchingBets($odds1->toArray(), $odds2->toArray(), 2);
-                        $over_selection_line = isset($found_matched_over_under['home']['bet_name']) ? $found_matched_over_under['home']['bet_name'] : null;
-                        $under_selection_line = isset($found_matched_over_under['away']['bet_name']) ? $found_matched_over_under['away']['bet_name'] : null;
+                    if ( in_array($row->selection_points, ['over','under']) ) {
+
+                        $query1 = GameOdds::where('game_id', $row->uid)->where('bet_type', $row->bet_type)->whereIn('selection_line', ['over','under'] )->orderBy('created_at','DESC')->get();
+                        $type = 1;
+                    } else if ( $row->selection_points == '' || $row->selection_points == NULL ) {
+
+                        $query1 = GameOdds::where('game_id', $row->uid)->where('bet_type', $row->bet_type)->where('team_type', 0)->orderBy('created_at','DESC')->get();
+                        $query2 = GameOdds::where('game_id', $row->uid)->where('bet_type', $row->bet_type)->where('team_type', 1)->orderBy('created_at','DESC')->get();
+                        $type = 2;
+                        
                     }
 
-                  
-                    
+                    $found_matched_over_under = $this->findMatchingBets($query1->toArray(), $query2->toArray(), $type);
+                    $bet_up = isset($found_matched_over_under['over']['name']) ? $found_matched_over_under['over']['name'] : '--';
+                    $bet_down = isset($found_matched_over_under['under']['name']) ? $found_matched_over_under['under']['name'] : '--';
 
                     $html = '<div class="flex flex-col">
-                            <span>
-                                '.$over_selection_line.'
-                            </span>
-                            <span>
-                                '.$under_selection_line.'
-                            </span>
-                        </div>';
+                        <span>
+                            '.$bet_up.'
+                        </span>
+                        <span>
+                            '.$bet_down.'
+                        </span>
+                    </div>';
+
                     return $html;
                 })
                 ->addColumn('best_odds', function ($row) {
+
+                    $odds1 = 0.00; 
+                    $odds2 = 0.00; 
+
+                    if ( in_array($row->selection_points, ['over','under']) ) {
+                        $odds1_query = GameOdds::where('game_id', $row->uid)->where('bet_type', $row->bet_type)->where('selection_line','over')->max('bet_price');
+                        $ddds2_query = GameOdds::where('game_id', $row->uid)->where('bet_type', $row->bet_type)->where('selection_line','under')->max('bet_price');
+
+                    } else if ( $row->selection_points == '' || $row->selection_points == NULL ) {
+                        $odds1_query = GameOdds::where('game_id', $row->uid)->where('bet_type', $row->bet_type)->where('team_type', 0)->max('bet_price');
+                        $ddds2_query = GameOdds::where('game_id', $row->uid)->where('bet_type', $row->bet_type)->where('team_type', 1)->max('bet_price');
+                    } else {
+                        $odds1_query = GameOdds::where('game_id', $row->uid)->where('bet_type', $row->bet_type)->max('bet_price');
+                        $ddds2_query = GameOdds::where('game_id', $row->uid)->where('bet_type', $row->bet_type)->min('bet_price');
+                    }
+
+                    $odds1 = convertAmericanToDecimalOdds($odds1_query);
+                    $odds2 = convertAmericanToDecimalOdds($ddds2_query);
                     
                     $html = '<div class="flex flex-col">
                         <div class="flex flex-row items-center gap-2">
-                            <span>'. ( $row->has_selection_line == "1" ? $row->over_selection_points : $row->highest_selection_points ) .'</span>
+                            <span>'.$odds1.'</span>
                         </div>
                         <div class="flex flex-row items-center gap-2">
-                            <span>'. ( $row->has_selection_line == "1" ? $row->under_selection_points : $row->lowest_selection_points ) .'</span>
+                            <span>'.$odds2.'</span>
                         </div>
                     </div>';
+
                     return $html;
 
                 })
                 ->addColumn('books', function ($row) {
+
+
                     return '--';
                 })
                 ->addColumn('updated', function ($row) {
