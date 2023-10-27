@@ -157,6 +157,7 @@ function getSports() {
 
 function convertAmericanToDecimalOdds(int $americanOdds = NULL): float
 {
+    \Log::info($americanOdds);
     $formula = 0.00;
     if ($americanOdds > 0) {
         $formula = ($americanOdds / 100) + 1;

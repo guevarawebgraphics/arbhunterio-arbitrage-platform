@@ -1218,6 +1218,7 @@ trait OddsJamAPITrait
             ->withTrashed()
             ->from('gameodds as go')
             ->leftJoin('games as g', 'g.uid', '=', 'go.game_id')
+            ->where('go.is_live', 0)
             ->select(
                 'g.uid',
                 'g.start_date',
@@ -1226,15 +1227,9 @@ trait OddsJamAPITrait
                 'go.bet_type',
                 'g.sport',
                 'g.league'
-
-                // \DB::raw('MAX(CASE WHEN go.selection_line = "over" THEN IF(go.selection_points,go.selection_points,0) ELSE 0 END) as over_selection_points'),
-                // \DB::raw('MAX(CASE WHEN go.selection_line = "under" THEN IF(go.selection_points,go.selection_points,0) ELSE 0 END) as under_selection_points'),
-                // \DB::raw('MAX(CASE WHEN go.selection_line not in ("over","under") THEN IF(go.selection_points,go.selection_points,0) ELSE 0 END) as highest_selection_points'),
-                // \DB::raw('MIN(CASE WHEN go.selection_line not in ("over","under") THEN IF(go.selection_points,go.selection_points,0) ELSE 0 END) as lowest_selection_points'),
-                // \DB::raw('CASE WHEN go.selection_line IN ("over","under") THEN 1 ELSE 0 END as has_selection_line')
-                
             )
-            // ->havingRaw('( over_selection_points * under_selection_points >= 4 ) OR ( highest_selection_points * lowest_selection_points >= 4 ) ')
+            
+            
             ->groupBy(
                 'g.uid',
                 'g.start_date',
@@ -1290,7 +1285,7 @@ trait OddsJamAPITrait
     }
 
     function findMatchingBets($dataObj1, $dataObj2, $type) {
-       
+        
         if ($type == 1) {
 
             // Convert the object to an array.
@@ -1348,10 +1343,13 @@ trait OddsJamAPITrait
             foreach ($homes as $home) {
                 $matched = false;
 
+
                 if ($home['selection_points'] > 0) {
                     foreach ($aways as $away) {
+                        
                         if ($home['selection_points'] === -$away['selection_points']) {
                             $matchingPairs[] = ['home' => $home, 'away' => $away];
+                            
                             $matched = true;
                             break;
                         }
@@ -1362,6 +1360,7 @@ trait OddsJamAPITrait
                     foreach ($aways as $away) {
                         if (-$home['selection_points'] === $away['selection_points']) {
                             $matchingPairs[] = ['home' => $home, 'away' => $away];
+                            \Log::info('Inside' . json_encode($matchingPairs));
                             break;
                         }
                     }
