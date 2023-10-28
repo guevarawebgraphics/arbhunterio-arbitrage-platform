@@ -23,7 +23,7 @@ class GamesTable extends Component
 
     public function mount()
     {
-        $this->games = $this->gamesPerMarketsV2([]);
+        $this->games = $this->gamesPerMarketsV3([]);
     }
 
     public function render()

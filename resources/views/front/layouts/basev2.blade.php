@@ -27,6 +27,7 @@
             background-color: #09131E;
         }
     </style>
+    @livewireStyles
 </head>
 <body class="font-body">
     <nav class="bg-white border-gray-200 ">
@@ -98,6 +99,8 @@
     <script src="{{asset('public/assets/js/switch.js')}}"></script>
     
     @yield('extra-script')
+
+    @livewireScripts
 
 </body>
 </html>

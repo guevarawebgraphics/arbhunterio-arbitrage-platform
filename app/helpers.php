@@ -170,3 +170,325 @@ function convertAmericanToDecimalOdds(int $americanOdds = NULL): float
     // Return a default value (e.g. for 0 odds)
     return number_format($formula, 2, '.', '');
 }
+
+function getOdds($row) {
+
+    $best_odds_a = 0.00;
+    $best_odds_b = 0.00;
+    $selection_line_a = '';
+    $selection_line_b = '';
+    $sportsbook_a = '';
+    $sportsbook_b = '';
+    $counter = 0;
+
+    $best_over_odds = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)
+                    ->where('game_id', $row->uid)
+                    ->where('selection_line', 'over')
+                    ->max('bet_price');
+
+    $best_under_odds = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)
+                    ->where('game_id', $row->uid)
+                    ->where('selection_line', 'under')
+                    ->max('bet_price');
+
+    $sports_book = getSportsBook();
+
+    if ( !empty($best_over_odds) || !empty($best_under_odds) ) {
+        
+        $best_odds_a = convertAmericanToDecimalOdds($best_over_odds) ?? 0.00;
+        $best_odds_b = convertAmericanToDecimalOdds($best_under_odds) ?? 0.00;
+        $mergedOdds = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->whereIn('selection_line', ['over','under'] )->get();
+        
+        $found_matched_over_under = findMatchingBets($mergedOdds->toArray(), null, 1);
+        $selection_line_a = isset($found_matched_over_under['over']['bet_name']) ? $found_matched_over_under['over']['bet_name'] : null;
+        $selection_line_b = isset($found_matched_over_under['under']['bet_name']) ? $found_matched_over_under['under']['bet_name'] : null;
+
+        $sportsbook_a_query = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('bet_price', $best_over_odds)->where('selection_line', 'over')->distinct()->pluck('sportsbook');
+        $sportsbook_b_query = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('bet_price', $best_under_odds)->where('selection_line', 'under')->distinct()->pluck('sportsbook');
+
+        $sportsbook_a = sports_book_image($sportsbook_a_query, $sports_book);
+        $sportsbook_b = sports_book_image($sportsbook_b_query, $sports_book);
+
+    } else {
+        // Binary Wins
+        $home_team = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('selection','LIKE','%'.$row->home_team.'%')->max('bet_price');
+        $away_team = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('selection','LIKE','%'.$row->away_team.'%')->max('bet_price');
+        $is_draw = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('selection','Draw')->count();
+
+        if ($is_draw > 0) {
+        
+            $best_odds_a = convertAmericanToDecimalOdds($home_team) ?? 0.00;
+            $best_odds_b = convertAmericanToDecimalOdds($away_team) ?? 0.00;
+            $selection_line_a = 'Draw';
+
+        } else if ( !empty($home_team) || !empty($away_team) ) {
+            // Binary
+            
+            $best_odds_a = convertAmericanToDecimalOdds($home_team) ?? 0.00;
+            $best_odds_b = convertAmericanToDecimalOdds($away_team) ?? 0.00;
+            
+            $bet_name_query = findBetName($row);
+            $selection_line_a = $bet_name_query && $bet_name_query != "[]" ? $bet_name_query->TeamA_Bet_Name  :  $row->home_team;
+            $selection_line_b = $bet_name_query && $bet_name_query != "[]" ? $bet_name_query->TeamB_Bet_Name  :  $row->away_team;
+
+            $sportsbook_a_query = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('bet_price', $home_team)->where('selection','LIKE','%'.$row->home_team.'%')->distinct()->pluck('sportsbook');
+            $sportsbook_b_query = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('bet_price', $away_team)->where('selection','LIKE','%'.$row->away_team.'%')->distinct()->pluck('sportsbook');
+
+            $sportsbook_a = sports_book_image($sportsbook_a_query, $sports_book);
+            $sportsbook_b = sports_book_image($sportsbook_b_query, $sports_book);
+
+
+        } else {
+        
+            $query_yes = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)
+                        ->where('selection','yes')->max('bet_price');
+
+            $query_no = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)
+                        ->where('selection','no')->max('bet_price');
+        
+            $query_odd  = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)
+                        ->where('selection','odd')->max('bet_price');
+
+            $query_even = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)
+                        ->where('selection','even')->max('bet_price');
+        
+
+
+            // If Yes or No
+            if ( !empty($query_yes) && !empty($query_no) ) {
+                $best_odds_a = convertAmericanToDecimalOdds($query_yes) ?? 0.00;
+                $best_odds_b = convertAmericanToDecimalOdds($query_no) ?? 0.00;
+                $selection_line_a = 'Yes';
+                $selection_line_b = 'No';
+
+                
+                $sportsbook_a_query = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('selection','yes')->where('bet_price', $query_yes)->distinct()->pluck('sportsbook');
+                $sportsbook_b_query = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('selection','no')->where('bet_price', $query_no)->distinct()->pluck('sportsbook');
+
+                $sportsbook_a = sports_book_image($sportsbook_a_query, $sports_book);
+                $sportsbook_b = sports_book_image($sportsbook_b_query, $sports_book);
+                
+            } else if ( !empty($query_odd) && !empty($query_even) ) {
+                $best_odds_a = convertAmericanToDecimalOdds($query_odd) ?? 0.00;
+                $best_odds_b = convertAmericanToDecimalOdds($query_even) ?? 0.00;
+                $selection_line_a = 'Odd';
+                $selection_line_b = 'Even';
+                $sportsbook_a_query = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('selection','odd')->where('bet_price', $query_odd)->distinct()->pluck('sportsbook');
+                $sportsbook_b_query = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('selection','even')->where('bet_price', $query_even)->distinct()->pluck('sportsbook');
+
+                $sportsbook_a = sports_book_image($sportsbook_a_query, $sports_book);
+                $sportsbook_b = sports_book_image($sportsbook_b_query, $sports_book);
+            }
+
+        }
+    }
+
+    $profit_percentage = calculateProfit($best_odds_a, $best_odds_b);
+
+    $data = [
+        'best_odds_a'   =>  $best_odds_a,
+        'best_odds_b'   =>  $best_odds_b,
+        'selection_line_a'   =>  $selection_line_a,
+        'selection_line_b'   =>  $selection_line_b,
+        'profit_percentage' =>  $profit_percentage,
+        'sportsbook_a'  =>  $sportsbook_a,
+        'sportsbook_b'  =>  $sportsbook_b
+    ];
+
+    return $data;
+
+}
+function formatEventDate($date) {
+    $dateTime = new DateTime($date);
+    return $dateTime->format('D, M j  g:i A');
+}
+function formatEvent($row) {
+    return $row->home_team . ' vs ' . $row->away_team . '<div class="flex flex-row gap-2">
+            <span><small>' . strtoupper($row->sport) . '</small></span>
+            <span class="border-e"></span>
+            <span><small>' . strtoupper($row->league) . '</small></span>
+        </div>';
+}    
+function findBetName($row) {
+
+    $positiveMatches = function($query) use ($row) { // Add 'use ($row)'
+        $query->from('gameodds AS A') 
+            ->join('gameodds AS B', 'A.selection_points', '=', 'B.selection_points')
+            ->where('A.selection', $row->home_team)
+            ->where('B.selection', $row->away_team)
+            ->where('A.selection_points', '>', 0)
+            ->where('B.selection_points', '>', 0)
+            ->where('A.game_id', $row->uid)
+            ->where('B.game_id', $row->uid)
+            ->where('A.bet_type', $row->bet_type)
+            ->where('B.bet_type', $row->bet_type)
+            ->select('A.selection_points');
+    };
+
+    $result = DB::table('gameodds AS A')
+        ->join('gameodds AS B', function($join) {
+            $join->on('A.selection_points', '=', DB::raw('-B.selection_points'));
+        })
+        ->where('A.game_id', $row->uid)
+        ->where('B.game_id', $row->uid)
+        ->where('A.bet_type', $row->bet_type)
+        ->where('B.bet_type', $row->bet_type)
+        ->whereNotExists($positiveMatches) 
+        ->orderByDesc(DB::raw('ABS(A.selection_points)'))
+        ->select(
+            'A.selection AS TeamA_Name', 'A.bet_name AS TeamA_Bet_Name',
+            'B.selection AS TeamB_Name', 'B.bet_name AS TeamB_Bet_Name'
+        )
+        ->first();
+
+    // Assuming you want the home team to always have the higher selection point
+    if ($result && $result->TeamA_Name != $row->home_team) {
+        $swap = $result->TeamA_Name;
+        $result->TeamA_Name = $result->TeamB_Name;
+        $result->TeamB_Name = $swap;
+
+        $swapBetName = $result->TeamA_Bet_Name;
+        $result->TeamA_Bet_Name = $result->TeamB_Bet_Name;
+        $result->TeamB_Bet_Name = $swapBetName;
+    }
+    
+    return $result;
+}
+function findMatchingBets($dataObj1, $dataObj2, $type) {
+        
+    if ($type == 1) {
+
+        // Convert the object to an array.
+        $dataArray = array_values($dataObj1);
+
+        $overs = array_filter($dataArray, function($item) {
+            return $item['selection_line'] === "over";
+        });
+
+        $unders = array_filter($dataArray, function($item) {
+            return $item['selection_line'] === "under";
+        });
+
+        $matchingPairs = [];
+
+        foreach ($overs as $over) {
+            foreach ($unders as $under) {
+                if (abs($over['selection_points']) === abs($under['selection_points'])) {
+                    $matchingPairs[] = ['over' => $over, 'under' => $under];
+                }
+            }
+        }
+
+        if (count($matchingPairs) === 0) {
+            return null;
+        }
+
+        $highestSelectionPoint = max(array_map(function($pair) {
+            return abs($pair['over']['selection_points']);
+        }, $matchingPairs));
+
+        $highestPair = array_filter($matchingPairs, function($pair) use ($highestSelectionPoint) {
+            return abs($pair['over']['selection_points']) === $highestSelectionPoint;
+        });
+
+        return array_values($highestPair)[0];
+
+    } elseif ($type == 2 && $dataObj1 && $dataObj2) {
+
+
+        // Convert the object to an array.
+        $dataArray1 = array_values($dataObj1);
+        $dataArray2 = array_values($dataObj2);
+
+        $homes = array_filter($dataArray1, function($item) {
+            return $item['selection_line'] != "over" && $item['selection_line'] != "under";
+        });
+
+        $aways = array_filter($dataArray2, function($item) {
+            return $item['selection_line'] != "over" && $item['selection_line'] != "under";
+        });
+
+        $matchingPairs = [];
+
+        foreach ($homes as $home) {
+            $matched = false;
+
+
+            if ($home['selection_points'] > 0) {
+                foreach ($aways as $away) {
+                    
+                    if ($home['selection_points'] === -$away['selection_points']) {
+                        $matchingPairs[] = ['home' => $home, 'away' => $away];
+                        
+                        $matched = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!$matched && $home['selection_points'] < 0) {
+                foreach ($aways as $away) {
+                    if (-$home['selection_points'] === $away['selection_points']) {
+                        $matchingPairs[] = ['home' => $home, 'away' => $away];
+                        \Log::info('Inside' . json_encode($matchingPairs));
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (count($matchingPairs) === 0) {
+            return null;
+        }
+
+        $highestSelectionPoint = max(array_map(function($pair) {
+            return abs($pair['home']['selection_points']);
+        }, $matchingPairs));
+
+        $highestPair = array_filter($matchingPairs, function($pair) use ($highestSelectionPoint) {
+            return abs($pair['home']['selection_points']) === $highestSelectionPoint;
+        });
+
+        return array_values($highestPair)[0];
+    }
+}
+function sports_book_image($arr, $sports_book) {
+    $imagesHTML = '';
+    
+    // Convert Eloquent Collection to array
+    $sports_book_array = $sports_book->toArray();
+    
+    if (count($arr) > 0) {
+        foreach ($arr as $name) {
+            if ($name != '') {
+                $book = array_filter($sports_book_array, function($item) use ($name) {
+                    return $item['name'] === $name;
+                });
+
+                // Using current() to get the first item from the filtered array.
+                $book = current($book);
+
+                if ($book) {
+                    $imagesHTML .= '<img class="rounded" width="24" src="' . url($book['image_url']) . '" />';
+                }
+            }
+        }
+    }
+    return $imagesHTML;
+}
+function calculateProfit($oddsA, $oddsB) {
+    // Convert the input values to float
+    $odds1 = floatval($oddsA);
+    $odds2 = floatval($oddsB);
+    
+    // Check for division by zero
+    if ($odds1 == 0 || $odds2 == 0) {
+        return 0;
+    }
+
+    // Calculate the profit percentage
+    $profitPercentage = (1 - (1 / $odds1 + 1 / $odds2)) * 100;
+
+    // Return the result rounded to two decimal places
+    return abs(round($profitPercentage, 2));
+}

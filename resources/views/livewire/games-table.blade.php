@@ -31,8 +31,11 @@
             </tr>
         </thead>
         <tbody class="text-white" id="arbitrage_body">
-            {{-- {{dd($games)}} --}}
             @foreach($games ?? [] as $field)
+                @php 
+                    $data = getOdds($field)
+                @endphp
+                @if( $data['profit_percentage'] > 0 && ( $data['best_odds_a'] * $data['best_odds_b'] > 4 ) )
                 <tr class="border-b hover:bg-[#1D2F41]">
                     <td class="w-4 p-4">
                         <div class="flex items-center">
@@ -42,49 +45,44 @@
                         </div>
                     </td>
                     <td class="px-6 py-4">
-                        {!! $field['profit_percentage'] !!}%
+                        {!! $data['profit_percentage'] !!}%
                     </td>
                     <td class="px-6 py-4">
-                        {!!$field['formattedDate']!!}
+                        {!! formatEventDate($field->start_date) !!}
                     </td>
                     <td class="px-6 py-4">
-                        {!!$field['home_team']!!} vs {!!$field['away_team']!!}
-                        <div class="flex flex-row gap-2">
-                            <span>{!!$field['sports']!!}</span>
-                            <span class="border-e"></span>
-                            <span>{!!$field['league']!!} </span>
-                        </div>
+                        {!! formatEvent($field) !!}
                     </td>
                     <td class="px-6 py-4">
-                        {!!$field['market']!!}
+                        {!!$field->bet_type !!}
                     </td>
                     <td class="px-6 py-4">
                         <div class="flex flex-col">
                             <span>
-                                {!!$field['selection_line']['over']!!}
+                                {!! $data['selection_line_a'] !!}
                             </span>
                             <span>
-                                {!!$field['selection_line']['under']!!}
+                                {!! $data['selection_line_b'] !!}
                             </span>
                         </div>
                     </td>
                         <td class="px-6 py-4">
                         <div class="flex flex-col">
                             <div class="flex flex-row items-center gap-2">
-                                <span>{!!$field['best_odds']['over']!!}</span>
+                                <span>{!! $data['best_odds_a'] !!}</span>
                             </div>
                             <div class="flex flex-row items-center gap-2">
-                                <span>{!!$field['best_odds']['under']!!}</span>
+                                <span>{!! $data['best_odds_b'] !!}</span>
                             </div>
                         </div>
                     </td>
                     <td class="px-6 py-4">
                         <div class="flex flex-col">
                             <div class="flex flex-row items-center gap-2">
-                            {!!$field['sports_book']['over']!!}
+                            {!! $data['sportsbook_a'] !!}
                             </div>
                             <div class="flex flex-row items-center gap-2">
-                            {!!$field['sports_book']['under']!!}
+                            {!! $data['sportsbook_b'] !!}
                             </div>
                         </div>
                     </td>
@@ -92,6 +90,7 @@
                         ----
                     </td>
                 </tr>
+                @endif
             @endforeach
         </tbody>
     </table>
