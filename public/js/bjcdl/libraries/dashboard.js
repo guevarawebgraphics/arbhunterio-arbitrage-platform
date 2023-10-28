@@ -126,6 +126,7 @@ var table = $('#arbitrage-table').DataTable({
     ajax: sBaseURI + '/dashboard',
     serverSide: true,
     processing: true,
+    aaSorting:[[1,"desc"]],
     columns: [
         {data: 'id', name: 'id'},
         {data: 'percent', name: 'percent'},
@@ -137,6 +138,9 @@ var table = $('#arbitrage-table').DataTable({
         {data: 'books', name: 'books'},
         {data: 'updated', name: 'updated'},
     ],
+    columnDefs: [
+        { type: 'numeric', targets: 1 } // Set column at index 1 to numeric type
+    ]
     // createdRow: function(row, data, dataIndex) {
     //     if (data.percent == "0%") {
     //         $(row).hide();

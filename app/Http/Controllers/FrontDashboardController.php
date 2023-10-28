@@ -69,7 +69,7 @@ class FrontDashboardController extends Controller
                 })
                 ->addColumn('percent',  function ($row) {
                     $data = $this->getOdds($row);
-                    return $data['profit_percentage'].'%';
+                    return $data['profit_percentage'];
                 })
                 ->addColumn('event_date', function ($row) {
                     return $this->formatEventDate($row->start_date);
