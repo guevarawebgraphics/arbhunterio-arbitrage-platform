@@ -286,7 +286,6 @@ class FrontDashboardController extends Controller
                 ->select('A.selection_points');
         };
 
-
         $result = DB::table('gameodds AS A')
             ->join('gameodds AS B', function($join) {
                 $join->on('A.selection_points', '=', DB::raw('-B.selection_points'));
