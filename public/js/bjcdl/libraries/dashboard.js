@@ -126,7 +126,7 @@ var table = $('#arbitrage-table').DataTable({
     ajax: sBaseURI + '/dashboard',
     serverSide: true,
     processing: true,
-    aaSorting:[[2,"desc"]],
+    aaSorting:[[1,"desc"]],
     columns: [
         {data: 'id', name: 'id'},
         {data: 'percent', name: 'percent'},
