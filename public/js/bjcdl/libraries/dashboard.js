@@ -126,7 +126,7 @@ var table = $('#arbitrage-table').DataTable({
     ajax: sBaseURI + '/dashboard',
     serverSide: true,
     processing: true,
-    aaSorting:[[1,"desc"]],
+    aaSorting:[[2,"desc"]],
     columns: [
         {data: 'id', name: 'id'},
         {data: 'percent', name: 'percent'},
@@ -137,7 +137,15 @@ var table = $('#arbitrage-table').DataTable({
         {data: 'best_odds', name: 'best_odds'},
         {data: 'books', name: 'books'},
         {data: 'updated', name: 'updated'},
-    ]
+    ],
+    createdRow: function(row, data, dataIndex) {
+        if (data.percent == "0%") {
+            $(row).hide();
+        }
+        if (data.bets == "Draw") {
+            $(row).hide();
+        }
+    }
 });
 
 // Echo.channel('odds-updates')

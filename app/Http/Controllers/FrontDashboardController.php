@@ -53,10 +53,9 @@ class FrontDashboardController extends Controller
         
         $seo_meta = $this->getSeoMeta($page);
 
-        // $games = collect($this->gamesPerMarketsV2([]));
-
         $games = $this->gamesPerMarketsV3([]);
 
+        $oddsCache = [];
 
         if ($request->ajax()) {
             \Log::info('data table ajax');
@@ -68,8 +67,9 @@ class FrontDashboardController extends Controller
                             </button>
                         </div>';
                 })
-                ->addColumn('percent', function ($row) {
-                    return $this->getProfitPercent($row);
+                ->addColumn('percent',  function ($row) {
+                    $data = $this->getOdds($row);
+                    return $data['best_odds_a'] . '%';
                 })
                 ->addColumn('event_date', function ($row) {
                     return $this->formatEventDate($row->start_date);
@@ -94,8 +94,7 @@ class FrontDashboardController extends Controller
 
                     return $html;
                 })
-                ->addColumn('best_odds', function ($row) {
-
+                ->addColumn('best_odds', function ($row) use (&$oddsCache) {
                     $data = $this->getOdds($row);
                     $html = '<div class="flex flex-col">
                         <div class="flex flex-row items-center gap-2">
@@ -110,13 +109,22 @@ class FrontDashboardController extends Controller
 
                 })
                 ->addColumn('books', function ($row) {
+                    $data = $this->getOdds($row);
+                    $html = '<div class="flex flex-col">
+                            <div class="flex flex-row items-center gap-2">
+                            '.$data['sportsbook_a'].'
+                            </div>
+                            <div class="flex flex-row items-center gap-2">
+                             '.$data['sportsbook_b'].'
+                            </div>
+                        </div>';
 
-
-                    return '--';
+                    return $html;
                 })
                 ->addColumn('updated', function ($row) {
                     return '';
-                })->rawColumns(['id','percent','event_date','event','market','bets','best_odds','books','updated'])->toJson();
+                })
+                ->rawColumns(['id','percent','event_date','event','market','bets','best_odds','books','updated'])->toJson();
         }
 
 
@@ -129,95 +137,118 @@ class FrontDashboardController extends Controller
         $best_odds_b = 0.00;
         $selection_line_a = '';
         $selection_line_b = '';
+        $sportsbook_a = '';
+        $sportsbook_b = '';
         $counter = 0;
 
-            // Over Under
-            $best_over_odds = GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('selection_line', 'over')->max('bet_price');
-            $best_under_odds = GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('selection_line', 'under')->max('bet_price');
-        
-            if ( !empty($best_over_odds) || !empty($best_under_odds) ) {
-                $best_odds_a = convertAmericanToDecimalOdds($best_over_odds) ?? 0.00;
-                $best_odds_b = convertAmericanToDecimalOdds($best_under_odds) ?? 0.00;
-                $mergedOdds = GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->whereIn('selection_line', ['over','under'] )->get();
+        $best_over_odds = GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('selection_line', 'over')->max('bet_price');
+        $best_under_odds = GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('selection_line', 'under')->max('bet_price');
+
+        $sports_book = getSportsBook();
+    
+        if ( !empty($best_over_odds) || !empty($best_under_odds) ) {
+            $best_odds_a = convertAmericanToDecimalOdds($best_over_odds) ?? 0.00;
+            $best_odds_b = convertAmericanToDecimalOdds($best_under_odds) ?? 0.00;
+            $mergedOdds = GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->whereIn('selection_line', ['over','under'] )->get();
+            
+            $found_matched_over_under = $this->findMatchingBets($mergedOdds->toArray(), null, 1);
+            $selection_line_a = isset($found_matched_over_under['over']['bet_name']) ? $found_matched_over_under['over']['bet_name'] : null;
+            $selection_line_b = isset($found_matched_over_under['under']['bet_name']) ? $found_matched_over_under['under']['bet_name'] : null;
+
+            $sportsbook_a_query = GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('selection_line', 'over')->distinct()->pluck('sportsbook');
+            $sportsbook_b_query = GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('selection_line', 'under')->distinct()->pluck('sportsbook');
+
+            $sportsbook_a = $this->sports_book_image($sportsbook_a_query, $sports_book);
+            $sportsbook_b = $this->sports_book_image($sportsbook_b_query, $sports_book);
+
+        } else {
+            // Binary Wins
+            $home_team = GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('selection','LIKE','%'.$row->home_team.'%')->max('bet_price');
+            $away_team = GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('selection','LIKE','%'.$row->away_team.'%')->max('bet_price');
+            $is_draw = GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('selection','Draw')->count();
+
+            if ($is_draw > 0) {
+            
+                $best_odds_a = convertAmericanToDecimalOdds($home_team) ?? 0.00;
+                $best_odds_b = convertAmericanToDecimalOdds($away_team) ?? 0.00;
+                $selection_line_a = 'Draw';
+
+            } else if ( !empty($home_team) || !empty($away_team) ) {
+                // Binary
                 
-                $found_matched_over_under = $this->findMatchingBets($mergedOdds->toArray(), null, 1);
-                $selection_line_a = isset($found_matched_over_under['over']['bet_name']) ? $found_matched_over_under['over']['bet_name'] : null;
-                $selection_line_b = isset($found_matched_over_under['under']['bet_name']) ? $found_matched_over_under['under']['bet_name'] : null;
+                $best_odds_a = convertAmericanToDecimalOdds($home_team) ?? 0.00;
+                $best_odds_b = convertAmericanToDecimalOdds($away_team) ?? 0.00;
+                
+                $bet_name_query = $this->findBetName($row);
+                $selection_line_a = $bet_name_query && $bet_name_query != "[]" ? $bet_name_query->TeamA_Bet_Name  :  $row->home_team;
+                $selection_line_b = $bet_name_query && $bet_name_query != "[]" ? $bet_name_query->TeamB_Bet_Name  :  $row->away_team;
+
+                $sportsbook_a_query = GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('selection','LIKE','%'.$row->home_team.'%')->distinct()->pluck('sportsbook');
+                $sportsbook_b_query = GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('selection','LIKE','%'.$row->away_team.'%')->distinct()->pluck('sportsbook');
+
+                $sportsbook_a = $this->sports_book_image($sportsbook_a_query, $sports_book);
+                $sportsbook_b = $this->sports_book_image($sportsbook_b_query, $sports_book);
+
 
             } else {
-                
-                // Binary Wins
-                $home_team = GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('selection','LIKE','%'.$row->home_team.'%')->max('bet_price');
-                $away_team = GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('selection','LIKE','%'.$row->away_team.'%')->max('bet_price');
-                $is_draw = GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('selection','Draw')->count();
+            
+                $query_yes = GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)
+                            ->where('selection','yes')->max('bet_price');
 
-                // If Draw
-                if ($is_draw > 0) {
-                
-                    $best_odds_a = convertAmericanToDecimalOdds($home_team) ?? 0.00;
-                    $best_odds_b = convertAmericanToDecimalOdds($away_team) ?? 0.00;
-                    $selection_line_a = 'Draw';
+                $query_no = GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)
+                            ->where('selection','no')->max('bet_price');
+            
+                $query_odd  = GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)
+                            ->where('selection','odd')->max('bet_price');
 
-                } else if ( !empty($home_team) || !empty($away_team) ) {
-                // Binary
+                $query_even = GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)
+                            ->where('selection','even')->max('bet_price');
+            
+
+
+                // If Yes or No
+                if ( !empty($query_yes) && !empty($query_no) ) {
+                    $best_odds_a = convertAmericanToDecimalOdds($query_yes) ?? 0.00;
+                    $best_odds_b = convertAmericanToDecimalOdds($query_no) ?? 0.00;
+                    $selection_line_a = 'Yes';
+                    $selection_line_b = 'No';
+
                     
-                    $best_odds_a = convertAmericanToDecimalOdds($home_team) ?? 0.00;
-                    $best_odds_b = convertAmericanToDecimalOdds($away_team) ?? 0.00;
+                    $sportsbook_a_query = GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('selection','yes')->distinct()->pluck('sportsbook');
+                    $sportsbook_b_query = GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('selection','no')->distinct()->pluck('sportsbook');
+
+                    $sportsbook_a = $this->sports_book_image($sportsbook_a_query, $sports_book);
+                    $sportsbook_b = $this->sports_book_image($sportsbook_b_query, $sports_book);
                     
-                    $bet_name_query = $this->findBetName($row);
-                    $selection_line_a = $bet_name_query && $bet_name_query != "[]" ? $bet_name_query->TeamA_Bet_Name  :  $row->home_team;
-                    $selection_line_b = $bet_name_query && $bet_name_query != "[]" ? $bet_name_query->TeamB_Bet_Name  :  $row->away_team;
+                } else if ( !empty($query_odd) && !empty($query_even) ) {
+                    $best_odds_a = convertAmericanToDecimalOdds($query_odd) ?? 0.00;
+                    $best_odds_b = convertAmericanToDecimalOdds($query_even) ?? 0.00;
+                    $selection_line_a = 'Odd';
+                    $selection_line_b = 'Even';
+                    $sportsbook_a_query = GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('selection','odd')->distinct()->pluck('sportsbook');
+                    $sportsbook_b_query = GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('selection','even')->distinct()->pluck('sportsbook');
 
-
-                } else {
-             
-                    $query_yes = GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)
-                                ->where('selection','yes')->max('bet_price');
-
-                    $query_no = GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)
-                                ->where('selection','no')->max('bet_price');
-                
-                    $query_odd  = GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)
-                                ->where('selection','odd')->max('bet_price');
-
-                    $query_even = GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)
-                                ->where('selection','even')->max('bet_price');
-                
-
-
-                    // If Yes or No
-                    if ( !empty($query_yes) && !empty($query_no) ) {
-                        $best_odds_a = convertAmericanToDecimalOdds($query_yes) ?? 0.00;
-                        $best_odds_b = convertAmericanToDecimalOdds($query_no) ?? 0.00;
-                        $selection_line_a = 'Yes';
-                        $selection_line_b = 'No';
-                    } else if ( !empty($query_odd) && !empty($query_even) ) {
-                        $best_odds_a = convertAmericanToDecimalOdds($query_odd) ?? 0.00;
-                        $best_odds_b = convertAmericanToDecimalOdds($query_even) ?? 0.00;
-                        $selection_line_a = 'Odd';
-                        $selection_line_b = 'Even';
-                    }
-
+                    $sportsbook_a = $this->sports_book_image($sportsbook_a_query, $sports_book);
+                    $sportsbook_b = $this->sports_book_image($sportsbook_b_query, $sports_book);
                 }
+
             }
+        }
+
+        $profit_percentage = $this->calculateProfit($best_odds_a, $best_odds_b);
 
         $data = [
             'best_odds_a'   =>  $best_odds_a,
             'best_odds_b'   =>  $best_odds_b,
             'selection_line_a'   =>  $selection_line_a,
-            'selection_line_b'   =>  $selection_line_b
+            'selection_line_b'   =>  $selection_line_b,
+            'profit_percentage' =>  $profit_percentage,
+            'sportsbook_a'  =>  $sportsbook_a,
+            'sportsbook_b'  =>  $sportsbook_b
         ];
 
         return $data;
 
-    }
-    private function getProfitPercent($row) {
-
-        $odd1 =  $row->has_selection_line == "1" ? $row->over_selection_points : $row->highest_selection_points;
-        $odd2 =  $row->has_selection_line == "1" ? $row->under_selection_points : $row->lowest_selection_points;
-
-        $profit = $this->calculateProfit($odd1, $odd2);
-        return $profit . '%';
     }
     private function formatEventDate($date) {
         $dateTime = new DateTime($date);
