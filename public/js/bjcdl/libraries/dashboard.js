@@ -139,7 +139,6 @@ $.dashboard.init = {
         ajax: sBaseURI + '/dashboard',
         serverSide: true,
         processing: true,
-        order: [[1, 'desc']],
         columns: [
             {data: 'id', name: 'id'},
             {data: 'percent', name: 'percent', type: 'num'},

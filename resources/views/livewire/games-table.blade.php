@@ -33,7 +33,7 @@
         <tbody class="text-white" id="arbitrage_body">
             @foreach($games ?? [] as $field)
                 @php 
-                    $data = getOdds($field)
+                    $data = getOdds($field);
                 @endphp
                 @if( $data['profit_percentage'] > 0 && ( $data['best_odds_a'] * $data['best_odds_b'] > 4 ) )
                 <tr class="border-b hover:bg-[#1D2F41]">
