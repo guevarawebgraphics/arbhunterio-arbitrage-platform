@@ -69,7 +69,7 @@ class FrontDashboardController extends Controller
                 })
                 ->addColumn('percent',  function ($row) {
                     $data = $this->getOdds($row);
-                    return $data['best_odds_a'] . '%';
+                    return $data['profit_percentage'].'%';
                 })
                 ->addColumn('event_date', function ($row) {
                     return $this->formatEventDate($row->start_date);
@@ -141,12 +141,20 @@ class FrontDashboardController extends Controller
         $sportsbook_b = '';
         $counter = 0;
 
-        $best_over_odds = GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('selection_line', 'over')->max('bet_price');
-        $best_under_odds = GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('selection_line', 'under')->max('bet_price');
+        $best_over_odds = GameOdds::where('bet_type', $row->bet_type)
+                        ->where('game_id', $row->uid)
+                        ->where('selection_line', 'over')
+                        ->max('bet_price');
+
+        $best_under_odds = GameOdds::where('bet_type', $row->bet_type)
+                        ->where('game_id', $row->uid)
+                        ->where('selection_line', 'under')
+                        ->max('bet_price');
 
         $sports_book = getSportsBook();
     
         if ( !empty($best_over_odds) || !empty($best_under_odds) ) {
+            
             $best_odds_a = convertAmericanToDecimalOdds($best_over_odds) ?? 0.00;
             $best_odds_b = convertAmericanToDecimalOdds($best_under_odds) ?? 0.00;
             $mergedOdds = GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->whereIn('selection_line', ['over','under'] )->get();
@@ -155,8 +163,8 @@ class FrontDashboardController extends Controller
             $selection_line_a = isset($found_matched_over_under['over']['bet_name']) ? $found_matched_over_under['over']['bet_name'] : null;
             $selection_line_b = isset($found_matched_over_under['under']['bet_name']) ? $found_matched_over_under['under']['bet_name'] : null;
 
-            $sportsbook_a_query = GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('selection_line', 'over')->distinct()->pluck('sportsbook');
-            $sportsbook_b_query = GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('selection_line', 'under')->distinct()->pluck('sportsbook');
+            $sportsbook_a_query = GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('bet_price', $best_over_odds)->where('selection_line', 'over')->distinct()->pluck('sportsbook');
+            $sportsbook_b_query = GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('bet_price', $best_under_odds)->where('selection_line', 'under')->distinct()->pluck('sportsbook');
 
             $sportsbook_a = $this->sports_book_image($sportsbook_a_query, $sports_book);
             $sportsbook_b = $this->sports_book_image($sportsbook_b_query, $sports_book);
@@ -183,8 +191,8 @@ class FrontDashboardController extends Controller
                 $selection_line_a = $bet_name_query && $bet_name_query != "[]" ? $bet_name_query->TeamA_Bet_Name  :  $row->home_team;
                 $selection_line_b = $bet_name_query && $bet_name_query != "[]" ? $bet_name_query->TeamB_Bet_Name  :  $row->away_team;
 
-                $sportsbook_a_query = GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('selection','LIKE','%'.$row->home_team.'%')->distinct()->pluck('sportsbook');
-                $sportsbook_b_query = GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('selection','LIKE','%'.$row->away_team.'%')->distinct()->pluck('sportsbook');
+                $sportsbook_a_query = GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('bet_price', $home_team)->where('selection','LIKE','%'.$row->home_team.'%')->distinct()->pluck('sportsbook');
+                $sportsbook_b_query = GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('bet_price', $away_team)->where('selection','LIKE','%'.$row->away_team.'%')->distinct()->pluck('sportsbook');
 
                 $sportsbook_a = $this->sports_book_image($sportsbook_a_query, $sports_book);
                 $sportsbook_b = $this->sports_book_image($sportsbook_b_query, $sports_book);
@@ -214,8 +222,8 @@ class FrontDashboardController extends Controller
                     $selection_line_b = 'No';
 
                     
-                    $sportsbook_a_query = GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('selection','yes')->distinct()->pluck('sportsbook');
-                    $sportsbook_b_query = GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('selection','no')->distinct()->pluck('sportsbook');
+                    $sportsbook_a_query = GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('selection','yes')->where('bet_price', $query_yes)->distinct()->pluck('sportsbook');
+                    $sportsbook_b_query = GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('selection','no')->where('bet_price', $query_no)->distinct()->pluck('sportsbook');
 
                     $sportsbook_a = $this->sports_book_image($sportsbook_a_query, $sports_book);
                     $sportsbook_b = $this->sports_book_image($sportsbook_b_query, $sports_book);
@@ -225,8 +233,8 @@ class FrontDashboardController extends Controller
                     $best_odds_b = convertAmericanToDecimalOdds($query_even) ?? 0.00;
                     $selection_line_a = 'Odd';
                     $selection_line_b = 'Even';
-                    $sportsbook_a_query = GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('selection','odd')->distinct()->pluck('sportsbook');
-                    $sportsbook_b_query = GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('selection','even')->distinct()->pluck('sportsbook');
+                    $sportsbook_a_query = GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('selection','odd')->where('bet_price', $query_odd)->distinct()->pluck('sportsbook');
+                    $sportsbook_b_query = GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('selection','even')->where('bet_price', $query_even)->distinct()->pluck('sportsbook');
 
                     $sportsbook_a = $this->sports_book_image($sportsbook_a_query, $sports_book);
                     $sportsbook_b = $this->sports_book_image($sportsbook_b_query, $sports_book);
