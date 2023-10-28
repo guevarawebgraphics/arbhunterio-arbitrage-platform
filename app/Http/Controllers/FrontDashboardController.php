@@ -269,7 +269,6 @@ class FrontDashboardController extends Controller
                 <span><small>' . strtoupper($row->league) . '</small></span>
             </div>';
     }    
-
     private function findBetName($row) {
     
         $positiveMatches = function($query) use ($row) { // Add 'use ($row)'
@@ -315,54 +314,4 @@ class FrontDashboardController extends Controller
         
         return $result;
     }
-
-    // private function findBetName($row) {
-    //     $query = "
-    //         WITH PositiveMatches AS (
-    //             SELECT
-    //                 A.selection_points
-    //             FROM
-    //                 (SELECT selection_points
-    //                 FROM gameodds
-    //                 WHERE selection = '".$row->away_team."'
-    //                 AND selection_points > 0
-    //                 AND game_id = '".$row->uid."'
-    //                 AND bet_type = '".$row->bet_type."') AS A
-    //             JOIN
-    //                 (SELECT selection_points
-    //                 FROM gameodds
-    //                 WHERE selection = '".$row->home_team."'
-    //                 AND selection_points > 0
-    //                 AND game_id = '".$row->uid."'
-    //                 AND bet_type = '".$row->bet_type."') AS B
-    //             ON A.selection_points = B.selection_points
-    //         )
-    //         SELECT
-    //             A.bet_name AS TeamA_Bet_Name,
-    //             B.bet_name AS TeamB_Bet_Name
-    //         FROM
-    //             (SELECT bet_name, selection_points
-    //             FROM gameodds
-    //             WHERE selection = '".$row->away_team."'
-    //             AND game_id = '".$row->uid."'
-    //             AND bet_type = '".$row->bet_type."'
-    //             ORDER BY selection_points DESC LIMIT 1) AS A
-    //         JOIN
-    //             (SELECT bet_name, selection_points
-    //             FROM gameodds
-    //             WHERE selection = '".$row->home_team."'
-    //             AND game_id = '".$row->uid."'
-    //             AND bet_type = '".$row->bet_type."'
-    //             ORDER BY selection_points ASC LIMIT 1) AS B
-    //         ON
-    //             A.selection_points = -B.selection_points
-    //         WHERE
-    //             NOT EXISTS (SELECT 1 FROM PositiveMatches);
-    //         ";
-
-    //         $results = DB::select(DB::raw($query));
-    //         return $results;
-    // }
-
-
 }
