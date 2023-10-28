@@ -1,4 +1,17 @@
+if (typeof jQuery === "undefined") {
+    throw new Error("jQuery plugins need to be before this file");
+}
 
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-Token': "<?php echo csrf_token() ?>"
+    }
+});
+
+$.dashboard = {};
+
+$.dashboard.init = {
+    activate: function () {
 // async function getGames(pageID) {
 
 //     $("#arbitrage_body").html(loading_html);
@@ -121,34 +134,39 @@
 
 // getGames(pageID);
 
-// Server side pagination
-var table = $('#arbitrage-table').DataTable({
-    ajax: sBaseURI + '/dashboard',
-    serverSide: true,
-    processing: true,
-    aaSorting:[[1,"desc"]],
-    columns: [
-        {data: 'id', name: 'id'},
-        {data: 'percent', name: 'percent'},
-        {data: 'event_date', name: 'event_date'},
-        {data: 'event', name: 'event'},
-        {data: 'market', name: 'market'},
-        {data: 'bets', name: 'bets'},
-        {data: 'best_odds', name: 'best_odds'},
-        {data: 'books', name: 'books'},
-        {data: 'updated', name: 'updated'},
-    ],
-    columnDefs: [
-        { type: 'numeric', targets: 1 } // Set column at index 1 to numeric type
-    ]
-    // createdRow: function(row, data, dataIndex) {
-    //     if (data.percent == "0%") {
-    //         $(row).hide();
-    //     }
-    // }
-});
+    // Server side pagination
+    var table = $('#arbitrage-table').DataTable({
+        ajax: sBaseURI + '/dashboard',
+        serverSide: true,
+        processing: true,
+        order: [[1, 'desc']],
+        columns: [
+            {data: 'id', name: 'id'},
+            {data: 'percent', name: 'percent', type: 'num'},
+            {data: 'event_date', name: 'event_date'},
+            {data: 'event', name: 'event'},
+            {data: 'market', name: 'market'},
+            {data: 'bets', name: 'bets'},
+            {data: 'best_odds', name: 'best_odds'},
+            {data: 'books', name: 'books'},
+            {data: 'updated', name: 'updated'},
+        ]
+        // createdRow: function(row, data, dataIndex) {
+        //     if (data.percent == "0%") {
+        //         $(row).hide();
+        //     }
+        // }
+    });
 
-// Echo.channel('odds-updates')
-// .listen('NewOddsReceived', (event) => {
-//     table.draw();
-// });
+    // Echo.channel('odds-updates')
+    // .listen('NewOddsReceived', (event) => {
+    //     table.draw();
+    // });
+
+
+    }
+}
+
+$(function () {
+    $.dashboard.init.activate();
+});
