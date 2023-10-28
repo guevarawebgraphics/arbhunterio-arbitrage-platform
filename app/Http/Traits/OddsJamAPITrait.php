@@ -1239,7 +1239,8 @@ trait OddsJamAPITrait
                 'g.sport',
                 'g.league',
                 // 'has_selection_line'
-            )->paginate(100);
+            // )->paginate(10);
+            );
 
 
         return $gamesArray;

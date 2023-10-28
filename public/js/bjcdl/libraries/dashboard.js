@@ -135,28 +135,28 @@ $.dashboard.init = {
 // getGames(pageID);
 
     // Server side pagination
-    // var table = $('#arbitrage-table').DataTable({
-    //     ajax: sBaseURI + '/dashboard',
-    //     serverSide: true,
-    //     processing: true,
-    //     order: [[1, 'desc']],
-    //     columns: [
-    //         {data: 'id', name: 'id'},
-    //         {data: 'percent', name: 'percent', type: 'num'},
-    //         {data: 'event_date', name: 'event_date'},
-    //         {data: 'event', name: 'event'},
-    //         {data: 'market', name: 'market'},
-    //         {data: 'bets', name: 'bets'},
-    //         {data: 'best_odds', name: 'best_odds'},
-    //         {data: 'books', name: 'books'},
-    //         {data: 'updated', name: 'updated'},
-    //     ]
-    //     // createdRow: function(row, data, dataIndex) {
-    //     //     if (data.percent == "0%") {
-    //     //         $(row).hide();
-    //     //     }
-    //     // }
-    // });
+    var table = $('#arbitrage-table').DataTable({
+        ajax: sBaseURI + '/dashboard',
+        serverSide: true,
+        processing: true,
+        order: [[1, 'desc']],
+        columns: [
+            {data: 'id', name: 'id'},
+            {data: 'percent', name: 'percent', type: 'num'},
+            {data: 'event_date', name: 'event_date'},
+            {data: 'event', name: 'event'},
+            {data: 'market', name: 'market'},
+            {data: 'bets', name: 'bets'},
+            {data: 'best_odds', name: 'best_odds'},
+            {data: 'books', name: 'books'},
+            {data: 'updated', name: 'updated'},
+        ]
+        // createdRow: function(row, data, dataIndex) {
+        //     if (data.percent == "0%") {
+        //         $(row).hide();
+        //     }
+        // }
+    });
 
     // Echo.channel('odds-updates')
     // .listen('NewOddsReceived', (event) => {

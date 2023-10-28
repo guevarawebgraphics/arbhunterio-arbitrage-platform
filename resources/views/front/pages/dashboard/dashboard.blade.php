@@ -20,47 +20,6 @@
     justify-content: center; /* Center the pagination */
 }
 
-/* Styles for each page item */
-.pagination .page-item {
-    margin: 0 3px;
-}
-
-/* Styles for the page link and buttons inside the page items */
-.pagination .page-link {
-    color: #007bff; /* Link color */
-    background-color: #fff;
-    border: 1px solid #dee2e6;
-    padding: 5px 10px;
-    text-decoration: none;
-    border-radius: 5px; /* Rounded corners */
-    cursor: pointer;
-}
-
-/* Hover effect for page link and buttons */
-.pagination .page-link:hover {
-    background-color: #f8f9fa;
-}
-
-/* Styles for the active page */
-.pagination .page-item.active .page-link {
-    color: #fff;
-    background-color: #007bff;
-    border-color: #007bff;
-}
-
-/* Styles for disabled page items */
-.pagination .page-item.disabled .page-link {
-    color: #6c757d;
-    background-color: #e9ecef;
-    border-color: #dee2e6;
-    cursor: not-allowed;
-}
-
-/* Optional: Style for the ellipsis */
-.pagination .page-item .page-link[aria-disabled="true"] {
-    font-size: 1rem; /* Adjust size as needed */
-    color: #6c757d;
-}
 
 </style>
 
@@ -563,8 +522,8 @@
             <div class="relative hidden md:block">
 
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                        <livewire:games-table />
-                        {{-- <table class="w-full text-sm text-left text-[#86A5B1] dark:text-gray-400" id="arbitrage-table">
+                        {{-- <livewire:games-table /> --}}
+                        <table class="w-full text-sm text-left text-[#86A5B1] dark:text-gray-400" id="arbitrage-table">
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 ">
                                 <tr>
                                     <th scope="col" class="p-4">
@@ -598,7 +557,7 @@
                             <tbody class="text-white" id="arbitrage_body">
 
                             </tbody>
-                        </table> --}}
+                        </table>
                 </div>
 
                 {{-- <nav aria-label="Page navigation example my-0" id="pagination-listings"></nav> --}}
