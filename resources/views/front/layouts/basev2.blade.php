@@ -27,7 +27,7 @@
             background-color: #09131E;
         }
     </style>
-    {{-- @livewireStyles --}}
+    @livewireStyles
 </head>
 <body class="font-body">
     <nav class="bg-white border-gray-200 ">
@@ -100,7 +100,7 @@
     
     @yield('extra-script')
 
-    {{-- @livewireScripts --}}
+    @livewireScripts
 
 </body>
 </html>

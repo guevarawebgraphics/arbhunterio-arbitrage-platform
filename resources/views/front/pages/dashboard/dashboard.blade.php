@@ -522,8 +522,8 @@
             <div class="relative hidden md:block">
 
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                        {{-- <livewire:games-table /> --}}
-                        <table class="w-full text-sm text-left text-[#86A5B1] dark:text-gray-400" id="arbitrage-table">
+                        <livewire:games-table />
+                        {{-- <table class="w-full text-sm text-left text-[#86A5B1] dark:text-gray-400" id="arbitrage-table">
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 ">
                                 <tr>
                                     <th scope="col" class="p-4">
@@ -557,7 +557,7 @@
                             <tbody class="text-white" id="arbitrage_body">
 
                             </tbody>
-                        </table>
+                        </table> --}}
                 </div>
 
                 {{-- <nav aria-label="Page navigation example my-0" id="pagination-listings"></nav> --}}

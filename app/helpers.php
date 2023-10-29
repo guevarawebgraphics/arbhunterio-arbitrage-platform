@@ -237,7 +237,6 @@ function getOdds($row) {
             $sportsbook_a = sports_book_image($sportsbook_a_query, $sports_book);
             $sportsbook_b = sports_book_image($sportsbook_b_query, $sports_book);
 
-
         } else {
         
             $query_yes = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)

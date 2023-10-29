@@ -1228,8 +1228,6 @@ trait OddsJamAPITrait
                 'g.sport',
                 'g.league'
             )
-            
-            
             ->groupBy(
                 'g.uid',
                 'g.start_date',
@@ -1237,10 +1235,9 @@ trait OddsJamAPITrait
                 'g.away_team',
                 'go.bet_type',
                 'g.sport',
-                'g.league',
-                // 'has_selection_line'
-            // )->paginate(50);
-            );
+                'g.league'
+            )->paginate(30);
+            // );
 
 
         return $gamesArray;
