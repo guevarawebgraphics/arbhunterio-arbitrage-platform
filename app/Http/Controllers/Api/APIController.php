@@ -19,6 +19,8 @@ use DateTime;
 use DateTimeZone;
 use DateInterval;
 
+use DB;
+
 class APIController extends Controller
 {
     use OddsJamAPITrait;
@@ -412,5 +414,186 @@ class APIController extends Controller
         $input = $request->all();
         $response = $this->sportsBook($input);
         return $response;
+    }
+
+    public function testApi() {
+       $gamesArray = GameOdds::query()
+            ->withTrashed()
+            ->from('gameodds as go')
+            ->leftJoin('games as g', 'g.uid', '=', 'go.game_id')
+            
+            // Over and Under Max Bet Price
+            ->leftJoinSub(
+                GameOdds::select('game_id', 'bet_type', DB::raw('MAX(bet_price) as max_over_bet_price'))
+                    ->where('selection_line', 'over')
+                    ->groupBy('game_id', 'bet_type'),
+                'max_over_odds',
+                function($join) {
+                    $join->on('max_over_odds.game_id', '=', 'g.uid')
+                        ->on('max_over_odds.bet_type', '=', 'go.bet_type');
+                }
+            )
+            ->leftJoinSub(
+                GameOdds::select('game_id', 'bet_type', DB::raw('MAX(bet_price) as max_under_bet_price'))
+                    ->where('selection_line', 'under')
+                    ->groupBy('game_id', 'bet_type'),
+                'max_under_odds',
+                function($join) {
+                    $join->on('max_under_odds.game_id', '=', 'g.uid')
+                        ->on('max_under_odds.bet_type', '=', 'go.bet_type');
+                }
+            )
+            // Over and Under Best Odds Decimal
+            ->leftJoinSub(
+                GameOdds::select('game_id', 'bet_type',
+                    \DB::raw('CASE 
+                        WHEN MAX(bet_price) > 0 THEN (MAX(bet_price) / 100) + 1
+                        ELSE (100 / ABS(MAX(bet_price))) + 1
+                    END as best_over_odds'))
+                    ->where('selection_line', 'over')
+                    ->groupBy('game_id', 'bet_type'),
+                'over_odds',
+                function($join) {
+                    $join->on('over_odds.game_id', '=', 'g.uid')
+                         ->on('over_odds.bet_type', '=', 'go.bet_type');
+                }
+            )
+            ->leftJoinSub(
+                GameOdds::select('game_id', 'bet_type',
+                    \DB::raw('CASE 
+                        WHEN MAX(bet_price) > 0 THEN (MAX(bet_price) / 100) + 1
+                        ELSE (100 / ABS(MAX(bet_price))) + 1
+                    END as best_under_odds'))
+                    ->where('selection_line', 'under')
+                    ->groupBy('game_id', 'bet_type'),
+                'under_odds',
+                function($join) {
+                    $join->on('under_odds.game_id', '=', 'g.uid')
+                         ->on('under_odds.bet_type', '=', 'go.bet_type');
+                }
+            )
+
+
+            // Home and Away
+            ->leftJoinSub(
+                GameOdds::select('game_id', 'bet_type', DB::raw('MAX(bet_price) as max_home_bet_price'))
+                    ->where('selection','LIKE','g.home_team')
+                    ->groupBy('game_id', 'bet_type'),
+                'max_home_odds',
+                function($join) {
+                    $join->on('max_home_odds.game_id', '=', 'g.uid')
+                        ->on('max_home_odds.bet_type', '=', 'go.bet_type');
+                }
+            )
+            ->leftJoinSub(
+                GameOdds::select('game_id', 'bet_type', DB::raw('MAX(bet_price) as max_away_bet_price'))
+                    ->where('selection','LIKE','g.away_team')
+                    ->groupBy('game_id', 'bet_type'),
+                'max_away_odds',
+                function($join) {
+                    $join->on('max_away_odds.game_id', '=', 'g.uid')
+                        ->on('max_away_odds.bet_type', '=', 'go.bet_type');
+                }
+            )
+            // Home and Away Decimal
+            ->leftJoinSub(
+                GameOdds::select('game_id', 'bet_type',
+                    \DB::raw('CASE 
+                        WHEN MAX(bet_price) > 0 THEN (MAX(bet_price) / 100) + 1
+                        ELSE (100 / ABS(MAX(bet_price))) + 1
+                    END as best_home_odds'))
+                    ->where('selection_line', 'g.home_team')
+                    ->groupBy('game_id', 'bet_type'),
+                'home_odds',
+                function($join) {
+                    $join->on('home_odds.game_id', '=', 'g.uid')
+                         ->on('home_odds.bet_type', '=', 'go.bet_type');
+                }
+            )
+            ->leftJoinSub(
+                GameOdds::select('game_id', 'bet_type',
+                    \DB::raw('CASE 
+                        WHEN MAX(bet_price) > 0 THEN (MAX(bet_price) / 100) + 1
+                        ELSE (100 / ABS(MAX(bet_price))) + 1
+                    END as best_away_odds'))
+                    ->where('selection_line', 'g.away_team')
+                    ->groupBy('game_id', 'bet_type'),
+                'away_odds',
+                function($join) {
+                    $join->on('away_odds.game_id', '=', 'g.uid')
+                         ->on('away_odds.bet_type', '=', 'go.bet_type');
+                }
+            )
+
+            // Draw
+            ->leftJoinSub(
+                GameOdds::select('game_id', 'bet_type',
+                    \DB::raw('COUNT(selection) as draw_count'))
+                    ->where('selection', 'Draw')
+                    ->groupBy('game_id', 'bet_type'),
+                'draw_count_odds',
+                function($join) {
+                    $join->on('draw_count_odds.game_id', '=', 'g.uid')
+                         ->on('draw_count_odds.bet_type', '=', 'go.bet_type');
+                }
+            )
+
+
+            ->where('go.is_live', 0)
+            ->select(
+                'g.uid',
+                'g.start_date',
+                'g.home_team',
+                'g.away_team',
+                'go.bet_type',
+                'g.sport',
+                'g.league',
+
+                // Over and Under
+                'max_over_odds.max_over_bet_price',
+                'max_under_odds.max_under_bet_price',
+                'over_odds.best_over_odds',
+                'under_odds.best_under_odds',
+
+
+                // Non - Over and Under
+                'max_home_odds.max_home_bet_price',
+                'max_away_odds.max_away_bet_price',
+
+                'home_odds.best_home_odds',
+                'away_odds.best_away_odds',
+
+                // Draw
+                'draw_count_odds.draw_count'
+
+            )
+            ->groupBy(
+                'g.uid',
+                'g.start_date',
+                'g.home_team',
+                'g.away_team',
+                'go.bet_type',
+                'g.sport',
+                'g.league',
+
+                // // Over and Under
+                // 'max_over_odds.max_over_bet_price',
+                // 'max_under_odds.max_under_bet_price',
+                // 'over_odds.best_over_odds',
+                // 'under_odds.best_under_odds',
+
+                // // Home and Away
+                // 'max_home_odds.max_home_bet_price',
+                // 'max_away_odds.max_away_bet_price',
+                // 'home_odds.best_home_odds',
+                // 'away_odds.best_away_odds',
+
+
+                // // Draw
+                // 'draw_count_odds.draw_count'
+
+            )->paginate(10);
+
+        return $gamesArray;
     }
 }

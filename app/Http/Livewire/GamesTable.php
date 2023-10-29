@@ -29,7 +29,14 @@ class GamesTable extends Component
     public function render()
     {
         // dd($this->games);
-        return view('livewire.games-table', ['games' => $this->games]);
+        $games = $this->games;
+        $sortedGames = $games->getCollection()->sortByDesc(function($game) {
+            $data = getOdds($game);
+            return ($data['best_odds_a'] * $data['best_odds_b']) > 0 ? $data['profit_percentage'] : 0;
+        })->values();
+
+        $games->setCollection($sortedGames);
+        return view('livewire.games-table', ['games' => $games]);
     }
 
     public function refreshTable()

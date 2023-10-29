@@ -197,6 +197,7 @@ function getOdds($row) {
         
         $best_odds_a = convertAmericanToDecimalOdds($best_over_odds) ?? 0.00;
         $best_odds_b = convertAmericanToDecimalOdds($best_under_odds) ?? 0.00;
+
         $mergedOdds = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->whereIn('selection_line', ['over','under'] )->get();
         
         $found_matched_over_under = findMatchingBets($mergedOdds->toArray(), null, 1);
