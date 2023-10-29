@@ -28,14 +28,17 @@ class GamesTable extends Component
 
     public function render()
     {
-        // dd($this->games);
-        $games = $this->games;
-        $sortedGames = $games->getCollection()->sortByDesc(function($game) {
+        $games = $this->gamesPerMarketsV3([]);
+
+        // Since the dataset is paginated, get the items for sorting.
+        $sortedItems = $games->getCollection()->sortByDesc(function($game) {
             $data = getOdds($game);
             return ($data['best_odds_a'] * $data['best_odds_b']) > 0 ? $data['profit_percentage'] : 0;
         })->values();
 
-        $games->setCollection($sortedGames);
+        // Set the sorted items back on the paginator instance.
+        $games->setCollection($sortedItems);
+
         return view('livewire.games-table', ['games' => $games]);
     }
 

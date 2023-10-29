@@ -13,3 +13,4 @@ npm-debug.log
 yarn-error.log
 /public/game.json
 /public/odds.json
+lr_oddsjam_dv_DEFAULT_DB.sql

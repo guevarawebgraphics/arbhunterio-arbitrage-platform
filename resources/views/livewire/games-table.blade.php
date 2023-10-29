@@ -104,7 +104,11 @@
     @endif
 
     <div wire:loading class="flex justify-center items-center">
-        <img src="{{url('public/images/loading2.gif')}}" style="width:24px; height: 24px;"/>
+        <center> <p class="text-white">
+            <img src="{{url('public/images/loading2.gif')}}" style="width:24px; height: 24px;"/>
+            Loading content..
+           </p>
+        </center>
     </div>
 
 </div>

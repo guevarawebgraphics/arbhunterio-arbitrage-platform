@@ -285,6 +285,10 @@ function getOdds($row) {
 
     $profit_percentage = calculateProfit($best_odds_a, $best_odds_b);
 
+    $updated_at = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)
+                    ->where('game_id', $row->uid)
+                    ->max('timestamp');
+
     $data = [
         'best_odds_a'   =>  $best_odds_a,
         'best_odds_b'   =>  $best_odds_b,
@@ -292,7 +296,8 @@ function getOdds($row) {
         'selection_line_b'   =>  $selection_line_b,
         'profit_percentage' =>  $profit_percentage,
         'sportsbook_a'  =>  $sportsbook_a,
-        'sportsbook_b'  =>  $sportsbook_b
+        'sportsbook_b'  =>  $sportsbook_b,
+        'updated_at'    =>  $updated_at
     ];
 
     return $data;
