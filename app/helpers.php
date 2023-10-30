@@ -298,17 +298,20 @@ function getOdds($row) {
     return $data;
 
 }
+
 function formatEventDate($date) {
     $dateTime = new DateTime($date);
     return $dateTime->format('D, M j  g:i A');
 }
+
 function formatEvent($row) {
     return $row->home_team . ' vs ' . $row->away_team . '<div class="flex flex-row gap-2">
             <span><small>' . strtoupper($row->sport) . '</small></span>
             <span class="border-e"></span>
             <span><small>' . strtoupper($row->league) . '</small></span>
         </div>';
-}    
+}   
+
 function findBetName($row) {
 
     $positiveMatches = function($query) use ($row) { // Add 'use ($row)'
@@ -354,6 +357,7 @@ function findBetName($row) {
     
     return $result;
 }
+
 function findMatchingBets($dataObj1, $dataObj2, $type) {
         
     if ($type == 1) {
@@ -452,6 +456,7 @@ function findMatchingBets($dataObj1, $dataObj2, $type) {
         return array_values($highestPair)[0];
     }
 }
+
 function sports_book_image($arr, $sports_book) {
     $imagesHTML = '';
     
@@ -476,6 +481,7 @@ function sports_book_image($arr, $sports_book) {
     }
     return $imagesHTML;
 }
+
 function calculateProfit($oddsA, $oddsB) {
     // Convert the input values to float
     $odds1 = floatval($oddsA);
