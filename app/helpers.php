@@ -220,7 +220,7 @@ function getOdds($row) {
         
             $best_odds_a = convertAmericanToDecimalOdds($home_team) ?? 0.00;
             $best_odds_b = convertAmericanToDecimalOdds($away_team) ?? 0.00;
-            // $selection_line_a = 'Draw';
+            $selection_line_a = 'Draw';
 
         } else if ( !empty($home_team) || !empty($away_team) ) {
             // Binary
