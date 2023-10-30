@@ -120,6 +120,58 @@ class APIController extends Controller
             
     }
 
+    public function getGameSportsBook(Request $request) {
+
+        $input = $request->all();
+
+        $sports_book = getSportsBook();
+
+        $sportsbook_a_query = GameOdds::where('bet_type', $input['bet_type'])
+            ->where('game_id', $input['game_id'])
+            ->where('bet_price', $input['up_bet_price'] )
+            ->where($input['selection_type'], $input['selecction_value'])
+            ->distinct()
+            ->pluck('sportsbook');
+
+        $sportsbook_b_query = GameOdds::where('bet_type', $input['bet_type'])
+            ->where('game_id', $input['game_id'])
+            ->where('bet_price', $input['down_bet_price'] )
+            ->where($input['selection_type'], $input['selecction_value'])
+            ->distinct()
+            ->pluck('sportsbook');
+
+        $sportsbook_a = sports_book_image($sportsbook_a_query, $sports_book);
+
+        $sportsbook_b = sports_book_image($sportsbook_b_query, $sports_book);
+
+        return $data = [
+            'sportsbook_a'  =>  $sportsbook_a,
+            'sportsbook_b'  =>  $sportsbook_b
+        ];
+    }
+
+    public function findMatchingBets(Request $request) {
+
+        $input = $request->all();
+        
+        $query = GameOdds::where('bet_type', $input['bet_type'])->where('game_id', $input['uid'])->whereIn('selection_line', ['over','under'] )->get();
+
+        $found_matched_over_under = findMatchingBets($query->toArray(), null, 1);
+
+        $selection_line_a = isset($found_matched_over_under['over']['bet_name']) ? $found_matched_over_under['over']['bet_name'] : null;
+
+        $selection_line_b = isset($found_matched_over_under['under']['bet_name']) ? $found_matched_over_under['under']['bet_name'] : null;
+
+        return $data = [
+            'selection_line_a'  =>  $selection_line_a,
+            'selection_line_b'  =>  $selection_line_b
+        ];
+
+    }
+
+
+    
+
     private function fetchOddsData($game, $sportsBook) {
         
         $upcomingGameOddsInput = [

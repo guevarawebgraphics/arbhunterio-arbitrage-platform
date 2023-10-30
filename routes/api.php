@@ -49,3 +49,8 @@ Route::get('/game-listing/paginate', '\App\Http\Controllers\Api\APIController@ge
 Route::get('/odds-push-streams', '\App\Http\Controllers\Api\APIController@oddsPushStream')->name('api.odds.push.streams');
 
 Route::get('/test-api', '\App\Http\Controllers\Api\APIController@testApi')->name('test.api');
+
+// Sports book 
+Route::post('/sportsbook/best-odds', '\App\Http\Controllers\Api\APIController@getGameSportsBook')->name('api.game.sportsbook');
+// Matching Bets to retrieve bet name
+Route::post('/find-matching-bets', '\App\Http\Controllers\Api\APIController@findMatchingBets')->name('api.game.find.matching.bets');

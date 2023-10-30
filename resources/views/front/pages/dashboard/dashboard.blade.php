@@ -12,13 +12,13 @@
     .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate {
         color:#fff !important;
     }
-    /* Base styles for the pagination container */
-.pagination {
-    display: flex;
-    list-style: none;
-    padding: 0;
-    justify-content: center; /* Center the pagination */
-}
+        /* Base styles for the pagination container */
+    .pagination {
+        display: flex;
+        list-style: none;
+        padding: 0;
+        justify-content: center; /* Center the pagination */
+    }
 
 
 </style>
@@ -395,19 +395,6 @@
                                                     @endforeach
 
                                                 @endif
-
-                                                {{-- <div class="form-check">
-                                                    <label class="form-check-label ml-6 inline-block cursor-pointer select-none text-sm leading-5 text-[#68CFF6]" for="41">
-                                                    <input type="checkbox" id="41" class="form-check-input float-left ml-[-1.5rem] mt-0.5 mr-2 h-4 w-4 cursor-pointer appearance-none rounded-sm border-2 border-brand-gray-6 bg-transparent bg-contain bg-center bg-no-repeat align-top transition duration-200 focus:outline-none checked:focus:outline-none checked:focus:bg-brand-blue checked:focus:ring-brand-blue checked:focus:hover:bg-brand-blue-1 checked:focus:hover:ring-brand-blue-1 !rounded hover:bg-brand-gray-3 checked:border-brand-blue-3 checked:bg-brand-blue-3 checked:hover:border-brand-blue-3 checked:hover:bg-brand-blue-3 focus:!border-brand-blue-3 focus:ring-brand-blue-3 focus:checked:!bg-brand-blue-3" checked="">
-                                                        Baseball 
-                                                    </label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <label class="form-check-label ml-6 inline-block cursor-pointer select-none text-sm leading-5 text-[#68CFF6]" for="40">
-                                                    <input type="checkbox" id="40" class="form-check-input float-left ml-[-1.5rem] mt-0.5 mr-2 h-4 w-4 cursor-pointer appearance-none rounded-sm border-2 border-brand-gray-6 bg-transparent bg-contain bg-center bg-no-repeat align-top transition duration-200 focus:outline-none checked:focus:outline-none checked:focus:bg-brand-blue checked:focus:ring-brand-blue checked:focus:hover:bg-brand-blue-1 checked:focus:hover:ring-brand-blue-1 !rounded hover:bg-brand-gray-3 checked:border-brand-blue-3 checked:bg-brand-blue-3 checked:hover:border-brand-blue-3 checked:hover:bg-brand-blue-3 focus:!border-brand-blue-3 focus:ring-brand-blue-3 focus:checked:!bg-brand-blue-3" checked="">
-                                                        Aussie Rules
-                                                    </label>
-                                                </div> --}}
                                             </div>
                                         </div>
                                     </div>

@@ -19,9 +19,6 @@
                 <th scope="col" class="px-6 py-3">
                     Bets
                 </th>
-                    <th scope="col" class="px-6 py-3">
-                    Best Odds
-                </th>
                 <th scope="col" class="px-6 py-3">
                     Books
                 </th>
@@ -71,19 +68,11 @@
                             <div class="flex flex-col">
                                 <div class="flex flex-row items-center gap-2">
                                     <span>{!! $data['best_odds_a'] !!}</span>
+                                    {!! $data['sportsbook_a'] !!}
                                 </div>
                                 <div class="flex flex-row items-center gap-2">
                                     <span>{!! $data['best_odds_b'] !!}</span>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-6 py-4">
-                            <div class="flex flex-col">
-                                <div class="flex flex-row items-center gap-2">
-                                {!! $data['sportsbook_a'] !!}
-                                </div>
-                                <div class="flex flex-row items-center gap-2">
-                                {!! $data['sportsbook_b'] !!}
+                                    {!! $data['sportsbook_b'] !!}
                                 </div>
                             </div>
                         </td>
