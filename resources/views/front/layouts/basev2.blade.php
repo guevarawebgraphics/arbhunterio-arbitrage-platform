@@ -102,5 +102,12 @@
 
     @livewireScripts
 
+    <script>
+        Echo.channel('odds-updates')
+        .listen('NewOddsReceived', (event) => {
+            console.log(event);
+        });
+    </script>
+
 </body>
 </html>

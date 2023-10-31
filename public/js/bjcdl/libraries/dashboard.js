@@ -157,10 +157,7 @@ $.dashboard.init = {
     //     // }
     // });
 
-    // Echo.channel('odds-updates')
-    // .listen('NewOddsReceived', (event) => {
-    //     table.draw();
-    // });
+
 
 
     }

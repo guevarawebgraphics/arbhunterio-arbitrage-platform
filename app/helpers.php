@@ -269,6 +269,7 @@ function getOdds($row) {
                 $sportsbook_b = sports_book_image($sportsbook_b_query, $sports_book);
                 
             } else if ( !empty($query_odd) && !empty($query_even) ) {
+                
                 $best_odds_a = convertAmericanToDecimalOdds($query_odd) ?? 0.00;
                 $best_odds_b = convertAmericanToDecimalOdds($query_even) ?? 0.00;
                 $selection_line_a = 'Odd';

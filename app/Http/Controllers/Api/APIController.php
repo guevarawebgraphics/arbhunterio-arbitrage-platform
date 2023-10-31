@@ -170,7 +170,7 @@ class APIController extends Controller
     }
 
 
-    
+
 
     private function fetchOddsData($game, $sportsBook) {
         
@@ -245,6 +245,7 @@ class APIController extends Controller
             foreach ($market ?? [] as $value) {
                 
                 $gameodds = GameOdds::where('uid', $value['id'])->whereNull('deleted_at')->first();
+                
                 event(new NewOddsReceived($value));
 
                 $input = [
