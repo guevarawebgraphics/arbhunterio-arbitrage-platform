@@ -154,29 +154,29 @@ class RegisterController extends Controller
 
         //$check_cart = Cart::where('user_id',$user->id)->count();
 
-        if (!in_array($_SERVER['REMOTE_ADDR'], ['127.0.0.1', '::1'])) {
-            $email_data = [
-                'view' => 'email.registered',
-                'type' => 'registered',
-                'user' => [
-                    'name' => $user->first_name,
-                    'email' => $user->email,
-                ],
-                'user_data' => $user,
-                'subject' => 'Registration Successful',
-                'attachments' => [],
-                'is_admin' => FALSE,
-            ];
+        // if (!in_array($_SERVER['REMOTE_ADDR'], ['127.0.0.1', '::1'])) {
+        //     $email_data = [
+        //         'view' => 'email.registered',
+        //         'type' => 'registered',
+        //         'user' => [
+        //             'name' => $user->first_name,
+        //             'email' => $user->email,
+        //         ],
+        //         'user_data' => $user,
+        //         'subject' => 'Registration Successful',
+        //         'attachments' => [],
+        //         'is_admin' => FALSE,
+        //     ];
 
-            /* send email to user */
-            $this->userRepository->sendEmail($email_data);
+        //     /* send email to user */
+        //     $this->userRepository->sendEmail($email_data);
 
-            /* send email to admin */
-            $email_data['is_admin'] = TRUE;
-            $email_data['view'] = 'email.registered_admin';
-            $email_data['subject'] = 'New Registration';
-            $this->userRepository->sendEmail($email_data);
-        }
+        //     /* send email to admin */
+        //     $email_data['is_admin'] = TRUE;
+        //     $email_data['view'] = 'email.registered_admin';
+        //     $email_data['subject'] = 'New Registration';
+        //     $this->userRepository->sendEmail($email_data);
+        // }
 
         if(session()->get('redirect_checkout') == 'true')
         {

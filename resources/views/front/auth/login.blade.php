@@ -75,6 +75,12 @@
                         <a href="{{ url('user/password/email') }}">
                             <small>Forgot password?</small>
                         </a>
+                        
+                    </div>
+                    <div class="container text-center">
+                         <a href="{{ url('user/register') }}">
+                            <small>No Account yet? Register Here</small>
+                        </a>
                     </div>
                     
                 </div>

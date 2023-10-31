@@ -314,4 +314,31 @@ class FrontDashboardController extends Controller
         
         return $result;
     }
+
+    public function indexBetConversion( Request $request ) {
+
+        $page = $this->pageRepository->getPageBySlug('bet_conversion');
+        
+        $seo_meta = $this->getSeoMeta($page);
+
+        return view('front.pages.dashboard.calculators.bet_conversion', compact('page','seo_meta'));
+    }
+
+    public function indexArbitrageHedgeCalculator( Request $request ) {
+
+        $page = $this->pageRepository->getPageBySlug('arbitrage_hedge_calculator');
+        
+        $seo_meta = $this->getSeoMeta($page);
+
+        return view('front.pages.dashboard.calculators.arbitrage', compact('page','seo_meta'));
+    }
+
+    public function indexBetTracker( Request $request  ) {
+        
+        $page = $this->pageRepository->getPageBySlug('bet-tracker');
+        
+        $seo_meta = $this->getSeoMeta($page);
+
+        return view('front.pages.dashboard.bet_tracker', compact('page','seo_meta'));
+    }
 }

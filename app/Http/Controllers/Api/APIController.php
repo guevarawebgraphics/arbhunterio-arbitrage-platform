@@ -76,46 +76,6 @@ class APIController extends Controller
                 $gameArray[] = $this->fetchOddsData($game, $sportsBook);
             }
         }
-        
-
-        // Define the path to the file in the public directory
-        $file = public_path('game.json');
-
-        // Read the existing content
-        $existingData = file_get_contents($file);
-
-        // Decode the JSON data to an array
-        $gamesExists = json_decode($existingData, true);
-
-        // If the file was empty or not a valid JSON, initialize an empty array
-        if (!is_array($gamesExists)) {
-            $gamesExists = [];
-        }
-
-        // Append the new games to the games array only if they don't exist
-        foreach ($gameArray as $game) {
-            $gameExists = false;
-
-            // Check if game with the same ID already exists in $gamesExists
-            foreach ($gamesExists as $existingGame) {
-                if ($existingGame['game']['id'] == $game['game']['id']) {
-                    $gameExists = true;
-                    break;
-                }
-            }
-
-            // If game doesn't exist, append it
-            if (!$gameExists) {
-                $gamesExists[] = $game;
-            }
-        }
-
-        // Convert the updated games array back to JSON
-        $jsonData = json_encode($gamesExists, JSON_PRETTY_PRINT);
-
-        // Save the updated JSON data back to the file
-        file_put_contents($file, $jsonData);
-
         return $gameArray;
             
     }
