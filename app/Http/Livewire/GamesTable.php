@@ -28,7 +28,8 @@ class GamesTable extends Component
 
     public function render()
     {
-        $games = $this->gamesPerMarketsV3([]);
+        // $games = $this->gamesPerMarketsV3([]);
+        $games = $this->games;
 
         // Since the dataset is paginated, get the items for sorting.
         $sortedItems = $games->getCollection()->sortByDesc(function($game) {
