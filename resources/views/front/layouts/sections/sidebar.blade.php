@@ -3,7 +3,7 @@
     <div>
         <div class="-mx-6 px-6 py-4 text-center">
             <a class="self-center text-2xl font-black whitespace-nowrap uppercase text-white" href="/" title="home">
-                ODDSJAM
+                ARBHUNTER.IO <small>Staging</small>
             </a>
         </div>
         <ul class="space-y-2 font-medium my-5">
