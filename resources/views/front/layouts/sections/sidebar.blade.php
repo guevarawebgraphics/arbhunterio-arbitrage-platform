@@ -3,8 +3,9 @@
     <div>
         <div class="-mx-6 px-6 py-4 text-center">
             <a class="self-center text-2xl font-black whitespace-nowrap uppercase text-white" href="/" title="home">
-                ARBHUNTER.IO <small>Staging</small>
+                ARBHUNTER.IO
             </a>
+            <small class="text-center text-white"><em>(Staging)</em></small>
         </div>
         <ul class="space-y-2 font-medium my-5">
             <li>
