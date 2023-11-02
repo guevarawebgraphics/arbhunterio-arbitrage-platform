@@ -25,6 +25,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
+        $schedule->command('oddsjam_game_event_api:cron')->dailyAt('23:00');
     }
 
     /**
