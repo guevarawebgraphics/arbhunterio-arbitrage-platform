@@ -164,9 +164,7 @@ function convertAmericanToDecimalOdds(int $americanOdds = NULL): float
     }
 
     if ($americanOdds < 0) {
-        $formula = (100 / $americanOdds) + 1;
-        \Log::info('Negative Odds ' . $americanOdds );
-        \Log::info('Negative Result ' . $formula );
+        $formula = (100 / abs($americanOdds)) + 1;
     }
 
     // Return a default value (e.g. for 0 odds)
@@ -183,15 +181,21 @@ function getOdds($row) {
     $sportsbook_b = '';
     $counter = 0;
 
-    $best_over_odds = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)
+    $best_over_odds_query = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)
                     ->where('game_id', $row->uid)
                     ->where('selection_line', 'over')
-                    ->max('bet_price');
+                    ->orderByRaw("STR_TO_DATE(timestamp, '%Y-%m-%d %H:%i:%s') DESC")
+                    ->first();
 
-    $best_under_odds = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)
+    $best_over_odds = $best_over_odds_query ? $best_over_odds_query->bet_price : 0.00;
+
+    $best_under_odds_query = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)
                     ->where('game_id', $row->uid)
                     ->where('selection_line', 'under')
-                    ->max('bet_price');
+                    ->orderByRaw("STR_TO_DATE(timestamp, '%Y-%m-%d %H:%i:%s') DESC")
+                    ->first();
+
+    $best_under_odds = $best_under_odds_query ? $best_under_odds_query->bet_price : 0.00;
 
     $sports_book = getSportsBook();
 
@@ -214,8 +218,12 @@ function getOdds($row) {
 
     } else {
         // Binary Wins
-        $home_team = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('selection','LIKE','%'.$row->home_team.'%')->max('bet_price');
-        $away_team = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('selection','LIKE','%'.$row->away_team.'%')->max('bet_price');
+        $home_team_query = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('selection','LIKE','%'.$row->home_team.'%')->orderByRaw("STR_TO_DATE(timestamp, '%Y-%m-%d %H:%i:%s') DESC")->first();
+        $away_team_query = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('selection','LIKE','%'.$row->away_team.'%')->orderByRaw("STR_TO_DATE(timestamp, '%Y-%m-%d %H:%i:%s') DESC")->first();
+        
+        $home_team = $home_team_query ? $home_team_query->bet_price : 0.00;
+        $away_team = $away_team_query ? $away_team_query->bet_price : 0.00;
+
         $is_draw = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('selection','Draw')->count();
 
         if ($is_draw > 0) {
@@ -242,19 +250,35 @@ function getOdds($row) {
 
         } else {
         
-            $query_yes = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)
-                        ->where('selection','yes')->max('bet_price');
+            $query_yes_query = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)
+                        ->where('selection','yes')
+                        ->orderByRaw("STR_TO_DATE(timestamp, '%Y-%m-%d %H:%i:%s') DESC")
+                        ->first();
+                        // ->max('bet_price');
 
-            $query_no = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)
-                        ->where('selection','no')->max('bet_price');
+            $query_no_query = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)
+                        ->where('selection','no')
+                        ->orderByRaw("STR_TO_DATE(timestamp, '%Y-%m-%d %H:%i:%s') DESC")
+                        ->first();
+                        // ->max('bet_price');
         
-            $query_odd  = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)
-                        ->where('selection','odd')->max('bet_price');
+            $query_odd_query  = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)
+                        ->where('selection','odd')
+                        ->orderByRaw("STR_TO_DATE(timestamp, '%Y-%m-%d %H:%i:%s') DESC")
+                        ->first();
+                        // ->max('bet_price');
 
-            $query_even = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)
-                        ->where('selection','even')->max('bet_price');
+            $query_even_query = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)
+                        ->where('selection','even')
+                        ->orderByRaw("STR_TO_DATE(timestamp, '%Y-%m-%d %H:%i:%s') DESC")
+                        ->first();
+                        // ->max('bet_price');
+
+            $query_yes = $query_yes_query ? $query_yes_query->bet_price : 0.00;
+            $query_no = $query_no_query ? $query_no_query->bet_price : 0.00;
         
-
+            $query_odd = $query_odd_query ? $query_odd_query->bet_price : 0.00;
+            $query_even = $query_even_query ? $query_even_query->bet_price : 0.00;
 
             // If Yes or No
             if ( !empty($query_yes) && !empty($query_no) ) {
@@ -489,6 +513,9 @@ function calculateProfit($oddsA, $oddsB) {
     // Convert the input values to float
     $odds1 = floatval($oddsA);
     $odds2 = floatval($oddsB);
+
+    // $odds1 = floatval(1.44);
+    // $odds2 = floatval(3.7);
     
     // Check for division by zero
     if ($odds1 == 0 || $odds2 == 0) {
@@ -499,5 +526,5 @@ function calculateProfit($oddsA, $oddsB) {
     $profitPercentage = (1 - (1 / $odds1 + 1 / $odds2)) * 100;
 
     // Return the result rounded to two decimal places
-    return abs(round($profitPercentage, 2));
+    return number_format(abs($profitPercentage),2,'.',',');
 }
