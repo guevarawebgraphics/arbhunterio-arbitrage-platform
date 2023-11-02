@@ -39,12 +39,6 @@ class OddsJamGameEventAPICron extends Command
      */
     public function handle()
     {   
-        // $sportsBook = getSportsBook();
-        // $sb = '';
-        // foreach ($sportsBook ?? [] as $value) {
-        //     $sb .= '&sportsbooks='.urlencode($value->name);
-        // }
-        // \Log::info($sb);
         $dateTime = $this->timeInterval();
         if ( !empty( $dateTime ) ) {
             foreach ( $dateTime ?? [] as $date ) {
@@ -56,7 +50,6 @@ class OddsJamGameEventAPICron extends Command
 
     private function timeInterval() {
 
-        // Create a DateTime object for the current date in the local timezone
         $currentDate = new DateTime('now', new DateTimeZone(date_default_timezone_get()));
         // $currentDate = new DateTime('2023-10-22', new DateTimeZone(date_default_timezone_get()));
 

@@ -106,7 +106,7 @@
     <script>
         Echo.channel('odds-updates')
         .listen('NewOddsReceived', (event) => {
-            console.log(event);
+            Livewire.emit('refreshData', e.data);
         });
     </script>
 
