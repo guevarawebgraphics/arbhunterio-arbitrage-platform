@@ -164,7 +164,9 @@ function convertAmericanToDecimalOdds(int $americanOdds = NULL): float
     }
 
     if ($americanOdds < 0) {
-        $formula = (100 / abs($americanOdds)) + 1;
+        $formula = (100 / $americanOdds) + 1;
+        \Log::info('Negative Odds ' . $americanOdds );
+        \Log::info('Negative Result ' . $formula );
     }
 
     // Return a default value (e.g. for 0 odds)
