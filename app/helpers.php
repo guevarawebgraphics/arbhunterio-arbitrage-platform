@@ -218,9 +218,13 @@ function getOdds($row) {
 
     } else {
         // Binary Wins
-        $home_team_query = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('selection','LIKE','%'.$row->home_team.'%')->orderByRaw("STR_TO_DATE(timestamp, '%Y-%m-%d %H:%i:%s') DESC")->first();
-        $away_team_query = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('selection','LIKE','%'.$row->away_team.'%')->orderByRaw("STR_TO_DATE(timestamp, '%Y-%m-%d %H:%i:%s') DESC")->first();
+        // $home_team_query = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('selection','LIKE','%'.$row->home_team.'%')->orderByRaw("STR_TO_DATE(timestamp, '%Y-%m-%d %H:%i:%s') DESC")->first();
+        // $away_team_query = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('selection','LIKE','%'.$row->away_team.'%')->orderByRaw("STR_TO_DATE(timestamp, '%Y-%m-%d %H:%i:%s') DESC")->first();
         
+        $home_team_query = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('selection', $row->home_team )->orderByRaw("STR_TO_DATE(timestamp, '%Y-%m-%d %H:%i:%s') DESC")->first();
+        $away_team_query = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('selection', $row->away_team )->orderByRaw("STR_TO_DATE(timestamp, '%Y-%m-%d %H:%i:%s') DESC")->first();
+        
+
         $home_team = $home_team_query ? $home_team_query->bet_price : 0.00;
         $away_team = $away_team_query ? $away_team_query->bet_price : 0.00;
 
@@ -242,8 +246,12 @@ function getOdds($row) {
             $selection_line_a = $bet_name_query && $bet_name_query != "[]" ? $bet_name_query->TeamA_Bet_Name  :  $row->home_team;
             $selection_line_b = $bet_name_query && $bet_name_query != "[]" ? $bet_name_query->TeamB_Bet_Name  :  $row->away_team;
 
-            $sportsbook_a_query = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('bet_price', $home_team)->where('selection','LIKE','%'.$row->home_team.'%')->distinct()->pluck('sportsbook');
-            $sportsbook_b_query = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('bet_price', $away_team)->where('selection','LIKE','%'.$row->away_team.'%')->distinct()->pluck('sportsbook');
+            // $sportsbook_a_query = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('bet_price', $home_team)->where('selection','LIKE','%'.$row->home_team.'%')->distinct()->pluck('sportsbook');
+            // $sportsbook_b_query = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('bet_price', $away_team)->where('selection','LIKE','%'.$row->away_team.'%')->distinct()->pluck('sportsbook');
+
+            $sportsbook_a_query = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('bet_price', $home_team)->where('selection',$row->home_team)->distinct()->pluck('sportsbook');
+            $sportsbook_b_query = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('bet_price', $away_team)->where('selection',$row->away_team)->distinct()->pluck('sportsbook');
+
 
             $sportsbook_a = sports_book_image($sportsbook_a_query, $sports_book);
             $sportsbook_b = sports_book_image($sportsbook_b_query, $sports_book);
