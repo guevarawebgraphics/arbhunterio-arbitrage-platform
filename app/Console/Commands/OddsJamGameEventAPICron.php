@@ -11,7 +11,11 @@ use Monolog\Handler\StreamHandler;
 
 use App\Jobs\SendRequestOddsJamJob;
 use Illuminate\Support\Facades\Queue;
+use App\Services\Games\Game;
+use App\Services\GameOdds\GameOdds;
+use DB;
 
+use Schema;
 use DateTime;
 use DateTimeZone;
 
@@ -39,12 +43,13 @@ class OddsJamGameEventAPICron extends Command
      */
     public function handle()
     {   
-        // $sportsBook = getSportsBook();
-        // $sb = '';
-        // foreach ($sportsBook ?? [] as $value) {
-        //     $sb .= '&sportsbooks='.urlencode($value->name);
-        // }
-        // \Log::info($sb);
+
+        // Game::truncate();
+        // Schema::disableForeignKeyConstraints();
+        // Game::query()->delete();
+        // Schema::enableForeignKeyConstraints();
+                
+
         $dateTime = $this->timeInterval();
         if ( !empty( $dateTime ) ) {
             foreach ( $dateTime ?? [] as $date ) {
@@ -52,11 +57,11 @@ class OddsJamGameEventAPICron extends Command
                 Queue::push($job);
             }
         }
+
     }
 
     private function timeInterval() {
 
-        // Create a DateTime object for the current date in the local timezone
         $currentDate = new DateTime('now', new DateTimeZone(date_default_timezone_get()));
         // $currentDate = new DateTime('2023-10-22', new DateTimeZone(date_default_timezone_get()));
 

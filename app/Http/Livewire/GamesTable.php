@@ -21,6 +21,8 @@ class GamesTable extends Component
 
     private $games = [];
 
+    public $page = 1;
+
     public function mount()
     {
         $this->games = $this->gamesPerMarketsV3([]);
@@ -29,7 +31,8 @@ class GamesTable extends Component
     public function render()
     {
         $games = $this->gamesPerMarketsV3([]);
-
+        // $games = $this->games;
+        
         // Since the dataset is paginated, get the items for sorting.
         $sortedItems = $games->getCollection()->sortByDesc(function($game) {
             $data = getOdds($game);

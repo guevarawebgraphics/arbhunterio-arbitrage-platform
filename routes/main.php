@@ -50,7 +50,23 @@ Route::group(
         'uses' => '\App\Http\Controllers\UserController@updateAccountDetails',
         'as' => 'account-details.update',
     ]);
+
+    Route::get('/calculators/arbitrage', [
+        'uses' => '\App\Http\Controllers\FrontDashboardController@indexArbitrageHedgeCalculator',
+        'as' => 'calculator.arbitrage',
+    ]);
+
+
+    Route::get('/calculators/bet-conversion', [
+        'uses' => '\App\Http\Controllers\FrontDashboardController@indexBetConversion',
+        'as' => 'calculator.bet_conversion',
+    ]);
     
+    Route::get('/bet-tracker', [
+        'uses' => '\App\Http\Controllers\FrontDashboardController@indexBetTracker',
+        'as' => 'bet.tracker',
+    ]);
+
 });
 
 Route::group(

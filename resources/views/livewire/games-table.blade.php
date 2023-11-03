@@ -28,12 +28,15 @@
             </tr>
         </thead>
         <tbody class="text-white" id="arbitrage_body">
-                {{-- how do you sort this to desc. Please note that the profit_percentage is not  a field from database and also this is paginated array ($games) --}}
+            {{-- how do you sort this to desc. Please note that the profit_percentage is not  a field from database and also this is paginated array ($games) --}}
             @foreach($games ?? [] as $field)
+
                 @php 
                     $data = getOdds($field);
                 @endphp
-                @if( $data['profit_percentage'] > 0 && ( $data['best_odds_a'] * $data['best_odds_b'] > 4 ) && $data['selection_line_a'] != "Draw"  )
+
+                {{-- @if( $data['profit_percentage'] > 0 && ( $data['best_odds_a'] * $data['best_odds_b'] > 4 ) && $data['selection_line_a'] != "Draw"  ) --}}
+                @if( $data['profit_percentage'] > 0 && ( $data['best_odds_a'] * $data['best_odds_b'] > 4 ) && $data['selection_line_a'] != "Draw"  ) 
                     <tr class="border-b hover:bg-[#1D2F41]">
                         <td class="w-4 p-4">
                             <div class="flex items-center">
@@ -81,7 +84,9 @@
                         </td>
                     </tr>
                 @endif
+
             @endforeach
+
         </tbody>
     </table>
     <!-- Livewire pagination links -->

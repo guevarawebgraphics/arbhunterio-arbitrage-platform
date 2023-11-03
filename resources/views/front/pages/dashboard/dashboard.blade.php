@@ -333,14 +333,6 @@
                                                     @endforeach
                                                 @endif
 
-                                                {{-- <div class="form-check">
-                                                    <label class="form-check-label ml-6 inline-block cursor-pointer select-none text-sm leading-5 text-[#68CFF6]" for="41">
-                                                    <input type="checkbox" id="41" class="form-check-input float-left ml-[-1.5rem] mt-0.5 mr-2 h-4 w-4 cursor-pointer appearance-none rounded-sm border-2 border-brand-gray-6 bg-transparent bg-contain bg-center bg-no-repeat align-top transition duration-200 focus:outline-none checked:focus:outline-none checked:focus:bg-brand-blue checked:focus:ring-brand-blue checked:focus:hover:bg-brand-blue-1 checked:focus:hover:ring-brand-blue-1 !rounded hover:bg-brand-gray-3 checked:border-brand-blue-3 checked:bg-brand-blue-3 checked:hover:border-brand-blue-3 checked:hover:bg-brand-blue-3 focus:!border-brand-blue-3 focus:ring-brand-blue-3 focus:checked:!bg-brand-blue-3" checked="">10bet </label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <label class="form-check-label ml-6 inline-block cursor-pointer select-none text-sm leading-5 text-[#68CFF6]" for="40">
-                                                    <input type="checkbox" id="40" class="form-check-input float-left ml-[-1.5rem] mt-0.5 mr-2 h-4 w-4 cursor-pointer appearance-none rounded-sm border-2 border-brand-gray-6 bg-transparent bg-contain bg-center bg-no-repeat align-top transition duration-200 focus:outline-none checked:focus:outline-none checked:focus:bg-brand-blue checked:focus:ring-brand-blue checked:focus:hover:bg-brand-blue-1 checked:focus:hover:ring-brand-blue-1 !rounded hover:bg-brand-gray-3 checked:border-brand-blue-3 checked:bg-brand-blue-3 checked:hover:border-brand-blue-3 checked:hover:bg-brand-blue-3 focus:!border-brand-blue-3 focus:ring-brand-blue-3 focus:checked:!bg-brand-blue-3" checked="">888sport (Canada) </label>
-                                                </div> --}}
                                             </div>
                                         </div>
                                     </div>
@@ -510,44 +502,7 @@
 
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                         <livewire:games-table />
-                        {{-- <table class="w-full text-sm text-left text-[#86A5B1] dark:text-gray-400" id="arbitrage-table">
-                            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 ">
-                                <tr>
-                                    <th scope="col" class="p-4">
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Percent
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Event Date
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Event
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Market
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Bets
-                                    </th>
-                                        <th scope="col" class="px-6 py-3">
-                                        Best Odds
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Books
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Updated
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody class="text-white" id="arbitrage_body">
-
-                            </tbody>
-                        </table> --}}
                 </div>
-
-                {{-- <nav aria-label="Page navigation example my-0" id="pagination-listings"></nav> --}}
 
             </div>
             <!-- end table-->

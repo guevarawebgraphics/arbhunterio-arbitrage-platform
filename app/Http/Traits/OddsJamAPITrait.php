@@ -1219,6 +1219,7 @@ trait OddsJamAPITrait
             ->from('gameodds as go')
             ->leftJoin('games as g', 'g.uid', '=', 'go.game_id')
             ->where('go.is_live', 0)
+            ->where('go.is_main', 0)
             ->select(
                 'g.uid',
                 'g.start_date',
