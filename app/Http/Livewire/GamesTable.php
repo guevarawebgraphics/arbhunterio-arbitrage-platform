@@ -21,6 +21,10 @@ class GamesTable extends Component
 
     private $games = [];
 
+    public $page = 1;
+
+    protected $updatesQueryString = ['page'];
+
     public function mount()
     {
         $this->games = $this->gamesPerMarketsV3([]);
@@ -28,15 +32,13 @@ class GamesTable extends Component
 
     public function render()
     {
-        $games = $this->gamesPerMarketsV3([]);
+        $games = $this->games;
 
-        // Since the dataset is paginated, get the items for sorting.
         $sortedItems = $games->getCollection()->sortByDesc(function($game) {
             $data = getOdds($game);
             return ($data['best_odds_a'] * $data['best_odds_b']) > 0 ? $data['profit_percentage'] : 0;
         })->values();
 
-        // Set the sorted items back on the paginator instance.
         $games->setCollection($sortedItems);
 
         return view('livewire.games-table', ['games' => $games]);
@@ -48,6 +50,15 @@ class GamesTable extends Component
         $this->mount();
         \Log::info('Data Table Refreshed: ' . date('H:i a',strtotime( now() )) );
     }
+    public function updatedPage($value)
+    {
+        $this->games = $this->gamesPerMarketsV3([]);
+    }
 
+    public function goToPage($page)
+    {
+        $this->setPage($page);
+        $this->games = $this->gamesPerMarketsV3([]);
+    }
 
 }
