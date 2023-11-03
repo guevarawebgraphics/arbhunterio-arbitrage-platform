@@ -663,40 +663,22 @@
 
         let source;
 
-        $("#playButton").on('click', function() {
-            let buttonText = $(this).text();
-
-            if(buttonText == "Play") {
-                // Change the button text to Stop
-                $(this).text('Stop');
-                
-                // Start streaming
-                if(typeof(EventSource) !== "undefined") {
-                    source = new EventSource("/api/odds-push-streams");
-
-                    source.onmessage = function(event) {
-                        // Handle the incoming data here
-                        console.log(event.data);
-                    };
-                    
-                    source.onerror = function(event) {
-                        console.error("EventSource failed:", event);
-                        source.close();
-                    };
-                } else {
-                    alert("Sorry! Your browser doesn't support server-sent events.");
-                }
-            } else {
-                // Change the button text to Play
-                $(this).text('Play');
-
-                // Stop streaming
-                if(source) {
-                    source.close();
-                }
+        $('#playButton').click(function() {
+            if (!source) { // Check if it's already opened
+                source = new EventSource("{{url('api/odds-push-streams')}}");
+                source.onmessage = function(event) {
+                    // Handle the incoming data here.
+                    console.log(event.data);
+                };
             }
         });
 
+        $('#stopButton').click(function() {
+            if (source) {
+                source.close();
+                source = null; // Reset to null so that it can be opened again later.
+            }
+        });
 
 </script>
 

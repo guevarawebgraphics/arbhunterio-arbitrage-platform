@@ -289,7 +289,10 @@ class APIController extends Controller
 
     private function fetchOddsPushStreamData($url)
     {
-        // dd($url);
+        header('Content-Type: text/event-stream');
+        header('Cache-Control: no-cache');
+        header('Connection: keep-alive');
+        
         $curl = curl_init();
         curl_setopt_array($curl, [
             CURLOPT_URL => $url,
@@ -297,7 +300,9 @@ class APIController extends Controller
             CURLOPT_FOLLOWLOCATION => 1,
             CURLOPT_WRITEFUNCTION => function ($ch, $str) {
                 $data = trim($str);
+
                 if ($data !== "") {
+                    
                     if (preg_match('/data: (\{.*\})/', $data, $matches)) {
                         $jsonData = $matches[1];
                         $job = new StoreOddsStreamJob($jsonData);
