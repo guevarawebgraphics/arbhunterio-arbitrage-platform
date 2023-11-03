@@ -663,21 +663,30 @@
 
         let source;
 
-        $('#playButton').click(function() {
-            if (!source) { // Check if it's already opened
-                source = new EventSource("{{url('api/odds-push-streams')}}");
-                source.onmessage = function(event) {
-                    // Handle the incoming data here.
-                    console.log(event.data);
-                };
-            }
-        });
+        $('#playButton').parent().click(function() {
+            let buttonText = $('#playButton').text();
 
-        $('#stopButton').click(function() {
-            if (source) {
-                source.close();
-                source = null; // Reset to null so that it can be opened again later.
+            if (buttonText === 'Play') {
+                // Start the SSE
+                source = new EventSource("{{url('api/odds-push-streams')}}");
+                
+                source.onmessage = function(event) {
+                    console.log('SSE Response ' , event.data);
+                };
+                $('#playButton').text('Pause');
+
+            } else {
+
+                // Close the SSE
+                if (source) {
+                    source.close();
+                    source = null; 
+                }
+                $('#playButton').text('Play');
             }
+
+            console.log('source: ' ,source);
+
         });
 
 </script>
