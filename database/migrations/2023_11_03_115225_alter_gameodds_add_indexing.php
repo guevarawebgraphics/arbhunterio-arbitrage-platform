@@ -15,7 +15,7 @@ class AlterGameoddsAddIndexing extends Migration
     {
         //
         Schema::table('gameodds', function (Blueprint $table) {
-            $table->index('bet_name');
+            $table->index('bet_type');
         });
     }
 
@@ -28,7 +28,7 @@ class AlterGameoddsAddIndexing extends Migration
     {
         //
         Schema::table('gameodds', function (Blueprint $table) {
-            $table->dropIndex('bet_name');
+            $table->dropIndex('bet_type');
         });
     }
 }
