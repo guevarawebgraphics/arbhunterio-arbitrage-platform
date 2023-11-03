@@ -104,10 +104,10 @@
     @livewireScripts
 
     <script>
-        Echo.channel('odds-updates')
-        .listen('NewOddsReceived', (event) => {
-            Livewire.emit('refreshData', e.data);
-        });
+        // Echo.channel('odds-updates')
+        // .listen('NewOddsReceived', (event) => {
+        //     Livewire.emit('refreshData', e.data);
+        // });
     </script>
 
 </body>
