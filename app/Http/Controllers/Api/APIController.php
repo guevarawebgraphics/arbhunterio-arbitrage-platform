@@ -201,6 +201,7 @@ class APIController extends Controller
                 $gameodds = GameOdds::where('uid', $value['id'])->whereNull('deleted_at')->first();
                 
                 event(new NewOddsReceived($value));
+                \Log::info('processTeamOdds : ' . json_encode($value) );
 
                 $input = [
                     'bet_name'          => $value['name'],

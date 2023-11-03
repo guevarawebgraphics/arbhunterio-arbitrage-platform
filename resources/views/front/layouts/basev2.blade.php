@@ -89,10 +89,10 @@
             </div>
         </div>
     </nav>
+
     <div>
         @yield('content')
     </div>
-
 
     <script src="{{asset('public/js/jquery-1.12.4.min.js')}}"></script>
     {{Html::script('public/bsbmd/plugins/momentjs/moment.js')}}
@@ -104,10 +104,13 @@
     @livewireScripts
 
     <script>
-        // Echo.channel('odds-updates')
-        // .listen('NewOddsReceived', (event) => {
-        //     Livewire.emit('refreshData', e.data);
-        // });
+        Echo.channel('odds-updates')
+        .listen('NewOddsReceived', (event) => {
+            console.log('Refreshed Data');
+            Livewire.emit('refreshData', event.data);
+            
+            // console.log(event.data);
+        });
     </script>
 
 </body>

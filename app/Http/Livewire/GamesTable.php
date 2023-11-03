@@ -50,6 +50,7 @@ class GamesTable extends Component
         $this->mount();
         \Log::info('Data Table Refreshed: ' . date('H:i a',strtotime( now() )) );
     }
+    
     public function updatedPage($value)
     {
         $this->games = $this->gamesPerMarketsV3([]);

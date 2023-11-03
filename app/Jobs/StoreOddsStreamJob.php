@@ -101,31 +101,6 @@ class StoreOddsStreamJob implements ShouldQueue
                 $create_odds = GameOdds::create($input);
 
             }
-
-            // \Log::info('Odds ID: ' . $bet->id);
-
-
         }
-
-       
-
-        // \Log::info('Game Odds: ' . json_encode($game_odds) );
-
-        // $existingData = [];
-        
-        // // If the file is not empty, read the existing content
-        // if (File::size($filePath) > 0) {
-        //     $existingData = json_decode(File::get($filePath));
-        // }
-
-        // // Merge existing data with new data
-        // $updatedData = array_merge($existingData, $raw_query->data);
-
-        // // Convert the updated data to a JSON string
-        // $jsonData = json_encode($updatedData, JSON_PRETTY_PRINT);
-
-        // // Write the updated content back to the file
-        // File::put($filePath, $jsonData);
-        
     }
 }
