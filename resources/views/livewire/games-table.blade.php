@@ -93,7 +93,7 @@
     @if( !empty(  $games ) )
     <!-- Livewire pagination links -->
     <div wire:loading.remove>
-        {{ $games->links() }}
+        {{ $games->render() }}
     </div>
     @endif
 
