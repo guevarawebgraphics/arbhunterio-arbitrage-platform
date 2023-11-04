@@ -30,7 +30,7 @@
         <tbody class="text-white" id="arbitrage_body">
             {{-- how do you sort this to desc. Please note that the profit_percentage is not  a field from database and also this is paginated array ($games) --}}
             @foreach($games ?? [] as $field)
-
+                
                 @php 
                     $data = getOdds($field);
                 @endphp
