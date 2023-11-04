@@ -160,11 +160,16 @@ function convertAmericanToDecimalOdds(int $americanOdds = NULL): float
     \Log::info($americanOdds);
     $formula = 0.00;
     if ($americanOdds > 0) {
-        $formula = ($americanOdds / 100) + 1;
+        $formula = 1 + ($americanOdds / 100);
     }
 
     if ($americanOdds < 0) {
-        $formula = (100 / abs($americanOdds)) + 1;
+        // $formula = (100 / abs($americanOdds)) + 1;
+        // $formula = (100 / $americanOdds) + 1;
+         $formula = 1 - (100 / $americanOdds);
+        \Log::info('Price: ' . $americanOdds);
+        \Log::info('Computed1 (100/odds) : ' . (100 / $americanOdds) );
+        \Log::info('Computed1 1 - odds : ' . 1 - (100 / $americanOdds) );
     }
 
     // Return a default value (e.g. for 0 odds)
@@ -214,6 +219,7 @@ function getOdds($row) {
         $sportsbook_b_query = \App\Services\GameOdds\GameOdds::where('bet_type', $row->bet_type)->where('game_id', $row->uid)->where('bet_price', $best_under_odds)->where('selection_line', 'under')->distinct()->pluck('sportsbook');
 
         $sportsbook_a = sports_book_image($sportsbook_a_query, $sports_book);
+        \Log::info('Sportsbook: ' . json_encode($sportsbook_a_query));
         $sportsbook_b = sports_book_image($sportsbook_b_query, $sports_book);
 
     } else {

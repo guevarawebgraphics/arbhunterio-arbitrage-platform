@@ -36,7 +36,7 @@
                 @endphp
 
                 {{-- @if( $data['profit_percentage'] > 0 && ( $data['best_odds_a'] * $data['best_odds_b'] > 4 ) && $data['selection_line_a'] != "Draw"  ) --}}
-                @if( $data['profit_percentage'] > 0 && ( $data['best_odds_a'] * $data['best_odds_b'] > 4 ) && $data['selection_line_a'] != "Draw"  ) 
+                @if( $data['profit_percentage'] > 0 && (  ( 1 / $data['best_odds_a'] ) + ( 1 / $data['best_odds_b'] ) < 1 ) && $data['selection_line_a'] != "Draw"  ) 
                     <tr class="border-b hover:bg-[#1D2F41]">
                         <td class="w-4 p-4">
                             <div class="flex items-center">
