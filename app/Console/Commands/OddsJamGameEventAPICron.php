@@ -40,16 +40,13 @@ class OddsJamGameEventAPICron extends Command
      * Execute the console command.
      *
      * @return int
-     */
+     * 
+    **/
+
     public function handle()
     {   
-
-        // Game::truncate();
-        // Schema::disableForeignKeyConstraints();
-        // Game::query()->delete();
-        // Schema::enableForeignKeyConstraints();
-                
-
+        Game::truncate();
+        GameOdds::truncate();
         $dateTime = $this->timeInterval();
         if ( !empty( $dateTime ) ) {
             foreach ( $dateTime ?? [] as $date ) {

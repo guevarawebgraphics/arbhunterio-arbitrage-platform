@@ -287,12 +287,52 @@ class APIController extends Controller
 
     }
 
+    // private function fetchOddsPushStreamData($url)
+    // {
+    //     header('Content-Type: text/event-stream');
+    //     header('Cache-Control: no-cache');
+    //     header('Connection: keep-alive');
+        
+    //     $curl = curl_init();
+    //     curl_setopt_array($curl, [
+    //         CURLOPT_URL => $url,
+    //         CURLOPT_RETURNTRANSFER => 1,
+    //         CURLOPT_FOLLOWLOCATION => 1,
+    //         CURLOPT_WRITEFUNCTION => function ($ch, $str) {
+    //             $data = trim($str);
+
+    //             if ($data !== "") {
+                    
+    //                 if (preg_match('/data: (\{.*\})/', $data, $matches)) {
+    //                     $jsonData = $matches[1];
+    //                     $job = new StoreOddsStreamJob($jsonData);
+    //                     Queue::push($job);
+                        
+    //                     echo "$jsonData\n" . "<br><br>";
+    //                     ob_flush();  // Use this to flush the output buffer to ensure real-time streaming
+    //                     flush();     // Use this to flush system output buffer
+    //                 }
+
+    //             }
+    //             return strlen($str);
+    //         }
+    //     ]);
+
+    //     curl_exec($curl);
+    //     curl_close($curl);
+    // }
+
     private function fetchOddsPushStreamData($url)
     {
+        set_time_limit(0);
+
         header('Content-Type: text/event-stream');
         header('Cache-Control: no-cache');
         header('Connection: keep-alive');
-        
+
+        // If you're using output buffering
+        ob_start();
+
         $curl = curl_init();
         curl_setopt_array($curl, [
             CURLOPT_URL => $url,
@@ -300,19 +340,20 @@ class APIController extends Controller
             CURLOPT_FOLLOWLOCATION => 1,
             CURLOPT_WRITEFUNCTION => function ($ch, $str) {
                 $data = trim($str);
-
+                
                 if ($data !== "") {
-                    
                     if (preg_match('/data: (\{.*\})/', $data, $matches)) {
                         $jsonData = $matches[1];
                         $job = new StoreOddsStreamJob($jsonData);
                         Queue::push($job);
-                        
-                        echo "$jsonData\n" . "<br><br>";
-                        ob_flush();  // Use this to flush the output buffer to ensure real-time streaming
-                        flush();     // Use this to flush system output buffer
-                    }
 
+                        echo "data: $jsonData\n\n";
+
+                        if (ob_get_level() > 0) {
+                            ob_flush();
+                        }
+                        flush();
+                    }
                 }
                 return strlen($str);
             }
@@ -320,9 +361,12 @@ class APIController extends Controller
 
         curl_exec($curl);
         curl_close($curl);
+
+        // If you started output buffering, end it
+        if (ob_get_level() > 0) {
+            ob_end_flush();
+        }
     }
-
-
 
     /*
     * End of Major Functions
