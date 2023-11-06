@@ -1243,9 +1243,6 @@ trait OddsJamAPITrait
 
         return $gamesArray;
 
-
-
-       
     }
 
     public function gameIds(){

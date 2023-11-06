@@ -538,5 +538,40 @@ class APIController extends Controller
         return $gamesArray;
     }
 
+    public function getGameInfo($id, $type) {
+
+        $game = GameOdds::query()
+        ->withTrashed()
+        ->from('gameodds as go')
+        ->leftJoin('games as g', 'g.uid', '=', 'go.game_id')
+        ->where('go.is_live', 0)
+        ->where('go.is_main', 0)
+        ->where('g.uid', $id)
+        ->where('go.bet_type', $type)
+        ->select(
+            'g.uid',
+            'g.start_date',
+            'g.home_team',
+            'g.away_team',
+            'go.bet_type',
+            'g.sport',
+            'g.league'
+        )
+        ->groupBy(
+            'g.uid',
+            'g.start_date',
+            'g.home_team',
+            'g.away_team',
+            'go.bet_type',
+            'g.sport',
+            'g.league'
+        )
+        ->first();
+
+        $odds = getOdds($game);
+            
+        return $odds;
+
+    }
     
 }

@@ -363,6 +363,8 @@ function getOdds($row) {
     
     $search_raw_a = "";
     $search_raw_b = "";
+    $latest_raw_a = "";
+    $latest_raw_b = "";
 
     $game = DB::table('gameodds')
     ->select(
@@ -388,65 +390,127 @@ function getOdds($row) {
         ];
         return $data;
     } else if (strpos($game->selection_line, 'over') !== false || strpos($game->selection_line, 'under') !== false ) {
-        $search_raw_a = "selection_line = 'over'";
-        $search_raw_b = "selection_line = 'under'";
+        $search_raw_a = "go.selection_line = 'over'";
+        $search_raw_b = "go.selection_line = 'under'";
+        $latest_raw_a = "x.selection_line = 'over'";
+        $latest_raw_b = "x.selection_line = 'under'";
     } else if(strpos($game->selection, $home_team ) !== false || strpos($game->selection,  $away_team) !== false ){
-        $search_raw_a = "selection LIKE '%".$home_team."%'";
-        $search_raw_b = "selection LIKE '%".$away_team."%'";
+        $search_raw_a = "go.selection LIKE '%".$home_team."%'";
+        $search_raw_b = "go.selection LIKE '%".$away_team."%'";
+        $latest_raw_a = "x.selection_line LIKE '%".$home_team."%'";
+        $latest_raw_b = "x.selection_line LIKE '%".$away_team."%'";
     } else if (strpos($game->selection_line, 'yes') !== false || strpos($game->selection_line, 'no') !== false ) {
-        $search_raw_a = "selection LIKE '%yes%'";
-        $search_raw_b = "selection LIKE '%no%'";
+        $search_raw_a = "go.selection LIKE '%yes%'";
+        $search_raw_b = "go.selection LIKE '%no%'";
+        $latest_raw_a = "x.selection_line LIKE '%yes%'";
+        $latest_raw_b = "x.selection_line LIKE '%no%'";
     } else if (strpos($game->selection_line, 'odd') !== false || strpos($game->selection_line, 'even') !== false ) { 
-        $search_raw_a = "selection LIKE '%odd%'";
-        $search_raw_b = "selection LIKE '%even%'";
+        $search_raw_a = "go.selection LIKE '%odd%'";
+        $search_raw_b = "go.selection LIKE '%even%'";
+        $latest_raw_a = "x.selection_line LIKE '%odd%'";
+        $latest_raw_b = "x.selection_line LIKE '%even%'";
     }
 
     if ($search_raw_a && $search_raw_b ) {
 
-        $best_over_odds_query = DB::table('gameodds')
+        $best_over_odds_query = DB::table('gameodds as go')
         ->select(
-            'bet_type', 
-            'selection_points', 
-            'selection_line', 
-            'bet_name', 
-            'sportsbook',
-            DB::raw('MAX(bet_price) as max_bet_price'),
-            DB::raw('MAX(CASE 
-                        WHEN bet_price > 0 THEN 1 + (bet_price / 100)
-                        WHEN bet_price < 0 THEN 1 - (100 / ABS(bet_price))
-                        ELSE 0 
-                    END) AS max_bet_price_to_decimal')
+            'go.bet_type', 
+            'go.selection_points', 
+            'go.selection_line', 
+            'go.bet_name', 
+            'go.sportsbook',
+            DB::raw('MAX(go.bet_price) as max_bet_price')
         )
         ->whereRaw($search_raw_a)
-        ->where('game_id', $game_id)
-        ->where('bet_type', $bet_type)
-        ->groupBy('sportsbook')
+        ->where('go.game_id', $game_id)
+        ->where('go.bet_type', $bet_type)
+        ->groupBy('go.sportsbook')
         ->get();
 
 
         $notInQuery = $best_over_odds_query->sortByDesc('max_bet_price')->first();
         $notIn = $best_over_odds_query->where('max_bet_price', $notInQuery->max_bet_price)->pluck('sportsbook')->unique()->values()->all();
 
-        $best_under_odds_query = DB::table('gameodds')
+        $best_under_odds_query = DB::table('gameodds as go')
         ->select(
-            'bet_type', 
-            'selection_points', 
-            'selection_line', 
-            'bet_name', 
-            'sportsbook',
-            DB::raw('MAX(bet_price) as max_bet_price'),
-            DB::raw('MAX(CASE 
-                        WHEN bet_price > 0 THEN 1 + (bet_price / 100)
-                        WHEN bet_price < 0 THEN 1 - (100 / ABS(bet_price))
-                        ELSE 0 
-                    END) AS max_bet_price_to_decimal')
+            'go.bet_type', 
+            'go.selection_points', 
+            'go.selection_line', 
+            'go.bet_name', 
+            'go.sportsbook',
+            DB::raw('MAX(go.bet_price) as max_bet_price')
         )
         ->whereRaw($search_raw_b)
-        ->where('game_id', $game_id)
-        ->where('bet_type', $bet_type)
-        ->whereNotIn('sportsbook', $notIn )
-        ->groupBy('sportsbook')
+        ->where('go.game_id', $game_id)
+        ->where('go.bet_type', $bet_type)
+        ->whereNotIn('go.sportsbook', $notIn )
+        ->groupBy('go.sportsbook')
         ->get();
+
+        // Now, define the subquery for getting the latest bet_price
+        // $latestBetPriceSubqueryA = DB::table('gameodds as x')
+        //     ->select('x.bet_price')
+        //     ->whereColumn('x.game_id', 'go.game_id')
+        //     ->whereColumn('x.bet_type', 'go.bet_type')
+        //     ->whereRaw($latest_raw_a)
+        //     ->whereColumn('x.sportsbook', 'go.sportsbook')
+        //     ->orderByDesc('x.timestamp')
+        //     ->limit(1);
+
+        // $latestBetPriceSubqueryB = DB::table('gameodds as x')
+        //     ->select('x.bet_price')
+        //     ->whereColumn('x.game_id', 'go.game_id')
+        //     ->whereColumn('x.bet_type', 'go.bet_type')
+        //     ->whereRaw($latest_raw_a)
+        //     ->whereColumn('x.sportsbook', 'go.sportsbook')
+        //     ->orderByDesc('x.timestamp')
+        //     ->limit(1);
+
+        //     \Log::info($latestBetPriceSubqueryA->toSql());
+        //     // Eloquent query for "best over odds"
+        //     $best_over_odds_query = DB::table('gameodds as go')
+        //     ->select(
+        //         'go.bet_type', 
+        //         'go.selection_points', 
+        //         'go.selection_line', 
+        //         'go.bet_name', 
+        //         'go.sportsbook',
+        //         DB::raw("({$latestBetPriceSubqueryA->toSql()}) as max_bet_price") // Add the subquery for latest bet_price
+        //     )
+        //     ->whereRaw($search_raw_a)
+        //     ->where('go.game_id', $game_id)
+        //     ->where('go.bet_type', $bet_type)
+        //     ->groupBy('go.sportsbook')
+        //     ->mergeBindings($latestBetPriceSubqueryA) // Merge bindings for the subquery
+        //     ->get();
+
+        // // Sort and get the "notIn" sportsbooks after both queries are made
+        // $notInQuery = $best_over_odds_query->sortByDesc('max_bet_price')->first();
+        // $notIn = collect($best_over_odds_query)
+        //     ->where('max_bet_price', $notInQuery->max_bet_price)
+        //     ->pluck('sportsbook')
+        //     ->unique()
+        //     ->values()
+        //     ->all();
+
+        // // Eloquent query for "best under odds"
+        // $best_under_odds_query = DB::table('gameodds as go')
+        //     ->select(
+        //         'go.bet_type', 
+        //         'go.selection_points', 
+        //         'go.selection_line', 
+        //         'go.bet_name', 
+        //         'go.sportsbook',
+        //         DB::raw("({$latestBetPriceSubqueryB->toSql()}) as max_bet_price") // Add the subquery for latest bet_price
+        //     )
+        //     ->whereRaw($search_raw_b)
+        //     ->where('go.game_id', $game_id)
+        //     ->where('go.bet_type', $bet_type)
+        //     ->whereNotIn('sportsbook', $notIn)
+        //     ->groupBy('go.sportsbook')
+        //     ->mergeBindings($latestBetPriceSubqueryB) // Merge bindings for the subquery
+        //     ->get();
 
     }
 
