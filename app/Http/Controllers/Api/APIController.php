@@ -569,8 +569,12 @@ class APIController extends Controller
         ->first();
 
         $odds = getOdds($game);
-            
-        return $odds;
+        $data = [
+            'game'  => $game,
+            'odds'  => $odds
+        ];
+
+        return $data;
 
     }
     

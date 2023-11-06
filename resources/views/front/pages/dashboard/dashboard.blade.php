@@ -179,14 +179,14 @@
 
             <!-- calculator modal -->
             <div id="viewModal" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
-                <div class="relative w-full max-w-md max-h-full ">
+                <div class="relative w-full max-w-lg max-h-full ">
                     <div class="relative bg-[#09131E] rounded-lg shadow dark:bg-gray-700 text-white">
                         <div class="flex p-4">
                             <div class="flex flex-col">
-                                <h3 class="text-xl font-semibold">
+                                <h3 class="text-xl font-semibold" id="viewModal-title">
                                     FC Porto vs FC Barcelona
                                 </h3>
-                                <span>Team Total Corners</span>
+                                <span id="viewModal-market">Team Total Corners</span>
                             </div>
                             <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="viewModal">
                                 <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
@@ -195,92 +195,42 @@
                                 <span class="sr-only">Close modal</span>
                             </button>
                         </div>
-                        <div class="p-6">
-                            <div class="flex text-sm my-2">
-                                <div class="flex w-14 h-14 items-center">
-                                  Books
-                                </div>
-                                <div class="flex-initial w-48">
-                                    <div class="flex flex-col text-center items-center justify-center">
-                                        <span class="font-bold">Tennessee Titans -3.5</span>
-                                        <img class="rounded" width="24"  src="{{asset('public/assets/img/tipico.webp')}}" alt="">
-                                    </div>
-        
-                                    
-                                </div>
-                                <div class="flex-initial w-48">
-                                    <div class="flex flex-col text-center items-center justify-center">
-                                            <span class="font-bold">Indianapolis Colts +3.5</span>
-                                            <img class="rounded" width="24"  src="{{asset('public/assets/img/tipico.webp')}}" alt="">
-                                    </div>
+
+                        <div id="head-line">
+
+                        </div>
+                        <div class="grid grid-rows-2 grid-flow-col gap-4">
+                            <div class="row-span-2">
+                                <div class="p-6">
+                                    <table>
+                                        <tbody id="view-modal-body-over">
+                                            <tr>
+                                                <th></th>
+                                                <td></td>
+                                            </tr>
+                                        </tbody>
+                                        
+                                    </table>
                                 </div>
                             </div>
-                            <div class="flex text-sm gap-2">
-                                <div class="flex w-14 h-14 items-center">
-                                  Odds
+                            <div class="row-span-2">
+                                 <div class="p-6">
+                                    <table>
+                                        <tbody id="view-modal-body-under">
+                                            <tr>
+                                                <th></th>
+                                                <td></td>
+                                            </tr>
+                                        </tbody>
+                                        
+                                    </table>
                                 </div>
-                                <div class="flex-initial w-48">
-                                    <input type="number" id="default-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="163">
-                                </div>
-                                <div class="flex-initial w-48">
-                                    <input type="number" id="default-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="162">
-                                </div>
-                            </div>
-                            <div class="flex text-sm gap-2">
-                                <div class="flex w-14 h-14 items-center">
-                                  Stake
-                                </div>
-                                <div class="flex-initial w-48">
-                                    <input type="number" id="default-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="100">
-                                </div>
-                                <div class="flex-initial w-48">
-                                    <input type="number" id="default-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="100">
-                                </div>
-                            </div>
-                            <div class="flex text-sm gap-2">
-                                <div class="flex w-14 h-14 items-center">
-                                  Payout
-                                </div>
-                                <div class="flex-initial w-48">
-                                    <div class="relative">
-                                        <div class="min-w-0 rounded border outline-none text-left h-10 flex w-full">
-                                            <div class="flex shrink-0 items-center justify-center  rounded-l w-10 text-white">
-                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" height="20"><path d="M10.464 8.746c.227-.18.497-.311.786-.394v2.795a2.252 2.252 0 01-.786-.393c-.394-.313-.546-.681-.546-1.004 0-.323.152-.691.546-1.004zM12.75 15.662v-2.824c.347.085.664.228.921.421.427.32.579.686.579.991 0 .305-.152.671-.579.991a2.534 2.534 0 01-.921.42z"></path><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 6a.75.75 0 00-1.5 0v.816a3.836 3.836 0 00-1.72.756c-.712.566-1.112 1.35-1.112 2.178 0 .829.4 1.612 1.113 2.178.502.4 1.102.647 1.719.756v2.978a2.536 2.536 0 01-.921-.421l-.879-.66a.75.75 0 00-.9 1.2l.879.66c.533.4 1.169.645 1.821.75V18a.75.75 0 001.5 0v-.81a4.124 4.124 0 001.821-.749c.745-.559 1.179-1.344 1.179-2.191 0-.847-.434-1.632-1.179-2.191a4.122 4.122 0 00-1.821-.75V8.354c.29.082.559.213.786.393l.415.33a.75.75 0 00.933-1.175l-.415-.33a3.836 3.836 0 00-1.719-.755V6z" clip-rule="evenodd"></path></svg>
-                                            </div>
-                                                <input type="text" disabled="" class="all-unset text-sm w-0 min-w-0 flex-1 items-center text-black focus:ring-0 pr-4 bg-brand-gray-3 text-brand-gray-5 placeholder-brand-gray-7 dark:placeholder-brand-gray-6 rounded-r" value="0.00">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="flex-initial w-48">
-                                    <div class="relative">
-                                        <div class="min-w-0 rounded border outline-none text-left h-10 flex w-full">
-                                            <div class="flex shrink-0 items-center justify-center  rounded-l w-10 text-white">
-                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" height="20"><path d="M10.464 8.746c.227-.18.497-.311.786-.394v2.795a2.252 2.252 0 01-.786-.393c-.394-.313-.546-.681-.546-1.004 0-.323.152-.691.546-1.004zM12.75 15.662v-2.824c.347.085.664.228.921.421.427.32.579.686.579.991 0 .305-.152.671-.579.991a2.534 2.534 0 01-.921.42z"></path><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 6a.75.75 0 00-1.5 0v.816a3.836 3.836 0 00-1.72.756c-.712.566-1.112 1.35-1.112 2.178 0 .829.4 1.612 1.113 2.178.502.4 1.102.647 1.719.756v2.978a2.536 2.536 0 01-.921-.421l-.879-.66a.75.75 0 00-.9 1.2l.879.66c.533.4 1.169.645 1.821.75V18a.75.75 0 001.5 0v-.81a4.124 4.124 0 001.821-.749c.745-.559 1.179-1.344 1.179-2.191 0-.847-.434-1.632-1.179-2.191a4.122 4.122 0 00-1.821-.75V8.354c.29.082.559.213.786.393l.415.33a.75.75 0 00.933-1.175l-.415-.33a3.836 3.836 0 00-1.719-.755V6z" clip-rule="evenodd"></path></svg>
-                                            </div>
-                                                <input type="text" disabled="" class="all-unset text-sm w-0 min-w-0 flex-1 items-center text-black focus:ring-0 pr-4 bg-brand-gray-3 text-brand-gray-5 placeholder-brand-gray-7 dark:placeholder-brand-gray-6 rounded-r" value="0.00">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="flex justify-end items-end gap-y-2 5 gap-x-6 w-full">
-                                <div class="flex flex-col gap-1">
-                                    <p class="text-[#86A5B1] font-bold">Total Stake</p>
-                                    <p class="font-bold">$100</p>
-                                </div>
-                                <div class="flex flex-col gap-1">
-                                    <p class="text-[#86A5B1] font-bold">Total Payout</p>
-                                    <p class="font-bold">$100</p>
-                                </div>
-                                <div class="flex flex-col gap-1 border-l border-slate-500 pl-6">
-                                    <p class="text-[#86A5B1] font-bold">Profit</p>
-                                    <p class="font-bold">$100</p>
-                                </div>
+                
                             </div>
                         </div>
-        
-                        <div class="flex justify-end px-6 pb-4 space-x-2">
-                            <button data-modal-hide="defaultModal" type="button" class="font-bold text-white p-2 rounded bg-red-500 hover:text-black hover:bg-white">Add to Bet Tracker</button>
-                        </div>
+
+                        
+                        
 
                     </div>
                 </div>
@@ -808,6 +758,20 @@
     var loading_image = "{{url('public/images/loading2.gif')}}";
     var sports_book = {!! json_encode(getSportsBook()) !!};
     var pageID = {!! isset($_GET['page']) ? $_GET['page'] : 1 !!};
+
+    function convertAmericanToDecimalOdds(americanOdds) {
+        console.log(americanOdds); // This will log to the browser console
+
+        var formula = 0.00;
+        if (americanOdds > 0) {
+            formula = 1 + (americanOdds / 100);
+        } else if (americanOdds < 0) {
+            formula = 1 - (100 / americanOdds);
+        }
+
+        // JavaScript's toFixed() method is similar to PHP's number_format function
+        return formula.toFixed(2);
+    }
     
     var loading_html = `<tr>
             <!-- colspan is set to 9 since there are 9 columns in the table -->
@@ -824,7 +788,6 @@
             </td>
         </tr>`;
 
-
     $(document).on('click','.btn--view-modal', function () {
         var gameId = $(this).attr('data-id');
         var betType = $(this).attr('data-bet_type');
@@ -832,7 +795,78 @@
             url: "{{ url('api/game') }}" + "/" + gameId + "/bet_type/" + betType,
             method: 'GET',
         success: function(response) {
-            console.log(response);
+            $("#viewModal-title").html(response.game.home_team + ' vs ' + response.game.away_team);
+            $("#viewModal-market").html(response.game.bet_type);
+
+            if(response.odds.best_over_odds_query.length > 0 ) {
+
+
+                var over_html = ``;
+
+                over_html += `<tr>
+                    <th></th>
+                    <td>
+                        <div class="p-6">
+                <div class="flex text-sm my-2">
+                    <div class="flex-initial w-48">
+                        <div class="flex flex-col text-center items-center justify-center">
+                            <span class="font-bold">${response.odds.selection_line_a}</span>
+                        </div>
+                    </div>
+                </div>
+                </td>
+                </tr>`;
+                
+                $.each(response.odds.best_over_odds_query, function(index, value) {
+                    over_html += `<tr>`;
+                    over_html += `<th>${value.sportsbook}</th>`;
+                    if (response.odds.best_odds_a == convertAmericanToDecimalOdds(value.max_bet_price)) {
+                        over_html += `<td><span style="background-color:green; color: #fff;" class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">${value.max_bet_price}</span></td>`;
+                        over_html += `<td></td>`;
+                        over_html += `<td><span style="background-color:green; color: #fff;" class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">${convertAmericanToDecimalOdds(value.max_bet_price)}</span></td>`;
+                    } else {
+                        over_html += `<td><span style="background-color:#f3f4f6;" class="bg-gray-100 text-black text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-gray-700 dark:text-gray-300">${value.max_bet_price}</span></td>`;
+                        over_html += `<td></td>`;
+                        over_html += `<td><span style="background-color:#f3f4f6;" class="bg-gray-100 text-black text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-gray-700 dark:text-gray-300">${convertAmericanToDecimalOdds(value.max_bet_price)}</span></td>`;
+                    }
+                    
+                    over_html += `</tr>`;
+                });
+
+                var under_html = ``;
+
+                  under_html += `<tr>
+                    <th></th>
+                    <td>
+                        <div class="p-6">
+                <div class="flex text-sm my-2">
+                    <div class="flex-initial w-48">
+                        <div class="flex flex-col text-center items-center justify-center">
+                            <span class="font-bold">${response.odds.selection_line_b}</span>
+                        </div>
+                    </div>
+                </div>
+                </td>
+                </tr>`;
+
+                $.each(response.odds.best_under_odds_query, function(index, value) {
+                    under_html += `<tr>`;
+                    under_html += `<th>${value.sportsbook}</th>`;
+                   if (response.odds.best_odds_b == convertAmericanToDecimalOdds(value.max_bet_price)) {
+                        under_html += `<td><span style="background-color:green; color: #fff;" class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">${value.max_bet_price}</span></td>`;
+                        under_html += `<td></td>`;
+                        under_html += `<td><span style="background-color:green; color: #fff;" class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">${convertAmericanToDecimalOdds(value.max_bet_price)}</span></td>`;
+                    } else {
+                        under_html += `<td><span style="background-color:#f3f4f6;" class="bg-gray-100 text-black text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-gray-700 dark:text-gray-300">${value.max_bet_price}</span></td>`;
+                        under_html += `<td></td>`;
+                        under_html += `<td><span style="background-color:#f3f4f6;" class="bg-gray-100 text-black text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-gray-700 dark:text-gray-300">${convertAmericanToDecimalOdds(value.max_bet_price)}</span></td>`;
+                    }
+                    under_html += `</tr>`;
+                });
+
+                $("#view-modal-body-over").html(over_html);
+                $("#view-modal-body-under").html(under_html);
+            }
         },
         error: function() {
 

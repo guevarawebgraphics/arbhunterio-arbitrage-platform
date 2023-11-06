@@ -545,7 +545,9 @@ function getOdds($row) {
         'selection_line_b'   =>  $selection_line_b,
         'profit_percentage' =>  $profit_percentage,
         'sportsbook_a'  =>  $sportsbook_a,
-        'sportsbook_b'  =>  $sportsbook_b
+        'sportsbook_b'  =>  $sportsbook_b,
+        'best_over_odds_query'  =>  $best_over_odds_query,
+        'best_under_odds_query'  =>  $best_under_odds_query
     ];
 
     return $data;
