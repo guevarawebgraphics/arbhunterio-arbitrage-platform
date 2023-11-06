@@ -53,3 +53,7 @@ Route::get('/test-api', '\App\Http\Controllers\Api\APIController@testApi')->name
 Route::post('/sportsbook/best-odds', '\App\Http\Controllers\Api\APIController@getGameSportsBook')->name('api.game.sportsbook');
 // Matching Bets to retrieve bet name
 Route::post('/find-matching-bets', '\App\Http\Controllers\Api\APIController@findMatchingBets')->name('api.game.find.matching.bets');
+
+Route::get('/test/get-odds', function () {
+    return getOddsTest();
+});
