@@ -378,13 +378,13 @@ function getOdds($row) {
     ->groupByRaw('game_id, bet_type')
     ->first();
 
-    if (strpos($game->selection, 'Draw') !== false || strpos($game->selection_line, 'No Goal') !== false ) {
+    if (strpos($game->selection, 'Draw') !== false || strpos($game->selection, 'No Goal') !== false ) {
         $data = [
             'best_odds_a'   =>  $best_odds_a,
             'best_odds_b'   =>  $best_odds_b,
             'selection_line_a'   =>  $selection_line_a,
             'selection_line_b'   =>  $selection_line_b,
-            'profit_percentage' =>  $profit_percentage,
+            'profit_percentage' =>  0,
             'sportsbook_a'  =>  $sportsbook_a,
             'sportsbook_b'  =>  $sportsbook_b
         ];
@@ -397,18 +397,18 @@ function getOdds($row) {
     } else if(strpos($game->selection, $home_team ) !== false || strpos($game->selection,  $away_team) !== false ){
         $search_raw_a = "go.selection LIKE '%".$home_team."%'";
         $search_raw_b = "go.selection LIKE '%".$away_team."%'";
-        $latest_raw_a = "x.selection_line LIKE '%".$home_team."%'";
-        $latest_raw_b = "x.selection_line LIKE '%".$away_team."%'";
-    } else if (strpos($game->selection_line, 'yes') !== false || strpos($game->selection_line, 'no') !== false ) {
+        $latest_raw_a = "x.selection LIKE '%".$home_team."%'";
+        $latest_raw_b = "x.selection LIKE '%".$away_team."%'";
+    } else if (strpos($game->selection, 'yes') !== false || strpos($game->selection, 'no') !== false ) {
         $search_raw_a = "go.selection LIKE '%yes%'";
         $search_raw_b = "go.selection LIKE '%no%'";
-        $latest_raw_a = "x.selection_line LIKE '%yes%'";
-        $latest_raw_b = "x.selection_line LIKE '%no%'";
-    } else if (strpos($game->selection_line, 'odd') !== false || strpos($game->selection_line, 'even') !== false ) { 
+        $latest_raw_a = "x.selection LIKE '%yes%'";
+        $latest_raw_b = "x.selection LIKE '%no%'";
+    } else if (strpos($game->selection, 'odd') !== false || strpos($game->selection, 'even') !== false ) { 
         $search_raw_a = "go.selection LIKE '%odd%'";
         $search_raw_b = "go.selection LIKE '%even%'";
-        $latest_raw_a = "x.selection_line LIKE '%odd%'";
-        $latest_raw_b = "x.selection_line LIKE '%even%'";
+        $latest_raw_a = "x.selection LIKE '%odd%'";
+        $latest_raw_b = "x.selection LIKE '%even%'";
     }
 
     if ($search_raw_a && $search_raw_b ) {
