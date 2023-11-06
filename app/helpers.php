@@ -360,6 +360,9 @@ function getOdds($row) {
 
     $best_over_odds_query = null;
     $best_under_odds_query = null;
+    
+    $search_raw_a = "";
+    $search_raw_b = "";
 
     $game = DB::table('gameodds')
     ->select(
@@ -374,120 +377,37 @@ function getOdds($row) {
     ->first();
 
     if (strpos($game->selection, 'Draw') !== false || strpos($game->selection_line, 'No Goal') !== false ) {
-    
+        $data = [
+            'best_odds_a'   =>  $best_odds_a,
+            'best_odds_b'   =>  $best_odds_b,
+            'selection_line_a'   =>  $selection_line_a,
+            'selection_line_b'   =>  $selection_line_b,
+            'profit_percentage' =>  $profit_percentage,
+            'sportsbook_a'  =>  $sportsbook_a,
+            'sportsbook_b'  =>  $sportsbook_b
+        ];
+        return $data;
     } else if (strpos($game->selection_line, 'over') !== false || strpos($game->selection_line, 'under') !== false ) {
-
-        $best_over_odds_query = DB::table('gameodds')
-        ->select(
-            'bet_type', 
-            'selection_points', 
-            'selection_line', 
-            'bet_name', 
-            'sportsbook',
-            DB::raw('MAX(bet_price) as max_bet_price'),
-            DB::raw('MAX(CASE 
-                        WHEN bet_price > 0 THEN 1 + (bet_price / 100)
-                        WHEN bet_price < 0 THEN 1 - (100 / ABS(bet_price))
-                        ELSE 0 
-                    END) AS max_bet_price_to_decimal')
-        )
-        ->where('selection_line', 'over')
-        ->where('game_id', $game_id)
-        ->where('bet_type', $bet_type)
-        ->groupBy('sportsbook')
-        ->get();
-
-        $notInQuery = $best_over_odds_query->sortByDesc('max_bet_price')->first();
-        $notIn = $best_over_odds_query->where('max_bet_price', $notInQuery->max_bet_price)->pluck('sportsbook')->unique()->values()->all();
-
-        $best_under_odds_query = DB::table('gameodds')
-        ->select(
-            'bet_type', 
-            'selection_points', 
-            'selection_line', 
-            'bet_name', 
-            'sportsbook',
-            DB::raw('MAX(bet_price) as max_bet_price'),
-            DB::raw('MAX(CASE 
-                        WHEN bet_price > 0 THEN 1 + (bet_price / 100)
-                        WHEN bet_price < 0 THEN 1 - (100 / ABS(bet_price))
-                        ELSE 0 
-                    END) AS max_bet_price_to_decimal')
-        )
-        ->where('selection_line', 'under')
-        ->where('game_id', $game_id)
-        ->where('bet_type', $bet_type)
-        ->whereNotIn('sportsbook', $notIn )
-        ->groupBy('sportsbook')
-        ->get();
-
+        $search_raw_a = "selection_line = 'over'";
+        $search_raw_b = "selection_line = 'under'";
     } else if(strpos($game->selection, $home_team ) !== false || strpos($game->selection,  $away_team) !== false ){
-
-        // $item_query = explode(',', $game->selection);
-        // $item_a = $item_query[0];
-        // $item_b = $item_query[1];
-
-        // \Log::info('Home ' . $home_team );
-        // \Log::info('Away ' . $away_team );
-        // \Log::info('GameID ' . $row->uid );
-        // \Log::info('BetType ' . $row->bet_type );
-        // \Log::info('Selection ' . json_encode($item_query) );
-
-        $best_over_odds_query = DB::table('gameodds')
-        ->select(
-            'bet_type', 
-            'selection_points', 
-            'selection_line', 
-            'selection',
-            'bet_name', 
-            'sportsbook',
-            DB::raw('MAX(bet_price) as max_bet_price'),
-            DB::raw('MAX(CASE 
-                        WHEN bet_price > 0 THEN 1 + (bet_price / 100)
-                        WHEN bet_price < 0 THEN 1 - (100 / ABS(bet_price))
-                        ELSE 0 
-                    END) AS max_bet_price_to_decimal')
-        )
-        ->where('selection','LIKE', '%'.$home_team.'%' )
-        ->where('game_id', $game_id)
-        ->where('bet_type', $bet_type)
-        ->groupBy('sportsbook')
-        ->get();
-
-        
-        $notInQuery = $best_over_odds_query->sortByDesc('max_bet_price')->first();
-        $notIn = $best_over_odds_query->where('max_bet_price', $notInQuery->max_bet_price)->pluck('sportsbook')->unique()->values()->all();
-
-        $best_under_odds_query = DB::table('gameodds')
-        ->select(
-            'bet_type', 
-            'selection_points', 
-            'selection_line', 
-            'selection',
-            'bet_name', 
-            'sportsbook',
-            DB::raw('MAX(bet_price) as max_bet_price'),
-            DB::raw('MAX(CASE 
-                        WHEN bet_price > 0 THEN 1 + (bet_price / 100)
-                        WHEN bet_price < 0 THEN 1 - (100 / ABS(bet_price))
-                        ELSE 0 
-                    END) AS max_bet_price_to_decimal')
-        )
-        ->where('selection','LIKE', '%'.$away_team.'%' )
-        ->where('game_id', $game_id)
-        ->where('bet_type', $bet_type)
-        ->whereNotIn('sportsbook', $notIn )
-        ->groupBy('sportsbook')
-        ->get();
-
+        $search_raw_a = "selection LIKE '%".$home_team."%'";
+        $search_raw_b = "selection LIKE '%".$away_team."%'";
     } else if (strpos($game->selection_line, 'yes') !== false || strpos($game->selection_line, 'no') !== false ) {
+        $search_raw_a = "selection LIKE '%yes%'";
+        $search_raw_b = "selection LIKE '%no%'";
+    } else if (strpos($game->selection_line, 'odd') !== false || strpos($game->selection_line, 'even') !== false ) { 
+        $search_raw_a = "selection LIKE '%odd%'";
+        $search_raw_b = "selection LIKE '%even%'";
+    }
+
+    if ($search_raw_a && $search_raw_b ) {
 
         $best_over_odds_query = DB::table('gameodds')
         ->select(
             'bet_type', 
             'selection_points', 
             'selection_line', 
-            'selection',
             'bet_name', 
             'sportsbook',
             DB::raw('MAX(bet_price) as max_bet_price'),
@@ -497,13 +417,13 @@ function getOdds($row) {
                         ELSE 0 
                     END) AS max_bet_price_to_decimal')
         )
-        ->where('selection','LIKE','%yes%' )
+        ->whereRaw($search_raw_a)
         ->where('game_id', $game_id)
         ->where('bet_type', $bet_type)
         ->groupBy('sportsbook')
         ->get();
-        
-        
+
+
         $notInQuery = $best_over_odds_query->sortByDesc('max_bet_price')->first();
         $notIn = $best_over_odds_query->where('max_bet_price', $notInQuery->max_bet_price)->pluck('sportsbook')->unique()->values()->all();
 
@@ -512,7 +432,6 @@ function getOdds($row) {
             'bet_type', 
             'selection_points', 
             'selection_line', 
-            'selection',
             'bet_name', 
             'sportsbook',
             DB::raw('MAX(bet_price) as max_bet_price'),
@@ -522,56 +441,7 @@ function getOdds($row) {
                         ELSE 0 
                     END) AS max_bet_price_to_decimal')
         )
-        ->where('selection','LIKE','%no%' )
-        ->where('game_id', $game_id)
-        ->where('bet_type', $bet_type)
-        ->whereNotIn('sportsbook', $notIn )
-        ->groupBy('sportsbook')
-        ->get();
-
-    } else if (strpos($game->selection_line, 'odd') !== false || strpos($game->selection_line, 'even') !== false ) {
-        
-        $best_over_odds_query = DB::table('gameodds')
-        ->select(
-            'bet_type', 
-            'selection_points', 
-            'selection_line', 
-            'selection',
-            'bet_name', 
-            'sportsbook',
-            DB::raw('MAX(bet_price) as max_bet_price'),
-            DB::raw('MAX(CASE 
-                        WHEN bet_price > 0 THEN 1 + (bet_price / 100)
-                        WHEN bet_price < 0 THEN 1 - (100 / ABS(bet_price))
-                        ELSE 0 
-                    END) AS max_bet_price_to_decimal')
-        )
-        ->where('selection','LIKE','%odd%' )
-        ->where('game_id', $game_id)
-        ->where('bet_type', $bet_type)
-        ->groupBy('sportsbook')
-        ->get();
-
-        
-        $notInQuery = $best_over_odds_query->sortByDesc('max_bet_price')->first();
-        $notIn = $best_over_odds_query->where('max_bet_price', $notInQuery->max_bet_price)->pluck('sportsbook')->unique()->values()->all();
-
-        $best_under_odds_query = DB::table('gameodds')
-        ->select(
-            'bet_type', 
-            'selection_points', 
-            'selection_line', 
-            'selection',
-            'bet_name', 
-            'sportsbook',
-            DB::raw('MAX(bet_price) as max_bet_price'),
-            DB::raw('MAX(CASE 
-                        WHEN bet_price > 0 THEN 1 + (bet_price / 100)
-                        WHEN bet_price < 0 THEN 1 - (100 / ABS(bet_price))
-                        ELSE 0 
-                    END) AS max_bet_price_to_decimal')
-        )
-        ->where('selection','LIKE','%even%' )
+        ->whereRaw($search_raw_b)
         ->where('game_id', $game_id)
         ->where('bet_type', $bet_type)
         ->whereNotIn('sportsbook', $notIn )
@@ -583,7 +453,7 @@ function getOdds($row) {
 
     $highest_over = $best_over_odds_query ? $best_over_odds_query->sortByDesc('max_bet_price')->first() : null;
     $highest_under = $best_under_odds_query ? $best_under_odds_query->sortByDesc('max_bet_price')->first() : null;
-    
+
     if (!empty($best_over_odds_query) && !empty($best_under_odds_query) && !empty($highest_over) && !empty($highest_under)) {
 
         $highest_over_bet_price_records = collect($best_over_odds_query)->where('max_bet_price', $highest_over->max_bet_price);
