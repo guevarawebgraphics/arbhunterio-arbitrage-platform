@@ -421,14 +421,6 @@ function getOdds($row) {
         ->groupBy('sportsbook')
         ->get();
 
-                    
-        $highest_over = $best_over_odds_query->sortByDesc('max_bet_price')->first();
-        $highest_under = $best_under_odds_query->sortByDesc('max_bet_price')->first();
-        
-        $selection_line_a = $highest_over->bet_name ?? '';
-        $selection_line_b = $highest_under->bet_name ?? '';
-
-
     } else if(strpos($game->selection, $home_team ) !== false || strpos($game->selection,  $away_team) !== false ){
 
         // $item_query = explode(',', $game->selection);
@@ -488,12 +480,6 @@ function getOdds($row) {
         ->groupBy('sportsbook')
         ->get();
 
-        $highest_over = $best_over_odds_query->sortByDesc('max_bet_price')->first();
-        $highest_under = $best_under_odds_query->sortByDesc('max_bet_price')->first();
-        
-        $selection_line_a = $highest_over->bet_name ?? '';
-        $selection_line_b = $highest_under->bet_name ?? '';
-
     } else if (strpos($game->selection_line, 'yes') !== false || strpos($game->selection_line, 'no') !== false ) {
 
         $best_over_odds_query = DB::table('gameodds')
@@ -542,13 +528,6 @@ function getOdds($row) {
         ->whereNotIn('sportsbook', $notIn )
         ->groupBy('sportsbook')
         ->get();
-
-                
-        $highest_over = $best_over_odds_query->sortByDesc('max_bet_price')->first();
-        $highest_under = $best_under_odds_query->sortByDesc('max_bet_price')->first();
-        
-        $selection_line_a = 'Yes';
-        $selection_line_b = 'No';
 
     } else if (strpos($game->selection_line, 'odd') !== false || strpos($game->selection_line, 'even') !== false ) {
         
@@ -599,14 +578,12 @@ function getOdds($row) {
         ->groupBy('sportsbook')
         ->get();
 
-        $highest_over = $best_over_odds_query->sortByDesc('max_bet_price')->first();
-        $highest_under = $best_under_odds_query->sortByDesc('max_bet_price')->first();
-        
-        $selection_line_a = 'Odd';
-        $selection_line_b = 'Even';
-
     }
 
+
+    $highest_over = $best_over_odds_query ? $best_over_odds_query->sortByDesc('max_bet_price')->first() : null;
+    $highest_under = $best_under_odds_query ? $best_under_odds_query->sortByDesc('max_bet_price')->first() : null;
+    
     if (!empty($best_over_odds_query) && !empty($best_under_odds_query) && !empty($highest_over) && !empty($highest_under)) {
 
         $highest_over_bet_price_records = collect($best_over_odds_query)->where('max_bet_price', $highest_over->max_bet_price);
@@ -620,7 +597,9 @@ function getOdds($row) {
 
         $sportsbook_a = sports_book_image($sportsbooks_over_with_highest_bet_price, $sports_book);
         $sportsbook_b = sports_book_image($sportsbooks_under_with_highest_bet_price, $sports_book);
-    
+        
+        $selection_line_a = $highest_over->bet_name ?? '';
+        $selection_line_b = $highest_under->bet_name ?? '';
     }
 
     $profit_percentage = calculateProfit($best_odds_a, $best_odds_b);
