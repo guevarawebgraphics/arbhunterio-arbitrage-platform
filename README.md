@@ -97,3 +97,20 @@ Run `php artisan oddsjam_game_event_api:cron`
 1. composer require livewire/livewire:^2.0
 
 2. Laravel Queue & Websockets
+
+-   php artisan queue:work
+-   php artisan websockets:serve
+
+Recompile:
+
+If uploading changes into staging environment (with SSL Enabled)
+
+1. npx webpack --mode=production
+2. npm run dev
+3. Activate HTACCESS force SSL
+
+If local only
+
+1. npx webpack --mode=development
+2. npm run dev
+3. Deactivate HTACCESS force SSL
