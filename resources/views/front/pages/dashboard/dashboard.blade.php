@@ -179,7 +179,8 @@
 
             <!-- calculator modal -->
             <div id="viewModal" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
-                <div class="relative w-full max-w-lg max-h-full ">
+                 {{-- w-full max-w-lg  --}}
+                <div class="relative max-h-full ">
                     <div class="relative bg-[#09131E] rounded-lg shadow dark:bg-gray-700 text-white">
                         <div class="flex p-4">
                             <div class="flex flex-col">
@@ -800,21 +801,20 @@
 
             if(response.odds.best_over_odds_query.length > 0 ) {
 
-
                 var over_html = ``;
 
                 over_html += `<tr>
-                    <th></th>
-                    <td>
-                        <div class="p-6">
-                <div class="flex text-sm my-2">
-                    <div class="flex-initial w-48">
-                        <div class="flex flex-col text-center items-center justify-center">
-                            <span class="font-bold">${response.odds.selection_line_a}</span>
+                        <th></th>
+                        <td>
+                            <div class="p-6">
+                    <div class="flex text-sm my-2">
+                        <div class="flex-initial w-48">
+                            <div class="flex flex-col text-center items-center justify-center">
+                                <span class="font-bold">${response.odds.selection_line_a}</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-                </td>
+                    </td>
                 </tr>`;
                 
                 $.each(response.odds.best_over_odds_query, function(index, value) {
