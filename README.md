@@ -101,16 +101,30 @@ Run `php artisan oddsjam_game_event_api:cron`
 -   php artisan queue:work
 -   php artisan websockets:serve
 
-Recompile:
+## Recompile:
 
-If uploading changes into staging environment (with SSL Enabled)
+## If uploading changes into staging environment (with SSL Enabled)
 
 1. npx webpack --mode=production
 2. npm run dev
 3. Activate HTACCESS force SSL
 
-If local only
+## If local only
 
 1. npx webpack --mode=development
 2. npm run dev
 3. Deactivate HTACCESS force SSL
+
+## Cron Job for retrieving latest games
+
+Staging or Production
+0 0 \* \* \* /user/bin/php /var/www/html/artisan oddsjam_game_event_api:cron
+
+## Local
+
+php artisan oddsjam_game_event_api:cron
+
+## Push Stream
+
+http://127.0.0.1/api/odds-push-streams
+https://staging.arbhunter.io/api/odds-push-streams
