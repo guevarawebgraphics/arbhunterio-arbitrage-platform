@@ -1,6 +1,6 @@
-# MY_CMS V2.0
+# ARBHUNTER.IO
 
--   [Developed by Guevara Web Graphics Studio](https://guevarawebgraphics.com.com)
+-   [Developed by Guevara Web Graphics Studio](https://guevarawebgraphics.com)
 
 ## Requirements
 
@@ -13,7 +13,7 @@
 1. Clone this repository to your local machine
 
 ```sh
-$ git clone https://github.com/kingrgdev/my_cms.git
+$ git clone https://github.com/guevarawebgraphics/oddsjam.git
 ```
 
 2. Create your database
