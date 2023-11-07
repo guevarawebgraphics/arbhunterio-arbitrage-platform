@@ -3,3 +3,4 @@ php artisan iseed oddsjamgameeventcronjobs --force
 php artisan iseed sportsbooks --force
 php artisan iseed gameodds --force
 php artisan iseed games --force
+php artisan iseed gamespermarkets --force

@@ -264,7 +264,15 @@ function getOdds($row) {
         ->get();
 
         $notInQuery = $best_over_odds_query->sortByDesc('max_bet_price')->first();
-        $notIn = $best_over_odds_query->where('max_bet_price', $notInQuery->max_bet_price)->pluck('sportsbook')->unique()->values()->all();
+
+        if ($notInQuery !== null) {
+            $notInMaxBetPrice = $notInQuery->max_bet_price;
+        } else {
+            $notInMaxBetPrice = 0;
+        }
+
+        $notIn = $best_over_odds_query->where('max_bet_price', $notInMaxBetPrice)->pluck('sportsbook')->unique()->values()->all();
+
 
         $best_under_odds_query = DB::table('gameodds as go')
         ->select(
@@ -308,7 +316,7 @@ function getOdds($row) {
     }
 
     $profit_percentage = calculateProfit($best_odds_a, $best_odds_b);
-    
+
     $data = [
         'best_odds_a'   =>  $best_odds_a,
         'best_odds_b'   =>  $best_odds_b,

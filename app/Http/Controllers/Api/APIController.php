@@ -14,6 +14,8 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use App\Jobs\StoreOddsStreamJob;
 use Illuminate\Support\Facades\Queue;
 use App\Events\NewOddsReceived;
+use App\Services\GamesPerMarkets\GamesPerMarket;
+use App\Jobs\StoreGamesPerMarketJob;
 
 use DateTime;
 use DateTimeZone;
@@ -67,63 +69,15 @@ class APIController extends Controller
         $gameArray = [];
         foreach ($games as $game) {
             if (isset($game['home_team_info']) && isset($game['away_team_info'])) {
-                $gameArray[] = $this->fetchOddsData($game, $sportsBook);
+                if ($game['status'] != "completed") {
+                    $gameArray[] = $this->fetchOddsData($game, $sportsBook);
+                }
             }
+            
         }
         return $gameArray;
             
     }
-
-    public function getGameSportsBook(Request $request) {
-
-        $input = $request->all();
-
-        $sports_book = getSportsBook();
-
-        $sportsbook_a_query = GameOdds::where('bet_type', $input['bet_type'])
-            ->where('game_id', $input['game_id'])
-            ->where('bet_price', $input['up_bet_price'] )
-            ->where($input['selection_type'], $input['selecction_value'])
-            ->distinct()
-            ->pluck('sportsbook');
-
-        $sportsbook_b_query = GameOdds::where('bet_type', $input['bet_type'])
-            ->where('game_id', $input['game_id'])
-            ->where('bet_price', $input['down_bet_price'] )
-            ->where($input['selection_type'], $input['selecction_value'])
-            ->distinct()
-            ->pluck('sportsbook');
-
-        $sportsbook_a = sports_book_image($sportsbook_a_query, $sports_book);
-
-        $sportsbook_b = sports_book_image($sportsbook_b_query, $sports_book);
-
-        return $data = [
-            'sportsbook_a'  =>  $sportsbook_a,
-            'sportsbook_b'  =>  $sportsbook_b
-        ];
-    }
-
-    public function findMatchingBets(Request $request) {
-
-        $input = $request->all();
-        
-        $query = GameOdds::where('bet_type', $input['bet_type'])->where('game_id', $input['uid'])->whereIn('selection_line', ['over','under'] )->get();
-
-        $found_matched_over_under = findMatchingBets($query->toArray(), null, 1);
-
-        $selection_line_a = isset($found_matched_over_under['over']['bet_name']) ? $found_matched_over_under['over']['bet_name'] : null;
-
-        $selection_line_b = isset($found_matched_over_under['under']['bet_name']) ? $found_matched_over_under['under']['bet_name'] : null;
-
-        return $data = [
-            'selection_line_a'  =>  $selection_line_a,
-            'selection_line_b'  =>  $selection_line_b
-        ];
-
-    }
-
-
 
 
     private function fetchOddsData($game, $sportsBook) {
@@ -133,6 +87,11 @@ class APIController extends Controller
             'team_id' => $game['home_team_info']['id'],
             'sportsbook' => $sportsBook
         ];
+
+        $homeTeamOdds = null;
+        $awayTeamOdds = null;
+        $bet_type = null;
+
 
         $homeTeamOdds = $this->groupOddsByMarket($this->upcomingGameOdds($upcomingGameOddsInput));
 
@@ -146,8 +105,13 @@ class APIController extends Controller
 
         $marketName = $this->markets($upcomingGameOddsInput);
 
+        $bet_type =  $marketName[0]['data'];
+
         $checkExists = Game::where('uid', $game['id'])->first();
 
+        $games_query = NULL;
+
+    
         if ( !empty($checkExists) ) {
 
             Game::where('uid', $game['id'] )->update([
@@ -165,9 +129,12 @@ class APIController extends Controller
                 'markets'   => json_encode($marketName[0]['data'])
             ]);
 
+            $storeGamesPerMarket = $this->createGamesPerMarket($game['id'], $marketName[0]['data']);
+        
+
         } else {
 
-            Game::create([
+            $games_created = Game::create([
                 'uid'   =>  $game['id'],
                 'start_date'    => $game['start_date'],
                 'home_team' => $game['home_team'],
@@ -183,15 +150,91 @@ class APIController extends Controller
                 'markets'   => json_encode($marketName[0]['data'])
             ]);
 
+             $storeGamesPerMarket = $this->createGamesPerMarket($game['id'], $marketName[0]['data']);
+
         }
 
         return [
             'game' => $game,
             'home_team_odds' => $homeTeamOdds,
             'away_team_odds' => $awayTeamOdds,
-            'markets'   =>  $marketName[0]['data']
+            'markets'   =>  $bet_type
         ];
 
+    }
+
+    private function createGamesPerMarket($gameId, $marketArray) {
+
+        $game_id = $gameId;
+        $market = $marketArray;
+        
+        foreach ( $market ?? [] as  $field ) {
+            \Log::info($field['label']);
+             $game = GameOdds::query()
+            ->withTrashed()
+            ->from('gameodds as go')
+            ->leftJoin('games as g', 'g.uid', '=', 'go.game_id')
+            ->where('g.uid', $game_id )
+            ->where('go.bet_type', $field['label'] )
+            ->select(
+                'g.uid',
+                'g.start_date',
+                'g.home_team',
+                'g.away_team',
+                'go.bet_type',
+                'g.sport',
+                'g.league'
+            )
+            ->groupBy(
+                'g.uid',
+                'g.start_date',
+                'g.home_team',
+                'g.away_team',
+                'go.bet_type',
+                'g.sport',
+                'g.league'
+            )
+            ->first();
+
+            if ( !empty($game) ) {
+
+                $odds_data = getOdds($game);
+
+                $checkExists = GamesPerMarket::where('game_id', $game_id)->where('bet_type', $field['label'])->first();
+
+                if ( !empty($checkExists) ) {
+
+                    $games_per_market_stored = GamesPerMarket::where('game_id', $game_id)->where('bet_type', $field['label'])->update([
+                        'best_odds_a'   =>  $odds_data['best_odds_a'],
+                        'best_odds_b'   =>  $odds_data['best_odds_b'],
+                        'selection_line_a'  =>  $odds_data['selection_line_a'],
+                        'selection_line_b'  =>  $odds_data['selection_line_b'],
+                        'profit_percentage' =>  $odds_data['profit_percentage'],
+                        'sportsbook_a'  =>  $odds_data['sportsbook_a'],
+                        'sportsbook_b'  =>  $odds_data['sportsbook_b']
+                    ]);
+
+                } else {
+
+                    $games_per_market_stored = GamesPerMarket::create([
+                        'game_id'   =>  $game_id,
+                        'bet_type'  =>  $field['label'],
+                        'best_odds_a'   =>  $odds_data['best_odds_a'],
+                        'best_odds_b'   =>  $odds_data['best_odds_b'],
+                        'selection_line_a'  =>  $odds_data['selection_line_a'],
+                        'selection_line_b'  =>  $odds_data['selection_line_b'],
+                        'profit_percentage' =>  $odds_data['profit_percentage'],
+                        'sportsbook_a'  =>  $odds_data['sportsbook_a'],
+                        'sportsbook_b'  =>  $odds_data['sportsbook_b']
+                    ]);
+
+                }
+
+            }
+
+        }
+       
+        return $market;
     }
 
     private function processTeamOdds($teamOdds, $teamType, $game) {
@@ -199,9 +242,6 @@ class APIController extends Controller
             foreach ($market ?? [] as $value) {
                 
                 $gameodds = GameOdds::where('uid', $value['id'])->whereNull('deleted_at')->first();
-                
-                event(new NewOddsReceived($value));
-                \Log::info('processTeamOdds : ' . json_encode($value) );
 
                 $input = [
                     'bet_name'          => $value['name'],
@@ -225,13 +265,17 @@ class APIController extends Controller
                 ];
 
                 if (!empty($gameodds)) {
+
                     GameOdds::where('uid', $value['id'])->update($input);
-                    \Log::info('Updated Odds : ' . json_encode($input) );
+
                 } else {
+
                     $input['uid'] = $value['id'];
                     $create_odds = GameOdds::create($input);
-                    \Log::info('Created Odds : ' . json_encode($create_odds) );
+
                 }
+
+
             }
         }
     }
@@ -544,8 +588,8 @@ class APIController extends Controller
         ->withTrashed()
         ->from('gameodds as go')
         ->leftJoin('games as g', 'g.uid', '=', 'go.game_id')
-        ->where('go.is_live', 0)
-        ->where('go.is_main', 0)
+        // ->where('go.is_live', 0)
+        // ->where('go.is_main', 0)
         ->where('g.uid', $id)
         ->where('go.bet_type', $type)
         ->select(
@@ -569,6 +613,7 @@ class APIController extends Controller
         ->first();
 
         $odds = getOdds($game);
+        
         $data = [
             'game'  => $game,
             'odds'  => $odds

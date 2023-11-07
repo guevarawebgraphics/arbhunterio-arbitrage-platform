@@ -34,13 +34,6 @@ class GamesTable extends Component
     {
         $games = $this->games;
 
-        $sortedItems = $games->getCollection()->sortByDesc(function($game) {
-            $data = getOdds($game);
-            return ($data['best_odds_a'] * $data['best_odds_b']) > 0 ? $data['profit_percentage'] : 0;
-        })->values();
-
-        $games->setCollection($sortedItems);
-
         return view('livewire.games-table', ['games' => $games]);
     }
 

@@ -13,6 +13,7 @@ use App\Jobs\SendRequestOddsJamJob;
 use Illuminate\Support\Facades\Queue;
 use App\Services\Games\Game;
 use App\Services\GameOdds\GameOdds;
+use App\Services\GamesPerMarkets\GamesPerMarket;
 use DB;
 
 use Schema;
@@ -47,6 +48,8 @@ class OddsJamGameEventAPICron extends Command
     {   
         Game::truncate();
         GameOdds::truncate();
+        GamesPerMarket::truncate();
+
         $dateTime = $this->timeInterval();
         if ( !empty( $dateTime ) ) {
             foreach ( $dateTime ?? [] as $date ) {
@@ -60,6 +63,8 @@ class OddsJamGameEventAPICron extends Command
     private function timeInterval() {
 
         $currentDate = new DateTime('now', new DateTimeZone(date_default_timezone_get()));
+        $currentDate->modify('+1 day'); // This adds one day to the current date
+
         // $currentDate = new DateTime('2023-10-22', new DateTimeZone(date_default_timezone_get()));
 
         $currentDate->setTime(0, 0, 0); // Set time to start of the day (12 am / 00:00)
