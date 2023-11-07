@@ -4,7 +4,7 @@
 
 ## Requirements
 
--   PHP -> 7.4+
+-   PHP -> 8.2
 -   Composer -> latest version
 -   MySQL -> 5.8+
 
