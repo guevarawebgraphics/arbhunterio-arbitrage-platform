@@ -303,9 +303,6 @@ function getOdds($row) {
         $sportsbook_a = sports_book_image($sportsbooks_over_with_highest_bet_price, $sports_book);
         $sportsbook_b = sports_book_image($sportsbooks_under_with_highest_bet_price, $sports_book);
         
-        // $selection_line_a = $highest_over->bet_name ?? '';
-        // $selection_line_b = $highest_under->bet_name ?? '';
-
         $selection_line_a = $bet_name['over'] ?? '';
         $selection_line_b = $bet_name['under'] ?? '';
     }
@@ -386,36 +383,32 @@ function calculateProfit($oddsA, $oddsB) {
 }
 
 function findMatchedBetName($queryA, $queryB) {
+    
+    $overCollection = collect($queryA);
+    $underCollection = collect($queryB);
 
-    $overCollection = collect($queryA->toArray());
-    $underCollection = collect($queryB->toArray());
+    $matchedBetName = '';
 
-    $highestOverBetName = '';
-    $highestUnderBetName = '';
+    // Extract the selection_points from both collections
+    $overPoints = $overCollection->pluck('selection_points');
+    $underPoints = $underCollection->pluck('selection_points');
 
-    if ( count($overCollection) > 0 && count($underCollection) > 0 ) {
+    // Find the intersection of both sets of selection_points
+    $matchedPoints = $overPoints->intersect($underPoints);
 
-        // Find the max selection_points for over
-        $maxOverSelectionPoints = $overCollection->max('selection_points');
+    // If there are matched points, find the corresponding bet_name for the matched selection_points
+    if ($matchedPoints->isNotEmpty()) {
+        $matchedPoint = $matchedPoints->first();
 
-        // Find the max selection_points for under
-        $maxUnderSelectionPoints = $underCollection->max('selection_points');
+        // Assuming bet_name is a direct attribute of your data items
+        $matchedOverBetName = $overCollection->where('selection_points', $matchedPoint)->pluck('bet_name')->first();
+        $matchedUnderBetName = $underCollection->where('selection_points', $matchedPoint)->pluck('bet_name')->first();
 
-        // Retrieve the bet_name(s) for the highest selection_points for over
-        $highestOverBetNames = $overCollection->where('selection_points', $maxOverSelectionPoints)->pluck('bet_name');
-
-        // Retrieve the bet_name(s) for the highest selection_points for under
-        $highestUnderBetNames = $underCollection->where('selection_points', $maxUnderSelectionPoints)->pluck('bet_name');
-
-        // If you need the first occurrence or assume only one occurrence you can use first() instead of pluck()
-        $highestOverBetName = $overCollection->where('selection_points', $maxOverSelectionPoints)->first();
-        $highestUnderBetName = $underCollection->where('selection_points', $maxUnderSelectionPoints)->first();
-
+        $matchedBetName = [
+            'over' => $matchedOverBetName,
+            'under' => $matchedUnderBetName
+        ];
     }
 
-    // Now you have the bet_name for the highest selection_points on over and under
-    return [
-        'over' => $highestOverBetName->bet_name ?? '',
-        'under' => $highestUnderBetName->bet_name ?? ''
-    ];
+    return $matchedBetName;
 }
