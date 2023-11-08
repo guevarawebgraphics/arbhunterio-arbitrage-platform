@@ -25,9 +25,10 @@ class OddsJamGameEventAPICron extends Command
 
     /**
      * The name and signature of the console command.
-     *
      * @var string
+     * 
      */
+
     protected $signature = 'oddsjam_game_event_api:cron';
 
     /**
@@ -35,6 +36,7 @@ class OddsJamGameEventAPICron extends Command
      *
      * @var string
      */
+
     protected $description = 'This CRON pull up game events from OddsJam';
 
     /**
@@ -46,18 +48,28 @@ class OddsJamGameEventAPICron extends Command
 
     public function handle()
     {   
-        Game::truncate();
-        GameOdds::truncate();
-        GamesPerMarket::truncate();
+        $todayDate = Carbon::today()->toDateString();
+
+        $game_query = Game::where('start_date', 'LIKE', $todayDate . '%')->select('uid','markets')->get();
+
+        foreach ( $game_query ?? [] as $game_field ) {
+            $markets = json_decode($game_field->markets);
+            if ( $markets != "[]" ) {
+                GameOdds::where('game_id', $game_field->uid)->whereIn( 'bet_type', $markets )->delete();
+                GamesPerMarket::where('game_id', $game_field->uid)->whereIn( 'bet_type', $markets )->delete();
+            }
+        }
+
+        Game::where('start_date', 'LIKE', $todayDate . '%')->delete();
 
         $dateTime = $this->timeInterval();
+
         if ( !empty( $dateTime ) ) {
             foreach ( $dateTime ?? [] as $date ) {
                 $job = new SendRequestOddsJamJob($date);
                 Queue::push($job);
             }
         }
-
     }
 
     private function timeInterval() {
@@ -71,7 +83,8 @@ class OddsJamGameEventAPICron extends Command
 
         $intervals = [];
 
-        for ($i = 0; $i < 72; $i++) {
+        // for ($i = 0; $i < 72; $i++) {
+         for ($i = 0; $i < 24; $i++) {
 
             // Create a clone of the DateTime object for the start of the current hour
             $startOfHour = clone $currentDate;

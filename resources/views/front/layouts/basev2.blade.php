@@ -30,6 +30,7 @@
     @livewireStyles
 </head>
 <body class="font-body">
+
     <nav class="bg-white border-gray-200 z-40 ">
         <div class="flex flex-wrap items-center justify-between md:justify-end mx-auto h-16 px-8 p-3 border-b border-slate-500 bg-[#09131E]">
             <a href="#" class="md:hidden flex items-center">
@@ -104,12 +105,15 @@
     @livewireScripts
 
     <script>
+       let refreshTimer;
+
         Echo.channel('odds-updates')
         .listen('NewOddsReceived', (event) => {
-            console.log('Refreshed Data');
-            Livewire.emit('refreshData', event.data);
-            
-            // console.log(event.data);
+            clearTimeout(refreshTimer);
+            refreshTimer = setTimeout(() => {
+                console.log('Refreshing Data');
+                Livewire.emit('refreshTable');
+            }, 15000); // Wait for 15 seconds of "silence" before refreshing
         });
     </script>
 

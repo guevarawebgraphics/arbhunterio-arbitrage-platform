@@ -163,80 +163,6 @@ class APIController extends Controller
 
     }
 
-    private function createGamesPerMarket($gameId, $marketArray) {
-
-        $game_id = $gameId;
-        $market = $marketArray;
-        
-        foreach ( $market ?? [] as  $field ) {
-            \Log::info($field['label']);
-             $game = GameOdds::query()
-            ->withTrashed()
-            ->from('gameodds as go')
-            ->leftJoin('games as g', 'g.uid', '=', 'go.game_id')
-            ->where('g.uid', $game_id )
-            ->where('go.bet_type', $field['label'] )
-            ->select(
-                'g.uid',
-                'g.start_date',
-                'g.home_team',
-                'g.away_team',
-                'go.bet_type',
-                'g.sport',
-                'g.league'
-            )
-            ->groupBy(
-                'g.uid',
-                'g.start_date',
-                'g.home_team',
-                'g.away_team',
-                'go.bet_type',
-                'g.sport',
-                'g.league'
-            )
-            ->first();
-
-            if ( !empty($game) ) {
-
-                $odds_data = getOdds($game);
-
-                $checkExists = GamesPerMarket::where('game_id', $game_id)->where('bet_type', $field['label'])->first();
-
-                if ( !empty($checkExists) ) {
-
-                    $games_per_market_stored = GamesPerMarket::where('game_id', $game_id)->where('bet_type', $field['label'])->update([
-                        'best_odds_a'   =>  $odds_data['best_odds_a'],
-                        'best_odds_b'   =>  $odds_data['best_odds_b'],
-                        'selection_line_a'  =>  $odds_data['selection_line_a'],
-                        'selection_line_b'  =>  $odds_data['selection_line_b'],
-                        'profit_percentage' =>  $odds_data['profit_percentage'],
-                        'sportsbook_a'  =>  $odds_data['sportsbook_a'],
-                        'sportsbook_b'  =>  $odds_data['sportsbook_b']
-                    ]);
-
-                } else {
-
-                    $games_per_market_stored = GamesPerMarket::create([
-                        'game_id'   =>  $game_id,
-                        'bet_type'  =>  $field['label'],
-                        'best_odds_a'   =>  $odds_data['best_odds_a'],
-                        'best_odds_b'   =>  $odds_data['best_odds_b'],
-                        'selection_line_a'  =>  $odds_data['selection_line_a'],
-                        'selection_line_b'  =>  $odds_data['selection_line_b'],
-                        'profit_percentage' =>  $odds_data['profit_percentage'],
-                        'sportsbook_a'  =>  $odds_data['sportsbook_a'],
-                        'sportsbook_b'  =>  $odds_data['sportsbook_b']
-                    ]);
-
-                }
-
-            }
-
-        }
-       
-        return $market;
-    }
-
     private function processTeamOdds($teamOdds, $teamType, $game) {
         foreach ($teamOdds ?? [] as $market) {
             foreach ($market ?? [] as $value) {
@@ -331,41 +257,6 @@ class APIController extends Controller
 
     }
 
-    // private function fetchOddsPushStreamData($url)
-    // {
-    //     header('Content-Type: text/event-stream');
-    //     header('Cache-Control: no-cache');
-    //     header('Connection: keep-alive');
-        
-    //     $curl = curl_init();
-    //     curl_setopt_array($curl, [
-    //         CURLOPT_URL => $url,
-    //         CURLOPT_RETURNTRANSFER => 1,
-    //         CURLOPT_FOLLOWLOCATION => 1,
-    //         CURLOPT_WRITEFUNCTION => function ($ch, $str) {
-    //             $data = trim($str);
-
-    //             if ($data !== "") {
-                    
-    //                 if (preg_match('/data: (\{.*\})/', $data, $matches)) {
-    //                     $jsonData = $matches[1];
-    //                     $job = new StoreOddsStreamJob($jsonData);
-    //                     Queue::push($job);
-                        
-    //                     echo "$jsonData\n" . "<br><br>";
-    //                     ob_flush();  // Use this to flush the output buffer to ensure real-time streaming
-    //                     flush();     // Use this to flush system output buffer
-    //                 }
-
-    //             }
-    //             return strlen($str);
-    //         }
-    //     ]);
-
-    //     curl_exec($curl);
-    //     curl_close($curl);
-    // }
-
     private function fetchOddsPushStreamData($url)
     {
         set_time_limit(0);
@@ -378,6 +269,7 @@ class APIController extends Controller
         ob_start();
 
         $curl = curl_init();
+
         curl_setopt_array($curl, [
             CURLOPT_URL => $url,
             CURLOPT_RETURNTRANSFER => 1,
@@ -387,6 +279,7 @@ class APIController extends Controller
                 
                 if ($data !== "") {
                     if (preg_match('/data: (\{.*\})/', $data, $matches)) {
+
                         $jsonData = $matches[1];
                         $job = new StoreOddsStreamJob($jsonData);
                         Queue::push($job);

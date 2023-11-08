@@ -894,11 +894,89 @@ trait OddsJamAPITrait
                 'g.league',
             )
             ->orderBy('gpm.profit_percentage','DESC')
-            ->paginate(30);
+            ->paginate(10);
 
         return $gamesArray;
 
     }
+
+    public function createGamesPerMarket($gameId, $marketArray) {
+
+        try {
+            $game_id = $gameId;
+            $market = $marketArray;
+            
+            foreach ( $market ?? [] as  $field ) {
+                \Log::info($field['label']);
+                $game = GameOdds::query()
+                ->withTrashed()
+                ->from('gameodds as go')
+                ->leftJoin('games as g', 'g.uid', '=', 'go.game_id')
+                ->where('g.uid', $game_id )
+                ->where('go.bet_type', $field['label'] )
+                ->select(
+                    'g.uid',
+                    'g.start_date',
+                    'g.home_team',
+                    'g.away_team',
+                    'go.bet_type',
+                    'g.sport',
+                    'g.league'
+                )
+                ->groupBy(
+                    'g.uid',
+                    'g.start_date',
+                    'g.home_team',
+                    'g.away_team',
+                    'go.bet_type',
+                    'g.sport',
+                    'g.league'
+                )
+                ->first();
+
+                if ( !empty($game) ) {
+
+                    $odds_data = getOdds($game);
+
+                    $checkExists = GamesPerMarket::where('game_id', $game_id)->where('bet_type', $field['label'])->first();
+
+                    if ( !empty($checkExists) ) {
+
+                        $games_per_market_stored = GamesPerMarket::where('game_id', $game_id)->where('bet_type', $field['label'])->update([
+                            'best_odds_a'   =>  $odds_data['best_odds_a'],
+                            'best_odds_b'   =>  $odds_data['best_odds_b'],
+                            'selection_line_a'  =>  $odds_data['selection_line_a'],
+                            'selection_line_b'  =>  $odds_data['selection_line_b'],
+                            'profit_percentage' =>  $odds_data['profit_percentage'],
+                            'sportsbook_a'  =>  $odds_data['sportsbook_a'],
+                            'sportsbook_b'  =>  $odds_data['sportsbook_b']
+                        ]);
+
+                    } else {
+
+                        $games_per_market_stored = GamesPerMarket::create([
+                            'game_id'   =>  $game_id,
+                            'bet_type'  =>  $field['label'],
+                            'best_odds_a'   =>  $odds_data['best_odds_a'],
+                            'best_odds_b'   =>  $odds_data['best_odds_b'],
+                            'selection_line_a'  =>  $odds_data['selection_line_a'],
+                            'selection_line_b'  =>  $odds_data['selection_line_b'],
+                            'profit_percentage' =>  $odds_data['profit_percentage'],
+                            'sportsbook_a'  =>  $odds_data['sportsbook_a'],
+                            'sportsbook_b'  =>  $odds_data['sportsbook_b']
+                        ]);
+
+                    }
+
+                }
+
+            }
+        
+            return $market;
+        } catch (\Exception $e) {
+            return ['data'  =>  null, 'message' => $e->getMessage() ];
+        }
+    } 
 
     public function gameIds(){
         $filePath = public_path('game.json');

@@ -49,8 +49,6 @@ class StoreOddsStreamJob implements ShouldQueue
 
             $gameodds = GameOdds::where('uid', $bet->id)->whereNull('deleted_at')->first();
 
-            event(new NewOddsReceived($bet));
-
             if (!empty($gameodds)) {
                 
                 GameOdds::where('uid', $bet->id)->update([
@@ -73,6 +71,8 @@ class StoreOddsStreamJob implements ShouldQueue
                     'type'  =>  $bet->type, 
                     'market'    =>   $bet->bet_type,
                 ]);
+
+                $updateGamesPerMarket = $this->createGamesPerMarket( $bet->game_id, $bet->bet_type );
 
             } else {
 
@@ -100,7 +100,13 @@ class StoreOddsStreamJob implements ShouldQueue
                 
                 $create_odds = GameOdds::create($input);
 
+                $storeGamesPerMarket = $this->createGamesPerMarket( $bet->game_id, $bet->bet_type );
+
             }
+
+            event(new NewOddsReceived($bet));
+
+            \Log::info('BET: ' . json_encode($bet) );
         }
     }
 }
