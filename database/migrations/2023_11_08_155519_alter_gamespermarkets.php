@@ -22,8 +22,10 @@ class AlterGamespermarkets extends Migration
             $table->index('selection_line_a');
             $table->index('selection_line_b');
             $table->index('profit_percentage');
-            $table->index('sportsbook_a');
-            $table->index('sportsbook_b');
+            // $table->index('sportsbook_a');
+            // $table->index('sportsbook_b');
+            $table->index(['sportsbook_a'], 'sportsbook_a_index')->length(9000000); 
+            $table->index(['sportsbook_b'], 'sportsbook_b_index')->length(9000000); 
         });
     }
 
