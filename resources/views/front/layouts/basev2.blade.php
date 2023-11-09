@@ -26,6 +26,35 @@
         body{
             background-color: #09131E;
         }
+        .placeholder-content {
+            background:#1f2937;
+            border-radius:0.5rem;
+            position: relative;
+            overflow: hidden;
+            width: 50px;
+        }
+
+        .placeholder-content:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 100px;
+            background: linear-gradient(90deg, #09131E, rgba(244, 244, 244, 0.287), #09131E);
+            animation: gradient 1s infinite ease-in-out;
+        }
+
+        @keyframes gradient {
+            form {
+                left: 0%;
+            }
+            
+            to {
+                left: 100%;
+            }
+        }
+        
     </style>
     @livewireStyles
 </head>
