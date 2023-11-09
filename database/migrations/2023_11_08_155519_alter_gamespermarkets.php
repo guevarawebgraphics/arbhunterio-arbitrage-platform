@@ -22,8 +22,8 @@ class AlterGamespermarkets extends Migration
             $table->index('selection_line_a');
             $table->index('selection_line_b');
             $table->index('profit_percentage');
-            // $table->index('sportsbook_a');
-            // $table->index('sportsbook_b');
+            $table->index('sportsbook_a');
+            $table->index('sportsbook_b');
         });
     }
 
@@ -43,8 +43,8 @@ class AlterGamespermarkets extends Migration
             $table->dropIndex('selection_line_a');
             $table->dropIndex('selection_line_b');
             $table->dropIndex('profit_percentage');
-            // $table->dropIndex('sportsbook_a');
-            // $table->dropIndex('sportsbook_b');
+            $table->dropIndex('sportsbook_a');
+            $table->dropIndex('sportsbook_b');
 
         });
     }

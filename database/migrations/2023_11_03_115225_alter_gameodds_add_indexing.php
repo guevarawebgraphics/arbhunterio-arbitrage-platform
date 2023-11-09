@@ -19,7 +19,7 @@ class AlterGameoddsAddIndexing extends Migration
             $table->index('game_id');
             $table->index('selection');
             $table->index('selection_line');
-            // $table->index('sportsbook');
+            $table->index('sportsbook');
             $table->index('bet_price');
             $table->index('selection_points');
         });
@@ -40,7 +40,7 @@ class AlterGameoddsAddIndexing extends Migration
             $table->dropIndex('selection');
 
             $table->dropIndex('selection_line');
-            // $table->dropIndex('sportsbook');
+            $table->dropIndex('sportsbook');
             $table->dropIndex('bet_price');
             $table->dropIndex('selection_points');
 

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Services\Games\Game;
 use App\Services\GameOdds\GameOdds;
+use App\Events\NewOddsReceived;
 use App\Services\GamesPerMarkets\GamesPerMarket;
 use URL;
 use DB;
@@ -912,38 +913,39 @@ trait OddsJamAPITrait
 
                     $checkExists = GamesPerMarket::where('game_id', $game_id)->where('bet_type', $field['label'])->first();
 
-                        if ( !empty($checkExists) ) {
+                    if ( !empty($checkExists) ) {
 
-                            $games_per_market_stored = GamesPerMarket::where('game_id', $game_id)->where('bet_type', $field['label'])->update([
-                                'best_odds_a'   =>  $odds_data['best_odds_a'],
-                                'best_odds_b'   =>  $odds_data['best_odds_b'],
-                                'selection_line_a'  =>  $odds_data['selection_line_a'],
-                                'selection_line_b'  =>  $odds_data['selection_line_b'],
-                                'profit_percentage' =>  $odds_data['profit_percentage'],
-                                'sportsbook_a'  =>  $odds_data['sportsbook_a'],
-                                'sportsbook_b'  =>  $odds_data['sportsbook_b'],
-                                'is_below_one'  =>  $odds_data['is_below_one']  
-                            ]);
+                        $games_per_market_stored = GamesPerMarket::where('game_id', $game_id)->where('bet_type', $field['label'])->update([
+                            'best_odds_a'   =>  $odds_data['best_odds_a'],
+                            'best_odds_b'   =>  $odds_data['best_odds_b'],
+                            'selection_line_a'  =>  $odds_data['selection_line_a'],
+                            'selection_line_b'  =>  $odds_data['selection_line_b'],
+                            'profit_percentage' =>  $odds_data['profit_percentage'],
+                            'sportsbook_a'  =>  $odds_data['sportsbook_a'],
+                            'sportsbook_b'  =>  $odds_data['sportsbook_b'],
+                            'is_below_one'  =>  $odds_data['is_below_one']  
+                        ]);
 
-                        } else {
+                    } else {
 
-                            $games_per_market_stored = GamesPerMarket::create([
-                                'game_id'   =>  $game_id,
-                                'bet_type'  =>  $field['label'],
-                                'best_odds_a'   =>  $odds_data['best_odds_a'],
-                                'best_odds_b'   =>  $odds_data['best_odds_b'],
-                                'selection_line_a'  =>  $odds_data['selection_line_a'],
-                                'selection_line_b'  =>  $odds_data['selection_line_b'],
-                                'profit_percentage' =>  $odds_data['profit_percentage'],
-                                'sportsbook_a'  =>  $odds_data['sportsbook_a'],
-                                'sportsbook_b'  =>  $odds_data['sportsbook_b'],
-                                'is_below_one'  =>  $odds_data['is_below_one']  
-                            ]);
+                        $games_per_market_stored = GamesPerMarket::create([
+                            'game_id'   =>  $game_id,
+                            'bet_type'  =>  $field['label'],
+                            'best_odds_a'   =>  $odds_data['best_odds_a'],
+                            'best_odds_b'   =>  $odds_data['best_odds_b'],
+                            'selection_line_a'  =>  $odds_data['selection_line_a'],
+                            'selection_line_b'  =>  $odds_data['selection_line_b'],
+                            'profit_percentage' =>  $odds_data['profit_percentage'],
+                            'sportsbook_a'  =>  $odds_data['sportsbook_a'],
+                            'sportsbook_b'  =>  $odds_data['sportsbook_b'],
+                            'is_below_one'  =>  $odds_data['is_below_one']  
+                        ]);
 
-                            \Log::info('Games Per Market Successfully created!! ' . json_encode($games_per_market_stored) ); 
+                        \Log::info('Games Per Market Successfully created!! ' . json_encode($games_per_market_stored) ); 
 
-                        }
-                        
+                    }
+                    
+                    event(new NewOddsReceived($odds_data));
 
 
                 }
