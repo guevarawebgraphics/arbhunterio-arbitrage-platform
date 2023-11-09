@@ -244,7 +244,7 @@ class APIController extends Controller
         $base_url = 'https://api-external.oddsjam.com/api/v2/stream/odds?key=' . urlencode(config('services.oddsjam.key')) . $league . '&start_date_before=' . $start_date_before . '&start_date_after=' . $start_date_after . $sportsbooks;
        
         $batches = array_chunk($game_ids_array, $batchSize);
-
+        
         foreach ($batches as $batch) {
             $url = $base_url . '&' . implode('&', $batch);
             $this->fetchOddsPushStreamData($url);
@@ -255,7 +255,7 @@ class APIController extends Controller
     private function fetchOddsPushStreamData($url)
     {
         set_time_limit(0);
-
+     
         header('Content-Type: text/event-stream');
         header('Cache-Control: no-cache');
         header('Connection: keep-alive');
@@ -276,8 +276,8 @@ class APIController extends Controller
                     if (preg_match('/data: (\{.*\})/', $data, $matches)) {
 
                         $jsonData = $matches[1];
-                        $job = new StoreOddsStreamJob($jsonData);
-                        Queue::push($job);
+                        // $job = new StoreOddsStreamJob($jsonData);
+                        // Queue::push($job);
 
                         echo "data: $jsonData\n\n";
 

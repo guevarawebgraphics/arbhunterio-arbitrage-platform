@@ -103,10 +103,9 @@ class StoreOddsStreamJob implements ShouldQueue
                 $storeGamesPerMarket = $this->createGamesPerMarket( $bet->game_id, $bet->bet_type );
 
             }
-
-            event(new NewOddsReceived($bet));
-
             \Log::info('BET: ' . json_encode($bet) );
         }
+
+        event(new NewOddsReceived($raw_query));
     }
 }
