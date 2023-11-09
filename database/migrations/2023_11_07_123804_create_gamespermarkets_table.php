@@ -27,6 +27,8 @@ class CreateGamesPerMarketsTable extends Migration
             $table->longtext('sportsbook_a')->nullable();
             $table->longtext('sportsbook_b')->nullable();
 
+            $table->decimal('is_below_one', 8, 2)->default(0.00)->comment('computed using this formula ( 1 / $best_odds_a ) + ( 1 / $best_odds_b ) < 1 ');
+
             $table->tinyInteger('is_active')->default(1);
             
             $table->timestamps();

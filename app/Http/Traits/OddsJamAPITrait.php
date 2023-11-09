@@ -43,8 +43,6 @@ trait OddsJamAPITrait
 
         $response = $this->makeAPIRequest($url, $headers);
 
-        // \Log::info($response);
-
         return $response =  [
             'data' => $response,
             'message' => 'Successfully processed..',
@@ -662,7 +660,6 @@ trait OddsJamAPITrait
 
             // Using Laravel's http_build_query function
             $url = $baseURL . '?' . http_build_query($queryParams) . $sportsbooks;
-            // \Log::info($url);
 
             curl_setopt($curl, CURLOPT_URL, $url );
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -687,8 +684,6 @@ trait OddsJamAPITrait
 
             $response = json_decode($json, true);
 
-            // \Log::info($url);
-           
             $output = [
                 $response,
                 'message'   =>  'Successfully processed..',
@@ -827,46 +822,45 @@ trait OddsJamAPITrait
     public function getGamesPerMarket($data) {
 
         $gamesArray = GamesPerMarket::query()
-            ->withTrashed()
-            ->from('gamespermarkets as gpm')
-            ->leftJoin('games as g', 'g.uid', '=', 'gpm.game_id')
-            ->leftJoin('gameodds as go', 'go.game_id', '=', 'gpm.game_id')
-            ->where('go.is_live', 0)
-            ->where('gpm.profit_percentage','>=', 0)
-            ->whereNotIn('gpm.selection_line_a', ['Draw','No Goal'])
-            ->where('gpm.selection_line_a','!=',"")
-            ->where('gpm.selection_line_b','!=',"")
-            ->where('gpm.sportsbook_a', '!=' , "")
-            ->where('gpm.sportsbook_b', '!=' , "")
-            ->whereRaw('(1 / gpm.best_odds_a) + (1 / gpm.best_odds_b) < ?', [1])
-            ->select(
-                'g.uid',
-                'g.start_date',
-                'g.home_team',
-                'g.away_team',
-                'gpm.bet_type',
-                'g.sport',
-                'g.league',
-
-                'gpm.best_odds_a',
-                'gpm.best_odds_b',
-                'gpm.selection_line_a',
-                'gpm.selection_line_b',
-                'gpm.profit_percentage',
-                'gpm.sportsbook_a',
-                'gpm.sportsbook_b'
-            )
-            ->groupBy(
-                'g.uid',
-                'g.start_date',
-                'g.home_team',
-                'g.away_team',
-                'gpm.bet_type',
-                'g.sport',
-                'g.league',
-            )
-            ->orderBy('gpm.profit_percentage','DESC')
-            ->paginate(10);
+        ->withTrashed()
+        ->from('gamespermarkets as gpm')
+        ->leftJoin('games as g', 'g.uid', '=', 'gpm.game_id')
+        ->leftJoin('gameodds as go', 'go.game_id', '=', 'gpm.game_id')
+        ->where('go.is_live', 0)
+        ->where('gpm.profit_percentage','>=', 0)
+        ->whereNotIn('gpm.selection_line_a', ['Draw','No Goal'])
+        ->where('gpm.selection_line_a','!=',"")
+        ->where('gpm.selection_line_b','!=',"")
+        ->where('gpm.sportsbook_a', '!=' , "")
+        ->where('gpm.sportsbook_b', '!=' , "")
+        ->where('is_below_one','<', 1)
+        ->select(
+            'g.uid',
+            'g.start_date',
+            'g.home_team',
+            'g.away_team',
+            'gpm.bet_type',
+            'g.sport',
+            'g.league',
+            'gpm.best_odds_a',
+            'gpm.best_odds_b',
+            'gpm.selection_line_a',
+            'gpm.selection_line_b',
+            'gpm.profit_percentage',
+            'gpm.sportsbook_a',
+            'gpm.sportsbook_b'
+        )
+        ->groupBy(
+            'g.uid',
+            'g.start_date',
+            'g.home_team',
+            'g.away_team',
+            'gpm.bet_type',
+            'g.sport',
+            'g.league',
+        )
+        ->orderBy('gpm.profit_percentage','DESC')
+        ->paginate(10);
 
         return $gamesArray;
 
@@ -875,16 +869,20 @@ trait OddsJamAPITrait
     public function createGamesPerMarket($gameId, $marketArray) {
 
         try {
+
             $game_id = $gameId;
             $market = $marketArray;
             
             foreach ( $market ?? [] as  $field ) {
 
+                \Log::info('To store game_id: ' . $game_id );
+                \Log::info('To store market: ' . $field['label'] );
+
                 $game = GameOdds::query()
                 ->withTrashed()
                 ->from('gameodds as go')
                 ->leftJoin('games as g', 'g.uid', '=', 'go.game_id')
-                ->where('g.uid', $game_id )
+                ->where('go.game_id', $game_id )
                 ->where('go.bet_type', $field['label'] )
                 ->select(
                     'g.uid',
@@ -905,45 +903,53 @@ trait OddsJamAPITrait
                     'g.league'
                 )
                 ->first();
+                
+                \Log::info('Store gameid: ' . json_encode( $game ) );
 
-                if ( !empty($game) ) {
+                if ( !empty($game) && $game != "[]" ) {
 
                     $odds_data = getOdds($game);
 
                     $checkExists = GamesPerMarket::where('game_id', $game_id)->where('bet_type', $field['label'])->first();
 
-                    if ( !empty($checkExists) ) {
+                        if ( !empty($checkExists) ) {
 
-                        $games_per_market_stored = GamesPerMarket::where('game_id', $game_id)->where('bet_type', $field['label'])->update([
-                            'best_odds_a'   =>  $odds_data['best_odds_a'],
-                            'best_odds_b'   =>  $odds_data['best_odds_b'],
-                            'selection_line_a'  =>  $odds_data['selection_line_a'],
-                            'selection_line_b'  =>  $odds_data['selection_line_b'],
-                            'profit_percentage' =>  $odds_data['profit_percentage'],
-                            'sportsbook_a'  =>  $odds_data['sportsbook_a'],
-                            'sportsbook_b'  =>  $odds_data['sportsbook_b']
-                        ]);
+                            $games_per_market_stored = GamesPerMarket::where('game_id', $game_id)->where('bet_type', $field['label'])->update([
+                                'best_odds_a'   =>  $odds_data['best_odds_a'],
+                                'best_odds_b'   =>  $odds_data['best_odds_b'],
+                                'selection_line_a'  =>  $odds_data['selection_line_a'],
+                                'selection_line_b'  =>  $odds_data['selection_line_b'],
+                                'profit_percentage' =>  $odds_data['profit_percentage'],
+                                'sportsbook_a'  =>  $odds_data['sportsbook_a'],
+                                'sportsbook_b'  =>  $odds_data['sportsbook_b'],
+                                'is_below_one'  =>  $odds_data['is_below_one']  
+                            ]);
 
-                    } else {
+                        } else {
 
-                        $games_per_market_stored = GamesPerMarket::create([
-                            'game_id'   =>  $game_id,
-                            'bet_type'  =>  $field['label'],
-                            'best_odds_a'   =>  $odds_data['best_odds_a'],
-                            'best_odds_b'   =>  $odds_data['best_odds_b'],
-                            'selection_line_a'  =>  $odds_data['selection_line_a'],
-                            'selection_line_b'  =>  $odds_data['selection_line_b'],
-                            'profit_percentage' =>  $odds_data['profit_percentage'],
-                            'sportsbook_a'  =>  $odds_data['sportsbook_a'],
-                            'sportsbook_b'  =>  $odds_data['sportsbook_b']
-                        ]);
+                            $games_per_market_stored = GamesPerMarket::create([
+                                'game_id'   =>  $game_id,
+                                'bet_type'  =>  $field['label'],
+                                'best_odds_a'   =>  $odds_data['best_odds_a'],
+                                'best_odds_b'   =>  $odds_data['best_odds_b'],
+                                'selection_line_a'  =>  $odds_data['selection_line_a'],
+                                'selection_line_b'  =>  $odds_data['selection_line_b'],
+                                'profit_percentage' =>  $odds_data['profit_percentage'],
+                                'sportsbook_a'  =>  $odds_data['sportsbook_a'],
+                                'sportsbook_b'  =>  $odds_data['sportsbook_b'],
+                                'is_below_one'  =>  $odds_data['is_below_one']  
+                            ]);
 
-                    }
+                            \Log::info('Games Per Market Successfully created!! ' . json_encode($games_per_market_stored) ); 
+
+                        }
+                        
+
 
                 }
 
             }
-        
+            
             return $market;
         } catch (\Exception $e) {
             return ['data'  =>  null, 'message' => $e->getMessage() ];

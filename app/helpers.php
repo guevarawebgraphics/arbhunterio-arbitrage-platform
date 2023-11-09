@@ -135,6 +135,7 @@ function getSportsBook() {
 }
 
 function getSports() {
+
     $data = [
         'football',
         'basketball',
@@ -157,8 +158,9 @@ function getSports() {
 
 function convertAmericanToDecimalOdds(int $americanOdds = NULL): float
 {
-    \Log::info($americanOdds);
+
     $formula = 0.00;
+
     if ($americanOdds > 0) {
         $formula = 1 + ($americanOdds / 100);
     }
@@ -167,7 +169,6 @@ function convertAmericanToDecimalOdds(int $americanOdds = NULL): float
          $formula = 1 - (100 / $americanOdds);
     }
 
-    // Return a default value (e.g. for 0 odds)
     return number_format($formula, 2, '.', '');
 }
 
@@ -225,26 +226,31 @@ function getOdds($row) {
             'sportsbook_b'  =>  $sportsbook_b
         ];
         return $data;
+
     } else if (strpos($game->selection_line, 'over') !== false || strpos($game->selection_line, 'under') !== false ) {
         $search_raw_a = "go.selection_line = 'over'";
         $search_raw_b = "go.selection_line = 'under'";
         $latest_raw_a = "x.selection_line = 'over'";
         $latest_raw_b = "x.selection_line = 'under'";
+
     } else if(strpos($game->selection, $home_team ) !== false || strpos($game->selection,  $away_team) !== false ){
         $search_raw_a = "go.selection LIKE '%".$home_team."%'";
         $search_raw_b = "go.selection LIKE '%".$away_team."%'";
         $latest_raw_a = "x.selection LIKE '%".$home_team."%'";
         $latest_raw_b = "x.selection LIKE '%".$away_team."%'";
+
     } else if (strpos($game->selection, 'yes') !== false || strpos($game->selection, 'no') !== false ) {
         $search_raw_a = "go.selection LIKE '%yes%'";
         $search_raw_b = "go.selection LIKE '%no%'";
         $latest_raw_a = "x.selection LIKE '%yes%'";
         $latest_raw_b = "x.selection LIKE '%no%'";
+
     } else if (strpos($game->selection, 'odd') !== false || strpos($game->selection, 'even') !== false ) { 
         $search_raw_a = "go.selection LIKE '%odd%'";
         $search_raw_b = "go.selection LIKE '%even%'";
         $latest_raw_a = "x.selection LIKE '%odd%'";
         $latest_raw_b = "x.selection LIKE '%even%'";
+
     }
 
     if ($search_raw_a && $search_raw_b ) {
@@ -321,15 +327,16 @@ function getOdds($row) {
     $profit_percentage = calculateProfit($best_odds_a, $best_odds_b);
 
     $data = [
-        'best_odds_a'   =>  $best_odds_a,
-        'best_odds_b'   =>  $best_odds_b,
-        'selection_line_a'   =>  $selection_line_a,
-        'selection_line_b'   =>  $selection_line_b,
-        'profit_percentage' =>  $profit_percentage,
-        'sportsbook_a'  =>  $sportsbook_a,
-        'sportsbook_b'  =>  $sportsbook_b,
-        'best_over_odds_query'  =>  $best_over_odds_query,
-        'best_under_odds_query'  =>  $best_under_odds_query
+        'best_odds_a'   => $best_odds_a,
+        'best_odds_b'   => $best_odds_b,
+        'selection_line_a'   => $selection_line_a,
+        'selection_line_b'   => $selection_line_b,
+        'profit_percentage' => $profit_percentage,
+        'sportsbook_a'  => $sportsbook_a,
+        'sportsbook_b'  => $sportsbook_b,
+        'best_over_odds_query'  => $best_over_odds_query,
+        'best_under_odds_query'  => $best_under_odds_query,
+        'is_below_one' => ($best_odds_a > 0 && $best_odds_b > 0) ? (1 / $best_odds_a) + (1 / $best_odds_b) : 0
     ];
 
     return $data;
@@ -342,10 +349,10 @@ function formatEventDate($date) {
 
 function formatEvent($row) {
     return $row->home_team . ' vs ' . $row->away_team . '<div class="flex flex-row gap-2">
-            <span><small>' . strtoupper($row->sport) . '</small></span>
-            <span class="border-e"></span>
-            <span><small>' . strtoupper($row->league) . '</small></span>
-        </div>';
+        <span><small>' . strtoupper($row->sport) . '</small></span>
+        <span class="border-e"></span>
+        <span><small>' . strtoupper($row->league) . '</small></span>
+    </div>';
 }   
 
 function sports_book_image($arr, $sports_book) {

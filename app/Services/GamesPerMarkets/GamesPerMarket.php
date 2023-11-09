@@ -42,6 +42,7 @@ class GamesPerMarket extends Model
         'profit_percentage',
         'sportsbook_a',
         'sportsbook_b',
+        'is_below_one',
         'is_active'
     ];
 }

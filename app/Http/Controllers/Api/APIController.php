@@ -32,7 +32,8 @@ class APIController extends Controller
     *
     */
 
-    public function getGames(Request $request) {
+    public function getGames(Request $request)
+    {
         // Define the path to the file in the public directory
         $games = $this->gamesPerMarkets([]);
         
@@ -51,7 +52,8 @@ class APIController extends Controller
         return response()->json($paginator->toArray());
     }
 
-    public function getGameListing(Request $request) {
+    public function getGameListing(Request $request)
+    {
 
         $input = $request->all();
 
@@ -79,8 +81,8 @@ class APIController extends Controller
             
     }
 
-
-    private function fetchOddsData($game, $sportsBook) {
+    private function fetchOddsData($game, $sportsBook)
+    {
         
         $upcomingGameOddsInput = [
             'game_id' => $game['id'],
@@ -91,7 +93,6 @@ class APIController extends Controller
         $homeTeamOdds = null;
         $awayTeamOdds = null;
         $bet_type = null;
-
 
         $homeTeamOdds = $this->groupOddsByMarket($this->upcomingGameOdds($upcomingGameOddsInput));
 
@@ -110,9 +111,8 @@ class APIController extends Controller
         $checkExists = Game::where('uid', $game['id'])->first();
 
         $games_query = NULL;
-
     
-        if ( !empty($checkExists) ) {
+        if ( !empty(    $checkExists    ) ) {
 
             Game::where('uid', $game['id'] )->update([
                 'start_date'    => $game['start_date'],
@@ -128,9 +128,6 @@ class APIController extends Controller
                 'away_team_info'    => json_encode($game['away_team_info']),  
                 'markets'   => json_encode($marketName[0]['data'])
             ]);
-
-            $storeGamesPerMarket = $this->createGamesPerMarket($game['id'], $marketName[0]['data']);
-        
 
         } else {
 
@@ -149,10 +146,10 @@ class APIController extends Controller
                 'away_team_info'    => json_encode($game['away_team_info']),  
                 'markets'   => json_encode($marketName[0]['data'])
             ]);
-
-             $storeGamesPerMarket = $this->createGamesPerMarket($game['id'], $marketName[0]['data']);
-
+            
         }
+
+        $storeGamesPerMarket = $this->createGamesPerMarket($game['id'], $marketName[0]['data']);
 
         return [
             'game' => $game,
@@ -218,13 +215,12 @@ class APIController extends Controller
     public function oddsPushStream(Request $request)
     {
         $batchSize = 10;
-
         $sportsbooks = '';
         $sports = getSports();
         $league_input = [];
         $league_input['sports'] = $sports;
         $league_api = $this->leagues($league_input);
-        $games = Game::orderBy('created_at', 'ASC')->get();
+        $games = GamesPerMarket::orderBy('created_at', 'ASC')->get();
         $league = '';
         $game_ids_array = [];
 
@@ -237,7 +233,7 @@ class APIController extends Controller
         // }
 
         foreach ($games ?? [] as $field) {
-            $game_ids_array[] = 'game_id=' . urlencode($field->uid);
+            $game_ids_array[] = 'game_id=' . urlencode($field->game_id);
         }
 
         $current_time = new DateTime('now', new DateTimeZone('America/New_York'));
@@ -247,7 +243,6 @@ class APIController extends Controller
 
         $base_url = 'https://api-external.oddsjam.com/api/v2/stream/odds?key=' . urlencode(config('services.oddsjam.key')) . $league . '&start_date_before=' . $start_date_before . '&start_date_after=' . $start_date_after . $sportsbooks;
        
-        // Split game IDs into batches and process each batch
         $batches = array_chunk($game_ids_array, $batchSize);
 
         foreach ($batches as $batch) {
