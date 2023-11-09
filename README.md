@@ -128,3 +128,8 @@ php artisan oddsjam_game_event_api:cron
 
 http://127.0.0.1/api/odds-push-streams
 https://staging.arbhunter.io/api/odds-push-streams
+
+
+## Server 
+![image](https://github.com/guevarawebgraphics/oddsjam/assets/42199746/00859447-cc17-466f-b4a6-d8b69bf1bb85)
+
