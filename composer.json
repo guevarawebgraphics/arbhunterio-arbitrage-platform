@@ -10,6 +10,7 @@
     "require": {
         "php": "^7.3|^8.0",
         "anhskohbo/no-captcha": "^3.3",
+        "barryvdh/laravel-debugbar": "*",
         "beyondcode/laravel-websockets": "^1.14",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",

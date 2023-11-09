@@ -824,35 +824,7 @@ trait OddsJamAPITrait
         return $data;
     }
     
-    // Minimized Query
-    public function gamesPerMarketsV3($data) {
-
-        // $gamesArray = GameOdds::query()
-        //     ->withTrashed()
-        //     ->from('gameodds as go')
-        //     ->leftJoin('games as g', 'g.uid', '=', 'go.game_id')
-        //     ->where('go.is_live', 0)
-        //     // ->where('go.is_main', 0)
-        //     ->select(
-        //         'g.uid',
-        //         'g.start_date',
-        //         'g.home_team',
-        //         'g.away_team',
-        //         'go.bet_type',
-        //         'g.sport',
-        //         'g.league'
-        //     )
-        //     ->groupBy(
-        //         'g.uid',
-        //         'g.start_date',
-        //         'g.home_team',
-        //         'g.away_team',
-        //         'go.bet_type',
-        //         'g.sport',
-        //         'g.league'
-        //     )
-        //     ->orderBy('g.start_date','DESC')
-        //     ->paginate(30);
+    public function getGamesPerMarket($data) {
 
         $gamesArray = GamesPerMarket::query()
             ->withTrashed()
@@ -907,7 +879,7 @@ trait OddsJamAPITrait
             $market = $marketArray;
             
             foreach ( $market ?? [] as  $field ) {
-                \Log::info($field['label']);
+
                 $game = GameOdds::query()
                 ->withTrashed()
                 ->from('gameodds as go')

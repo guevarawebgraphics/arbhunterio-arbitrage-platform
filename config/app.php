@@ -184,6 +184,8 @@ return [
 
         Orangehill\Iseed\IseedServiceProvider::class,
         Livewire\LivewireServiceProvider::class,
+
+        Barryvdh\Debugbar\ServiceProvider::class
     ],
 
     /*

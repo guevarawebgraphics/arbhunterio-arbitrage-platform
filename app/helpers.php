@@ -210,6 +210,7 @@ function getOdds($row) {
     )
     ->where('game_id', $game_id)
     ->where('bet_type', $bet_type)
+    ->whereNotIn('type',    ["locked"])
     ->groupByRaw('game_id, bet_type')
     ->first();
 
@@ -260,6 +261,7 @@ function getOdds($row) {
         ->whereRaw($search_raw_a)
         ->where('go.game_id', $game_id)
         ->where('go.bet_type', $bet_type)
+        ->whereNotIn('go.type', ["locked"])
         ->groupBy('go.sportsbook')
         ->get();
 
@@ -286,6 +288,7 @@ function getOdds($row) {
         ->whereRaw($search_raw_b)
         ->where('go.game_id', $game_id)
         ->where('go.bet_type', $bet_type)
+        ->whereNotIn('go.type', ["locked"])
         ->whereNotIn('go.sportsbook', $notIn )
         ->groupBy('go.sportsbook')
         ->get();

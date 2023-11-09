@@ -27,7 +27,7 @@ class GamesTable extends Component
 
     public function mount()
     {
-        $this->games = $this->gamesPerMarketsV3([]);
+        $this->games = $this->getGamesPerMarket([]);
     }
 
     public function render()
@@ -46,13 +46,13 @@ class GamesTable extends Component
     
     public function updatedPage($value)
     {
-        $this->games = $this->gamesPerMarketsV3([]);
+        $this->games = $this->getGamesPerMarket([]);
     }
 
     public function goToPage($page)
     {
         $this->setPage($page);
-        $this->games = $this->gamesPerMarketsV3([]);
+        $this->games = $this->getGamesPerMarket([]);
     }
 
 }
