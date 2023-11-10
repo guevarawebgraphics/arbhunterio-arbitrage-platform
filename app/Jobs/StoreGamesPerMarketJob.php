@@ -45,7 +45,6 @@ class StoreGamesPerMarketJob implements ShouldQueue
         ->from('gameodds as go')
         ->leftJoin('games as g', 'g.uid', '=', 'go.game_id')
         ->where('go.is_live', 0)
-        // ->where('go.is_main', 0)
         ->where('g.uid', $game_id )
         ->where('go.bet_type', $market )
         ->select(
@@ -70,8 +69,7 @@ class StoreGamesPerMarketJob implements ShouldQueue
 
         if ( !empty($game) ) {
 
-            $odds_data = getOdds($game);
-
+            $odds_data = $this->getOdds($game);
             $games_per_market_stored = GamesPerMarket::create([
                 'name'  =>  $game->home_team . ' vs ' . $game->away_team,
                 'game_id'   =>  $game_id,
@@ -86,7 +84,5 @@ class StoreGamesPerMarketJob implements ShouldQueue
             ]);
 
         }
-
-        \Log::info('Games Per Market: ' . $game_id . ' ' . $market );
     }
 }

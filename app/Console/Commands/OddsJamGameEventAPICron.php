@@ -22,7 +22,6 @@ use DateTimeZone;
 
 class OddsJamGameEventAPICron extends Command
 {
-
     /**
      * The name and signature of the console command.
      * @var string
@@ -75,6 +74,7 @@ class OddsJamGameEventAPICron extends Command
     private function timeInterval() {
 
         $currentDate = new DateTime('now', new DateTimeZone(date_default_timezone_get()));
+
         $currentDate->modify('+1 day'); // This adds one day to the current date
 
         // $currentDate = new DateTime('2023-10-22', new DateTimeZone(date_default_timezone_get()));
@@ -84,7 +84,7 @@ class OddsJamGameEventAPICron extends Command
         $intervals = [];
 
         // for ($i = 0; $i < 72; $i++) {
-         for ($i = 0; $i < 24; $i++) {
+        for ($i = 0; $i < 24; $i++) {
 
             // Create a clone of the DateTime object for the start of the current hour
             $startOfHour = clone $currentDate;

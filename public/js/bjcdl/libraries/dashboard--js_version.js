@@ -22,7 +22,7 @@ function contains(arr, sportsBookName) {
     });
 }
 
-function sports_book_image(arr, sports_book) {
+function $this->sports_book_image(arr, sports_book) {
     var imagesHTML = '';
     if (arr.length > 0 ) {
         $.each(arr, function (i, name) {
@@ -39,7 +39,7 @@ function sports_book_image(arr, sports_book) {
     }
     return imagesHTML;
 }
-function calculateProfit(oddsA, oddsB) {
+function $this->calculateProfit(oddsA, oddsB) {
     // ( 1 - (1/2.5 + 1/2.5) * 100
     // = 0.4 + 0.4
     // = 1 - 0.8
@@ -234,8 +234,8 @@ function getGames() {
                             under_selection_line = found_matched_over_under?.under?.name;
                             
                             // Sports Book Dynamic Images
-                            var over_sports_book_images = sports_book_image(over_sports_books, sports_book);
-                            var under_sports_book_images = sports_book_image(under_sports_books, sports_book);
+                            var over_$this->sports_book_images = $this->sports_book_image(over_sports_books, sports_book);
+                            var under_$this->sports_book_images = $this->sports_book_image(under_sports_books, sports_book);
 
                             // Retrieval of Home and Away Odds
                             $.each(home_odds[market_name], function (index, obj) {
@@ -267,8 +267,8 @@ function getGames() {
                             
 
                             // Sports Book Dynamic Images
-                            var home_sports_book_images = sports_book_image(home_sports_books, sports_book);
-                            var away_sports_book_images = sports_book_image(away_sports_books, sports_book);
+                            var home_$this->sports_book_images = $this->sports_book_image(home_sports_books, sports_book);
+                            var away_$this->sports_book_images = $this->sports_book_image(away_sports_books, sports_book);
 
 
 
@@ -283,7 +283,7 @@ function getGames() {
                             }
 
                             if ( is_html != "0" ) {
-                                var profit_percentage = is_html == 1 ? calculateProfit(over_best_odds, under_best_odds) : calculateProfit(home_best_odds, away_best_odds);
+                                var profit_percentage = is_html == 1 ? $this->calculateProfit(over_best_odds, under_best_odds) : $this->calculateProfit(home_best_odds, away_best_odds);
 
                                 html += `<tr class="border-b hover:bg-[#1D2F41]">
                                     <td class="w-4 p-4">
@@ -333,10 +333,10 @@ function getGames() {
                                     <td class="px-6 py-4">
                                         <div class="flex flex-col">
                                             <div class="flex flex-row items-center gap-2">
-                                                ${ is_html == 1 ? over_sports_book_images : home_sports_book_images}
+                                                ${ is_html == 1 ? over_$this->sports_book_images : home_$this->sports_book_images}
                                             </div>
                                             <div class="flex flex-row items-center gap-2">
-                                                ${ is_html == 1 ? under_sports_book_images : away_sports_book_images}
+                                                ${ is_html == 1 ? under_$this->sports_book_images : away_$this->sports_book_images}
                                             </div>
                                         </div>
                                     </td>

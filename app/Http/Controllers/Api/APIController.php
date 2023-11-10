@@ -75,12 +75,11 @@ class APIController extends Controller
                     $gameArray[] = $this->fetchOddsData($game, $sportsBook);
                 }
             }
-            
         }
         return $gameArray;
             
     }
-
+    
     private function fetchOddsData($game, $sportsBook)
     {
         
@@ -91,7 +90,9 @@ class APIController extends Controller
         ];
 
         $homeTeamOdds = null;
+
         $awayTeamOdds = null;
+
         $bet_type = null;
 
         $homeTeamOdds = $this->groupOddsByMarket($this->upcomingGameOdds($upcomingGameOddsInput));
@@ -114,7 +115,8 @@ class APIController extends Controller
     
         if ( !empty(    $checkExists    ) ) {
 
-            Game::where('uid', $game['id'] )->update([
+            Game::where('uid', $game['id'] )
+            ->update([
                 'start_date'    => $game['start_date'],
                 'home_team' => $game['home_team'],
                 'away_team' => $game['away_team'],
@@ -146,7 +148,7 @@ class APIController extends Controller
                 'away_team_info'    => json_encode($game['away_team_info']),  
                 'markets'   => json_encode($marketName[0]['data'])
             ]);
-            
+
         }
 
         $storeGamesPerMarket = $this->createGamesPerMarket($game['id'], $marketName[0]['data']);
@@ -500,7 +502,7 @@ class APIController extends Controller
         )
         ->first();
 
-        $odds = getOdds($game);
+        $odds = $this->getOdds($game);
         
         $data = [
             'game'  => $game,

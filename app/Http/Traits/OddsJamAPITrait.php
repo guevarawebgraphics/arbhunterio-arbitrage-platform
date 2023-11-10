@@ -876,9 +876,6 @@ trait OddsJamAPITrait
             
             foreach ( $market ?? [] as  $field ) {
 
-                \Log::info('To store game_id: ' . $game_id );
-                \Log::info('To store market: ' . $field['label'] );
-
                 $game = GameOdds::query()
                 ->withTrashed()
                 ->from('gameodds as go')
@@ -905,11 +902,10 @@ trait OddsJamAPITrait
                 )
                 ->first();
                 
-                \Log::info('Store gameid: ' . json_encode( $game ) );
 
                 if ( !empty($game) && $game != "[]" ) {
 
-                    $odds_data = getOdds($game);
+                    $odds_data = $this->getOdds($game);
 
                     $checkExists = GamesPerMarket::where('game_id', $game_id)->where('bet_type', $field['label'])->first();
 
@@ -991,9 +987,179 @@ trait OddsJamAPITrait
                 'status' => false
             ];
         }
+    }  
+
+    public function getOdds($row) {
+
+        $game_id = $row->uid;
+        $bet_type = $row->bet_type;
+        
+        $home_team = $row->home_team;
+        $away_team = $row->away_team;
+
+        $best_odds_a = 0.00;
+        $best_odds_b = 0.00;
+
+        $selection_line_a = '';
+        $selection_line_b = '';
+
+        $sportsbook_a = '';
+        $sportsbook_b = '';
+
+        $sports_book = getSportsBook();
+        $counter = 0;
+
+        $best_over_odds_query = null;
+        $best_under_odds_query = null;
+        
+        $search_raw_a = "";
+        $search_raw_b = "";
+        $latest_raw_a = "";
+        $latest_raw_b = "";
+
+        $bet_name = null;
+
+        $game = DB::table('gameodds')
+        ->select(
+            'game_id',
+            'bet_type',
+            DB::raw("GROUP_CONCAT(DISTINCT(selection) SEPARATOR ',') AS selection"),
+            DB::raw("GROUP_CONCAT(DISTINCT(selection_line) SEPARATOR ',') AS selection_line")
+        )
+        ->where('game_id', $game_id)
+        ->where('bet_type', $bet_type)
+        ->whereNotIn('type',    ["locked"])
+        ->groupByRaw('game_id, bet_type')
+        ->first();
+
+        if (strpos($game->selection, 'Draw') !== false || strpos($game->selection, 'No Goal') !== false ) {
+            $data = [
+                'best_odds_a'   =>  $best_odds_a,
+                'best_odds_b'   =>  $best_odds_b,
+                'selection_line_a'   =>  $selection_line_a,
+                'selection_line_b'   =>  $selection_line_b,
+                'profit_percentage' =>  0,
+                'sportsbook_a'  =>  $sportsbook_a,
+                'sportsbook_b'  =>  $sportsbook_b
+            ];
+            return $data;
+
+        } else if (strpos($game->selection_line, 'over') !== false || strpos($game->selection_line, 'under') !== false ) {
+            $search_raw_a = "go.selection_line = 'over'";
+            $search_raw_b = "go.selection_line = 'under'";
+            $latest_raw_a = "x.selection_line = 'over'";
+            $latest_raw_b = "x.selection_line = 'under'";
+
+        } else if(strpos($game->selection, $home_team ) !== false || strpos($game->selection,  $away_team) !== false ){
+            $search_raw_a = "go.selection LIKE '%".$home_team."%'";
+            $search_raw_b = "go.selection LIKE '%".$away_team."%'";
+            $latest_raw_a = "x.selection LIKE '%".$home_team."%'";
+            $latest_raw_b = "x.selection LIKE '%".$away_team."%'";
+
+        } else if (strpos($game->selection, 'yes') !== false || strpos($game->selection, 'no') !== false ) {
+            $search_raw_a = "go.selection LIKE '%yes%'";
+            $search_raw_b = "go.selection LIKE '%no%'";
+            $latest_raw_a = "x.selection LIKE '%yes%'";
+            $latest_raw_b = "x.selection LIKE '%no%'";
+
+        } else if (strpos($game->selection, 'odd') !== false || strpos($game->selection, 'even') !== false ) { 
+            $search_raw_a = "go.selection LIKE '%odd%'";
+            $search_raw_b = "go.selection LIKE '%even%'";
+            $latest_raw_a = "x.selection LIKE '%odd%'";
+            $latest_raw_b = "x.selection LIKE '%even%'";
+
+        }
+
+        if ($search_raw_a && $search_raw_b ) {
+
+            $best_over_odds_query = DB::table('gameodds as go')
+            ->select(
+                'go.bet_type', 
+                'go.selection_points', 
+                'go.selection_line', 
+                'go.bet_name', 
+                'go.sportsbook',
+                DB::raw('MAX(go.bet_price) as max_bet_price')
+            )
+            ->whereRaw($search_raw_a)
+            ->where('go.game_id', $game_id)
+            ->where('go.bet_type', $bet_type)
+            ->whereNotIn('go.type', ["locked"])
+            ->groupBy('go.sportsbook')
+            ->get();
+
+            $notInQuery = $best_over_odds_query->sortByDesc('max_bet_price')->first();
+
+            if ($notInQuery !== null) {
+                $notInMaxBetPrice = $notInQuery->max_bet_price;
+            } else {
+                $notInMaxBetPrice = 0;
+            }
+
+            $notIn = $best_over_odds_query->where('max_bet_price', $notInMaxBetPrice)->pluck('sportsbook')->unique()->values()->all();
+
+
+            $best_under_odds_query = DB::table('gameodds as go')
+            ->select(
+                'go.bet_type', 
+                'go.selection_points', 
+                'go.selection_line', 
+                'go.bet_name', 
+                'go.sportsbook',
+                DB::raw('MAX(go.bet_price) as max_bet_price')
+            )
+            ->whereRaw($search_raw_b)
+            ->where('go.game_id', $game_id)
+            ->where('go.bet_type', $bet_type)
+            ->whereNotIn('go.type', ["locked"])
+            ->whereNotIn('go.sportsbook', $notIn )
+            ->groupBy('go.sportsbook')
+            ->get();
+
+            $bet_name = $this->findMatchedBetName($best_over_odds_query, $best_under_odds_query);
+        }
+
+
+        $highest_over = $best_over_odds_query ? $best_over_odds_query->sortByDesc('max_bet_price')->first() : null;
+        $highest_under = $best_under_odds_query ? $best_under_odds_query->sortByDesc('max_bet_price')->first() : null;
+
+        if (!empty($best_over_odds_query) && !empty($best_under_odds_query) && !empty($highest_over) && !empty($highest_under)) {
+
+            $highest_over_bet_price_records = collect($best_over_odds_query)->where('max_bet_price', $highest_over->max_bet_price);
+            $highest_under_bet_price_records = collect($best_under_odds_query)->where('max_bet_price', $highest_under->max_bet_price);
+
+            $sportsbooks_over_with_highest_bet_price = $highest_over_bet_price_records->pluck('sportsbook')->unique()->values()->all();
+            $sportsbooks_under_with_highest_bet_price = $highest_under_bet_price_records->pluck('sportsbook')->unique()->values()->all();
+
+            $best_odds_a = convertAmericanToDecimalOdds($highest_over->max_bet_price) ?? 0.00;
+            $best_odds_b = convertAmericanToDecimalOdds($highest_under->max_bet_price) ?? 0.00;
+
+            $sportsbook_a = $this->sports_book_image($sportsbooks_over_with_highest_bet_price, $sports_book);
+            $sportsbook_b = $this->sports_book_image($sportsbooks_under_with_highest_bet_price, $sports_book);
+            
+            $selection_line_a = $bet_name['over'] ?? '';
+            $selection_line_b = $bet_name['under'] ?? '';
+        }
+
+        $profit_percentage = $this->calculateProfit($best_odds_a, $best_odds_b);
+
+        $data = [
+            'best_odds_a'   => $best_odds_a,
+            'best_odds_b'   => $best_odds_b,
+            'selection_line_a'   => $selection_line_a,
+            'selection_line_b'   => $selection_line_b,
+            'profit_percentage' => $profit_percentage,
+            'sportsbook_a'  => $sportsbook_a,
+            'sportsbook_b'  => $sportsbook_b,
+            'best_over_odds_query'  => $best_over_odds_query,
+            'best_under_odds_query'  => $best_under_odds_query,
+            'is_below_one' => ($best_odds_a > 0 && $best_odds_b > 0) ? (1 / $best_odds_a) + (1 / $best_odds_b) : 0
+        ];
+
+        return $data;
     }
 
-    function sports_book_image($arr, $sports_book) {
+    public function sports_book_image($arr, $sports_book) {
         $imagesHTML = '';
         
         // Convert Eloquent Collection to array
@@ -1016,12 +1182,15 @@ trait OddsJamAPITrait
             }
         }
         return $imagesHTML;
-    }    
+    }
 
-    function calculateProfit($oddsA, $oddsB) {
+    public function calculateProfit($oddsA, $oddsB) {
         // Convert the input values to float
         $odds1 = floatval($oddsA);
         $odds2 = floatval($oddsB);
+
+        // $odds1 = floatval(1.44);
+        // $odds2 = floatval(3.7);
         
         // Check for division by zero
         if ($odds1 == 0 || $odds2 == 0) {
@@ -1032,7 +1201,38 @@ trait OddsJamAPITrait
         $profitPercentage = (1 - (1 / $odds1 + 1 / $odds2)) * 100;
 
         // Return the result rounded to two decimal places
-        return abs(round($profitPercentage, 2));
+        return number_format(abs($profitPercentage),2,'.',',');
+    }
+
+    public function findMatchedBetName($queryA, $queryB) {
+        
+        $overCollection = collect($queryA);
+        $underCollection = collect($queryB);
+
+        $matchedBetName = '';
+
+        // Extract the selection_points from both collections
+        $overPoints = $overCollection->pluck('selection_points');
+        $underPoints = $underCollection->pluck('selection_points');
+
+        // Find the intersection of both sets of selection_points
+        $matchedPoints = $overPoints->intersect($underPoints);
+
+        // If there are matched points, find the corresponding bet_name for the matched selection_points
+        if ($matchedPoints->isNotEmpty()) {
+            $matchedPoint = $matchedPoints->first();
+
+            // Assuming bet_name is a direct attribute of your data items
+            $matchedOverBetName = $overCollection->where('selection_points', $matchedPoint)->pluck('bet_name')->first();
+            $matchedUnderBetName = $underCollection->where('selection_points', $matchedPoint)->pluck('bet_name')->first();
+
+            $matchedBetName = [
+                'over' => $matchedOverBetName,
+                'under' => $matchedUnderBetName
+            ];
+        }
+
+        return $matchedBetName;
     }
 
 }
