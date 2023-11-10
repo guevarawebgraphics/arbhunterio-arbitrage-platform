@@ -134,13 +134,6 @@
     @livewireScripts
 
     <script>
-
-        // Echo.channel('odds-updates')
-        // .listen('NewOddsReceived', (event) => {
-        //     console.log(event);
-        //     // Livewire.emit('refreshTable');
-        // });
-
         $(document).ready(function() {
             var listening = false;
             var echoChannel = null;
@@ -149,10 +142,10 @@
                 if (!listening) {
                     // Start Listening
                     echoChannel = Echo.channel('odds-updates')
-                                    .listen('NewOddsReceived', (event) => {
-                                        console.log('Refreshing Data');
-                                        Livewire.emit('refreshTable');
-                                    });
+                    .listen('NewOddsReceived', (event) => {
+                        console.log('Refreshing Data');
+                        Livewire.emit('refreshTable');
+                    });
                     $(this).text('Stop'); // Change button text to 'Stop'
                     // Update the icon to a 'stop' icon if available
                     listening = true;
