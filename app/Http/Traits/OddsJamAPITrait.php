@@ -868,7 +868,7 @@ trait OddsJamAPITrait
     }
 
     public function createGamesPerMarket($gameId, $marketArray) {
-
+        
         try {
 
             $game_id = $gameId;
@@ -937,7 +937,7 @@ trait OddsJamAPITrait
                             'is_below_one'  =>  $odds_data['is_below_one']  
                         ]);
 
-                        \Log::info('Games Per Market Successfully created!! ' . json_encode($games_per_market_stored) ); 
+                        // \Log::info('Games Per Market Successfully created!! ' . json_encode($games_per_market_stored) ); 
 
                     }
                     
@@ -980,7 +980,7 @@ trait OddsJamAPITrait
             curl_close($curl);
             return json_decode($json, true);
         } catch (\Exception $e) {
-            \Log::error($e->getMessage());
+            // \Log::error($e->getMessage());
             return [
                 'data' => NULL,
                 'message' => $e->getMessage(),

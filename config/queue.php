@@ -42,6 +42,27 @@ return [
             'after_commit' => false,
         ],
 
+        'push_stream_odds' => [
+            'driver' => 'database',
+            'table' => 'jobs',
+            'queue' => 'push_stream_odds',
+            'retry_after' => 90,
+        ],
+
+        'sync_odds' => [
+            'driver' => 'database',
+            'table' => 'jobs',
+            'queue' => 'sync_odds',
+            'retry_after' => 90,
+        ],
+
+        'sync_games' => [
+            'driver' => 'database',
+            'table' => 'jobs',
+            'queue' => 'sync_games',
+            'retry_after' => 90,
+        ],
+
         'beanstalkd' => [
             'driver' => 'beanstalkd',
             'host' => 'localhost',

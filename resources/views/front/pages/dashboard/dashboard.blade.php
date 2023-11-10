@@ -724,33 +724,6 @@
         });
 
 
-        let source;
-
-        $('#playButton').parent().click(function() {
-            let buttonText = $('#playButton').text();
-
-            if (buttonText === 'Play') {
-                // Start the SSE
-                source = new EventSource("{{url('api/odds-push-streams')}}");
-                
-                source.onmessage = function(event) {
-                    console.log('SSE Response ' , event.data);
-                };
-                $('#playButton').text('Pause');
-
-            } else {
-
-                // Close the SSE
-                if (source) {
-                    source.close();
-                    source = null; 
-                }
-                $('#playButton').text('Play');
-            }
-
-            console.log('source: ' ,source);
-
-        });
 
 </script>
 
@@ -881,6 +854,7 @@
         }
         });
     });
+
 </script>
 
 {{Html::script('public/js/bjcdl/libraries/dashboard.js')}}

@@ -34,6 +34,7 @@ class OddsJamGameEventAPICron extends Command
      * The console command description.
      *
      * @var string
+     * 
      */
 
     protected $description = 'This CRON pull up game events from OddsJam';
@@ -66,7 +67,7 @@ class OddsJamGameEventAPICron extends Command
         if ( !empty( $dateTime ) ) {
             foreach ( $dateTime ?? [] as $date ) {
                 $job = new SendRequestOddsJamJob($date);
-                Queue::push($job);
+                Queue::pushOn('sync_games', $job);
             }
         }
     }
@@ -84,7 +85,7 @@ class OddsJamGameEventAPICron extends Command
         $intervals = [];
 
         // for ($i = 0; $i < 72; $i++) {
-        for ($i = 0; $i < 24; $i++) {
+        for ($i = 0; $i < 72; $i++) {
 
             // Create a clone of the DateTime object for the start of the current hour
             $startOfHour = clone $currentDate;

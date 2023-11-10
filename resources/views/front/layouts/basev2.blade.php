@@ -134,15 +134,39 @@
     @livewireScripts
 
     <script>
-       let refreshTimer;
 
-        Echo.channel('odds-updates')
-        .listen('NewOddsReceived', (event) => {
-            clearTimeout(refreshTimer);
-            refreshTimer = setTimeout(() => {
-                console.log('Refreshing Data');
-                Livewire.emit('refreshTable');
-            }, 15000); // Wait for 15 seconds of "silence" before refreshing
+        // Echo.channel('odds-updates')
+        // .listen('NewOddsReceived', (event) => {
+        //     console.log(event);
+        //     // Livewire.emit('refreshTable');
+        // });
+
+        $(document).ready(function() {
+            var listening = false;
+            var echoChannel = null;
+
+            $('#playButton').click(function() {
+                if (!listening) {
+                    // Start Listening
+                    echoChannel = Echo.channel('odds-updates')
+                                    .listen('NewOddsReceived', (event) => {
+                                        console.log('Refreshing Data');
+                                        Livewire.emit('refreshTable');
+                                    });
+                    $(this).text('Stop'); // Change button text to 'Stop'
+                    // Update the icon to a 'stop' icon if available
+                    listening = true;
+                } else {
+                    // Stop Listening
+                    if (echoChannel) {
+                        echoChannel.stopListening('NewOddsReceived');
+                    }
+                    $(this).text('Play'); // Change button text back to 'Play'
+                    // Update the icon back to a 'play' icon if available
+                    listening = false;
+                }
+                console.log(echoChannel);
+            });
         });
     </script>
 

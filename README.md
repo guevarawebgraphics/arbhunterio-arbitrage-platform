@@ -2,91 +2,6 @@
 
 -   [Developed by Guevara Web Graphics Studio](https://guevarawebgraphics.com)
 
-## Requirements
-
--   PHP -> 8.2
--   Composer -> latest version
--   MySQL -> 5.8+
-
-## Installation
-
-1. Clone this repository to your local machine
-
-```sh
-$ git clone https://github.com/guevarawebgraphics/oddsjam.git
-```
-
-2. Create your database
-
-```sh
-$ mysql -u root -p
-
-# you should be inside MySQL console to do this:
-mysql> CREATE DATABASE my_cms;
-```
-
-3. CD to project directory then install composer libraries
-
-```sh
-$ cd path/to/my_cms
-$ composer install
-```
-
-4. Create Laravel .env
-
-```sh
-$ cp .env.example .env
-$ php artisan key:generate
-```
-
-5. Fill in necessary fields in .env file (i.e DB setup, Mail driver, etc...)
-
-6. Migrate and seed your database
-
-```sh
-$ php artisan migrate:fresh --seed
-```
-
-7. Start Laravel and PHP server
-
-```sh
-$ php artisan serve # this will spawn a PHP server that can be accessed at http://127.0.0.1:8000
-```
-
-## Usage
-
-1. CD to your project directory (skip if you're still in project directory)
-
-```sh
-$ cd path/to/my_cms
-```
-
-2. View all routes and its available methods
-
-```sh
-$ php artisan route:list
-```
-
-3. Use Postman or cURL to send requests to routes
-
-```sh
-# example of using cURL
-$ curl -X POST 'http://127.0.0.1:8000/api/login' \
--H 'Accept: application/json' \
--F 'email=dev@localhost.io' \
--F 'password=secret'
-```
-
-## Developer
-
--   Guevara Web Graphics Studio
-
-## VERSIONS
-
-1.0 - Native PHP
-2.0 - Basic Laravel (For application)
-2.1 - Full blast template
-
 ## Setup Online Betting
 
 Run php artisan migrate:fresh --seed
@@ -96,10 +11,16 @@ Run `php artisan oddsjam_game_event_api:cron`
 
 1. composer require livewire/livewire:^2.0
 
-2. Laravel Queue & Websockets
+2. Laravel Queue & Websockets - create separate terminals and execute these commands separately
 
 -   php artisan queue:work
+-   php artisan queue:work --queue=sync_games
+-   php artisan queue:work --queue=sync_odds
+-   php artisan queue:work --queue=push_stream_odds
 -   php artisan websockets:serve
+
+-   php artisan queue:clear database sync_games
+-   php artisan queue:clear database push_stream_odds
 
 ## Recompile:
 
@@ -118,6 +39,7 @@ Run `php artisan oddsjam_game_event_api:cron`
 ## Cron Job for retrieving latest games
 
 Staging or Production
+
 0 0 \* \* \* /user/bin/php /var/www/html/artisan oddsjam_game_event_api:cron
 
 ## Local
@@ -127,9 +49,9 @@ php artisan oddsjam_game_event_api:cron
 ## Push Stream
 
 http://127.0.0.1/api/odds-push-streams
+
 https://staging.arbhunter.io/api/odds-push-streams
 
+## Server
 
-## Server 
 ![image](https://github.com/guevarawebgraphics/oddsjam/assets/42199746/00859447-cc17-466f-b4a6-d8b69bf1bb85)
-

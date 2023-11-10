@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Queue;
 use App\Events\NewOddsReceived;
 use App\Services\GamesPerMarkets\GamesPerMarket;
 use App\Jobs\StoreGamesPerMarketJob;
+use App\Jobs\SendRequestFetchOddsJob;
 
 use DateTime;
 use DateTimeZone;
@@ -69,54 +70,41 @@ class APIController extends Controller
         $games = array_slice($games, 0, 1000); 
 
         $gameArray = [];
+
         foreach ($games as $game) {
             if (isset($game['home_team_info']) && isset($game['away_team_info'])) {
                 if ($game['status'] != "completed") {
-                    $gameArray[] = $this->fetchOddsData($game, $sportsBook);
+
+                    $gameArray[] = $this->createGames($game, $sportsBook);
+
+                    $job = new SendRequestFetchOddsJob([
+                        'game'  =>  $game ?? [],
+                        'sportsbook'    =>  $sportsBook ?? []
+                    ]);
+                    Queue::pushOn('sync_odds', $job);
+
                 }
             }
         }
+
         return $gameArray;
             
     }
-    
-    private function fetchOddsData($game, $sportsBook)
+
+    private function createGames($game, $sportsBook)
     {
-        
-        $upcomingGameOddsInput = [
+
+        $checkExists = Game::where( 'uid', $game['id'] )->first();
+
+        $input = [
             'game_id' => $game['id'],
-            'team_id' => $game['home_team_info']['id'],
             'sportsbook' => $sportsBook
         ];
 
-        $homeTeamOdds = null;
+        $marketName = $this->markets($input);
 
-        $awayTeamOdds = null;
-
-        $bet_type = null;
-
-        $homeTeamOdds = $this->groupOddsByMarket($this->upcomingGameOdds($upcomingGameOddsInput));
-
-        $this->processTeamOdds($homeTeamOdds, 0, $game);
-
-        $upcomingGameOddsInput['team_id'] = $game['away_team_info']['id'];
-
-        $awayTeamOdds = $this->groupOddsByMarket($this->upcomingGameOdds($upcomingGameOddsInput));
-
-        $this->processTeamOdds($awayTeamOdds, 1, $game);
-
-        $marketName = $this->markets($upcomingGameOddsInput);
-
-        $bet_type =  $marketName[0]['data'];
-
-        $checkExists = Game::where('uid', $game['id'])->first();
-
-        $games_query = NULL;
-    
         if ( !empty(    $checkExists    ) ) {
-
-            Game::where('uid', $game['id'] )
-            ->update([
+            Game::where('uid', $game['id'] )->update([
                 'start_date'    => $game['start_date'],
                 'home_team' => $game['home_team'],
                 'away_team' => $game['away_team'],
@@ -130,9 +118,7 @@ class APIController extends Controller
                 'away_team_info'    => json_encode($game['away_team_info']),  
                 'markets'   => json_encode($marketName[0]['data'])
             ]);
-
         } else {
-
             $games_created = Game::create([
                 'uid'   =>  $game['id'],
                 'start_date'    => $game['start_date'],
@@ -148,8 +134,41 @@ class APIController extends Controller
                 'away_team_info'    => json_encode($game['away_team_info']),  
                 'markets'   => json_encode($marketName[0]['data'])
             ]);
-
         }
+
+        return $game;
+    }
+
+    public function fetchOddsData(Request $request)
+    {
+
+        $game = $request->game;
+
+        $sportsBook = $request->sportsbook;
+        
+        $upcomingGameOddsInput = [
+            'game_id' => $game['id'],
+            'team_id' => $game['home_team_info']['id'],
+            'sportsbook' => $sportsBook
+        ];
+
+        $homeTeamOdds = null;
+
+        $awayTeamOdds = null;
+
+        $bet_type = null;
+
+        $homeTeamOdds = $this->groupOddsByMarket($this->upcomingGameOdds($upcomingGameOddsInput));
+
+        $home_store = $this->processTeamOdds($homeTeamOdds, 0, $game);
+
+        $upcomingGameOddsInput['team_id'] = $game['away_team_info']['id'];
+
+        $awayTeamOdds = $this->groupOddsByMarket($this->upcomingGameOdds($upcomingGameOddsInput));
+
+        $away_store = $this->processTeamOdds($awayTeamOdds, 1, $game);
+
+        $marketName = $this->markets($upcomingGameOddsInput);
 
         $storeGamesPerMarket = $this->createGamesPerMarket($game['id'], $marketName[0]['data']);
 
@@ -157,12 +176,13 @@ class APIController extends Controller
             'game' => $game,
             'home_team_odds' => $homeTeamOdds,
             'away_team_odds' => $awayTeamOdds,
-            'markets'   =>  $bet_type
+            'markets'   =>  $marketName[0]['data']
         ];
 
     }
 
-    private function processTeamOdds($teamOdds, $teamType, $game) {
+    private function processTeamOdds($teamOdds, $teamType, $game)
+    {
         foreach ($teamOdds ?? [] as $market) {
             foreach ($market ?? [] as $value) {
                 
@@ -191,12 +211,13 @@ class APIController extends Controller
 
                 if (!empty($gameodds)) {
 
-                    GameOdds::where('uid', $value['id'])->update($input);
-
+                    $updated_odds = GameOdds::where('uid', $value['id'])->update($input);
+                    // \Log::info('processTeamOdds ' . json_encode($updated_odds));
                 } else {
 
                     $input['uid'] = $value['id'];
                     $create_odds = GameOdds::create($input);
+                    // \Log::info('processTeamOdds ' . json_encode($create_odds));
 
                 }
 
@@ -278,10 +299,12 @@ class APIController extends Controller
                     if (preg_match('/data: (\{.*\})/', $data, $matches)) {
 
                         $jsonData = $matches[1];
-                        // $job = new StoreOddsStreamJob($jsonData);
-                        // Queue::push($job);
 
-                        echo "data: $jsonData\n\n";
+                        $output = $jsonData ?? 'No records..';
+                        echo "data: $output\n\n";
+
+                        $job = new StoreOddsStreamJob($jsonData);
+                        Queue::pushOn('push_stream_odds', $job);
 
                         if (ob_get_level() > 0) {
                             ob_flush();
