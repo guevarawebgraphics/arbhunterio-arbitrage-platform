@@ -134,6 +134,38 @@
     @livewireScripts
 
 
+    <script>
+        var isPlaying = false;
+        var echoChannel = null;
 
+        function toggleStream() {
+            if (isPlaying) {
+                // Stop listening to the Echo channel
+                if (echoChannel) {
+                    echoChannel.stopListening('NewOddsReceived');
+                    echoChannel = null;
+                }
+                $('#playButtonText').text('Play');
+                isPlaying = false;
+
+                console.log('Stopped Streaming');
+            } else {
+                // Start listening to the Echo channel
+                echoChannel = Echo.channel('odds-updates');
+                echoChannel.listen('NewOddsReceived', (event) => {
+                    Livewire.emit('refreshTable');
+                    console.log(event);
+                });
+                $('#playButtonText').text('Stop');
+                isPlaying = true;
+
+                console.log('Started Streaming');
+            }
+        }
+
+        $(document).ready(function() {
+            $('#playButton').click(toggleStream);
+        });
+    </script>
 </body>
 </html>

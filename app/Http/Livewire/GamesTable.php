@@ -17,7 +17,11 @@ class GamesTable extends Component
 
     protected $paginationTheme = 'tailwind'; // 'tailwind' or 'bootstrap', based on your preference
 
-    protected $listeners = ['echo:odds-updates,NewOddsReceived' => 'refreshTable'];
+    // Removed due to it automatically refreshes frontend. This can be triggered through client side
+    // protected $listeners = ['echo:odds-updates,NewOddsReceived' => 'refreshTable'];
+
+    // This tends to receive request of echo from client side.
+    protected $listeners = ['refreshTable' => 'refreshTable'];
 
     private $games = [];
 
