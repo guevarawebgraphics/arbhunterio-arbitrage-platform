@@ -16,6 +16,13 @@ class CreateGamesPerMarketsTable extends Migration
         Schema::create('gamespermarkets', function (Blueprint $table) {
             $table->increments('id');
 
+            $table->string('start_date')->nullable();
+            $table->string('home_team')->nullable();
+            $table->string('away_team')->nullable();
+            $table->string('sport')->nullable();
+            $table->string('league')->nullable();
+            $table->string('is_live')->default('false')->nullable();
+
             $table->string('game_id')->nullable();
             $table->string('bet_type')->nullable();
             $table->decimal('best_odds_a', 8,2 )->nullable();

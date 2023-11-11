@@ -19,8 +19,10 @@ Run `php artisan oddsjam_game_event_api:cron`
 -   php artisan queue:work --queue=push_stream_odds
 -   php artisan websockets:serve
 
--   php artisan queue:clear database sync_games
--   php artisan queue:clear database push_stream_odds
+-   php artisan queue:clear
+-   php artisan queue:clear --queue=sync_games
+-   php artisan queue:clear --queue=sync_odds
+-   php artisan queue:clear --queue=push_stream_odds
 
 ## Recompile:
 
@@ -55,3 +57,23 @@ https://staging.arbhunter.io/api/odds-push-streams
 ## Server
 
 ![image](https://github.com/guevarawebgraphics/oddsjam/assets/42199746/00859447-cc17-466f-b4a6-d8b69bf1bb85)
+
+## Local Setup
+
+1. php artisan migrate:fresh --seed
+2. Execute these commands on separate bash terminals.
+
+-   php artisan optimize
+-   php artisan queue:work
+-   php artisan queue:work --queue=sync_games
+-   php artisan queue:work --queue=sync_odds
+-   php artisan queue:work --queue=push_stream_odds
+-   php artisan websockets:serve
+
+3. Execute this command to retrieve games and odds per game
+
+-   php artisan oddsjam_game_event_api:cron
+
+4. If you want to receive real time response. Execute this curl command on your bash terminal (Optional)
+
+-   curl http://127.0.0.1/api/odds-push-streams

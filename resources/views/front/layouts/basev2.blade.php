@@ -133,38 +133,7 @@
 
     @livewireScripts
 
-    <script>
-        $(document).ready(function() {
-            var listening = false;
-            var echoChannel = null;
 
-            $('#playButton').click(function() {
-                if (!listening) {
-                    // Start Listening
-                    echoChannel = Echo.channel('odds-updates');
-                    echoChannel.listen('NewOddsReceived', (event) => {
-                        console.log('Refreshing Data');
-                        Livewire.emit('refreshTable');
-                    });
-                    $(this).text('Stop'); // Change button text to 'Stop'
-                    // Here, add code to change the icon to 'Stop'
-                    listening = true;
-                } else {
-                    // Stop Listening and disconnect
-                    if (echoChannel) {
-                        echoChannel.stopListening('NewOddsReceived');
-                        // Disconnect from the channel
-                        Echo.leaveChannel('odds-updates');
-                        echoChannel = null;
-                    }
-                    $(this).text('Play'); // Change button text back to 'Play'
-                    // Here, add code to change the icon back to 'Play'
-                    listening = false;
-                }
-            });
-        });
-
-    </script>
 
 </body>
 </html>

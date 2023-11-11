@@ -822,45 +822,40 @@ trait OddsJamAPITrait
     
     public function getGamesPerMarket($data) {
 
-        $gamesArray = GamesPerMarket::query()
-        ->withTrashed()
-        ->from('gamespermarkets as gpm')
-        ->leftJoin('games as g', 'g.uid', '=', 'gpm.game_id')
-        ->leftJoin('gameodds as go', 'go.game_id', '=', 'gpm.game_id')
-        ->where('go.is_live', 0)
-        ->where('gpm.profit_percentage','>=', 0)
-        ->whereNotIn('gpm.selection_line_a', ['Draw','No Goal'])
-        ->where('gpm.selection_line_a','!=',"")
-        ->where('gpm.selection_line_b','!=',"")
-        ->where('gpm.sportsbook_a', '!=' , "")
-        ->where('gpm.sportsbook_b', '!=' , "")
+        $gamesArray = GamesPerMarket::where('is_live', 0)
+        ->where('profit_percentage','>=', 0)
+        ->whereNotIn('selection_line_a', ['Draw','No Goal'])
+        ->where('selection_line_a','!=',"")
+        ->where('selection_line_b','!=',"")
+        ->where('sportsbook_a', '!=' , "")
+        ->where('sportsbook_b', '!=' , "")
         ->where('is_below_one','<', 1)
         ->select(
-            'g.uid',
-            'g.start_date',
-            'g.home_team',
-            'g.away_team',
-            'gpm.bet_type',
-            'g.sport',
-            'g.league',
-            'gpm.best_odds_a',
-            'gpm.best_odds_b',
-            'gpm.selection_line_a',
-            'gpm.selection_line_b',
-            'gpm.profit_percentage',
-            'gpm.sportsbook_a',
-            'gpm.sportsbook_b'
+            'game_id as uid',
+            'start_date',
+            'home_team',
+            'away_team',
+            'bet_type',
+            'sport',
+            'league',
+            'best_odds_a',
+            'best_odds_b',
+            'selection_line_a',
+            'selection_line_b',
+            'profit_percentage',
+            'sportsbook_a',
+            'sportsbook_b'
         )
         ->groupBy(
-            'g.uid',
-            'g.start_date',
-            'g.home_team',
-            'g.away_team',
-            'gpm.bet_type',
-            'g.sport',
-            'g.league',
+            'game_id',
+            'start_date',
+            'home_team',
+            'away_team',
+            'bet_type',
+            'sport',
+            'league',
         )
-        ->orderBy('gpm.profit_percentage','DESC')
+        ->orderBy('profit_percentage','DESC')
         ->paginate(10);
 
         return $gamesArray;
@@ -909,9 +904,18 @@ trait OddsJamAPITrait
 
                     $checkExists = GamesPerMarket::where('game_id', $game_id)->where('bet_type', $field['label'])->first();
 
+                    $game_info = Game::where('uid', $game_id)->first();
+
                     if ( !empty($checkExists) ) {
 
                         $games_per_market_stored = GamesPerMarket::where('game_id', $game_id)->where('bet_type', $field['label'])->update([
+                            'start_date'   =>  $game_info->start_date,
+                            'home_team'   =>   $game_info->home_team,
+                            'away_team'   =>   $game_info->away_team,
+                            'sport'   =>   $game_info->sport,
+                            'league'   =>   $game_info->league,
+                            'is_live'   =>   $game_info->is_live,
+
                             'best_odds_a'   =>  $odds_data['best_odds_a'],
                             'best_odds_b'   =>  $odds_data['best_odds_b'],
                             'selection_line_a'  =>  $odds_data['selection_line_a'],
@@ -925,6 +929,13 @@ trait OddsJamAPITrait
                     } else {
 
                         $games_per_market_stored = GamesPerMarket::create([
+                            'start_date'   =>  $game_info->start_date,
+                            'home_team'   =>   $game_info->home_team,
+                            'away_team'   =>   $game_info->away_team,
+                            'sport'   =>   $game_info->sport,
+                            'league'   =>   $game_info->league,
+                            'is_live'   =>   $game_info->is_live,
+
                             'game_id'   =>  $game_id,
                             'bet_type'  =>  $field['label'],
                             'best_odds_a'   =>  $odds_data['best_odds_a'],
