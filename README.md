@@ -78,14 +78,11 @@ https://staging.arbhunter.io/api/odds-push-streams
 
 -   curl http://127.0.0.1/api/odds-push-streams
 
-
-
 ## AWS SERVER SETUP
 
 ![image](https://github.com/guevarawebgraphics/oddsjam/assets/42199746/3f624b11-8510-4be5-b1b0-4edcf26900cf)
 
 ![image](https://github.com/guevarawebgraphics/oddsjam/assets/42199746/20bfe292-7537-41ec-aa1d-25684794ae52)
-
 
 php artisan queue:work
 
@@ -97,6 +94,10 @@ php artisan queue:work --queue=sync_push_stream_odds
 
 php artisan websockets:serve
 
+php artisan queue:clear
 
+php artisan queue:clear --queue=sync_games
 
+php artisan queue:clear --queue=sync_odds
 
+php artisan queue:clear --queue=sync_push_stream_odds
