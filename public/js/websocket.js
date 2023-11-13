@@ -16,4 +16,4 @@ window.Echo = new Echo({
     forceTLS: true,
     enabledTransports: ['ws','wss'],
     authEndpoint: 'broadcasting/auth',
-});  
+});   
