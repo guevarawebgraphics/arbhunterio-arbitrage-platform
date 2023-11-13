@@ -13,16 +13,12 @@ Run `php artisan oddsjam_game_event_api:cron`
 
 2. Laravel Queue & Websockets - create separate terminals and execute these commands separately
 
+-   php artisan optimize
 -   php artisan queue:work
 -   php artisan queue:work --queue=sync_games
 -   php artisan queue:work --queue=sync_odds
 -   php artisan queue:work --queue=push_stream_odds
 -   php artisan websockets:serve
-
--   php artisan queue:clear
--   php artisan queue:clear --queue=sync_games
--   php artisan queue:clear --queue=sync_odds
--   php artisan queue:clear --queue=push_stream_odds
 
 ## Recompile:
 
@@ -42,17 +38,17 @@ Run `php artisan oddsjam_game_event_api:cron`
 
 Staging or Production
 
-0 0 \* \* \* /user/bin/php /var/www/html/artisan oddsjam_game_event_api:cron
+`0 0 \* \* \* /user/bin/php /var/www/html/artisan oddsjam_game_event_api:cron`
 
 ## Local
 
-php artisan oddsjam_game_event_api:cron
+`php artisan oddsjam_game_event_api:cron`
 
 ## Push Stream
 
-http://127.0.0.1/api/odds-push-streams
+`http://127.0.0.1/api/odds-push-streams`
 
-https://staging.arbhunter.io/api/odds-push-streams
+`https://staging.arbhunter.io/api/odds-push-streams`
 
 ## Server
 
@@ -142,6 +138,8 @@ user=ec2-user-workers
 
 ### Supervisor Commands
 
+## How to stop QUEUE & Websocket
+
 sudo supervisorctl stop queue
 
 sudo supervisorctl stop queue_sync_games
@@ -152,6 +150,8 @@ sudo supervisorctl stop queue_sync_push_stream_odds
 
 sudo supervisorctl stop websockets
 
+## How to start QUEUE & Websocket
+
 sudo supervisorctl start queue
 
 sudo supervisorctl start queue_sync_games
@@ -161,6 +161,8 @@ sudo supervisorctl start queue_sync_odds
 sudo supervisorctl start queue_sync_push_stream_odds
 
 sudo supervisorctl start websockets
+
+## How to restart QUEUE & Websocket
 
 sudo supervisorctl restart queue
 
