@@ -156,3 +156,13 @@ sudo supervisorctl start queue_sync_odds
 sudo supervisorctl start queue_sync_push_stream_odds
 
 sudo supervisorctl start websockets
+
+sudo supervisorctl restart queue
+
+sudo supervisorctl restart queue_sync_games
+
+sudo supervisorctl restart queue_sync_odds
+
+sudo supervisorctl restart queue_sync_push_stream_odds
+
+sudo supervisorctl restart websockets

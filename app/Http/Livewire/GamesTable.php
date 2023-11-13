@@ -45,7 +45,7 @@ class GamesTable extends Component
     {
         // This will refresh the data by re-fetching from the database.
         $this->mount();
-        \Log::info('Data Table Refreshed: ' . date('H:i a',strtotime( now() )) );
+        \Log::info( 'Data Table Refreshed: ' . date('H:i a',strtotime( now() )) );
     }
     
     public function updatedPage($value)
