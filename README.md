@@ -102,6 +102,9 @@ php artisan queue:clear --queue=sync_odds
 
 php artisan queue:clear --queue=sync_push_stream_odds
 
+
+### /etc/supervisor.d/queue.conf
+
 [program:queue]
 command=/usr/bin/php /var/www/html/artisan queue:work
 numprocs=1
@@ -137,6 +140,8 @@ autostart=true
 autorestart=true
 user=ec2-user-workers
 
+### Supervisor Commands
+
 sudo supervisorctl stop queue
 
 sudo supervisorctl stop queue_sync_games
@@ -166,3 +171,8 @@ sudo supervisorctl restart queue_sync_odds
 sudo supervisorctl restart queue_sync_push_stream_odds
 
 sudo supervisorctl restart websockets
+
+
+### PM2 Process Manager for Push Stream API
+
+![image](https://github.com/guevarawebgraphics/oddsjam/assets/42199746/ed126b7b-0607-4da6-b5c4-9cbf3c3f25d4)
