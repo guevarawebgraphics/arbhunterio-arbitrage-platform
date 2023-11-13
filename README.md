@@ -103,76 +103,96 @@ php artisan queue:clear --queue=sync_push_stream_odds
 
 [program:queue]
 command=/usr/bin/php /var/www/html/artisan queue:work
+
 numprocs=1
+
 autostart=true
+
 autorestart=true
+
 user=ec2-user-workers
 
 [program:queue_sync_games]
 command=/usr/bin/php /var/www/html/artisan queue:work --queue=sync_games
+
 numprocs=1
+
 autostart=true
+
 autorestart=true
+
 user=ec2-user-workers
 
 [program:queue_sync_odds]
 command=/usr/bin/php /var/www/html/artisan queue:work --queue=sync_odds
+
 numprocs=1
+
 autostart=true
+
 autorestart=true
+
 user=ec2-user-workers
 
 [program:queue_sync_push_stream_odds]
 command=/usr/bin/php /var/www/html/artisan queue:work --queue=sync_push_stream_odds
+
 numprocs=1
+
 autostart=true
+
 autorestart=true
+
 user=ec2-user-workers
 
 [program:websockets]
 command=/usr/bin/php /var/www/html/artisan websockets:serve
+
 numprocs=1
+
 autostart=true
+
 autorestart=true
+
 user=ec2-user-workers
 
 ### Supervisor Commands
 
 ## How to stop QUEUE & Websocket
 
-sudo supervisorctl stop queue
+`sudo supervisorctl stop queue`
 
-sudo supervisorctl stop queue_sync_games
+`sudo supervisorctl stop queue_sync_games`
 
-sudo supervisorctl stop queue_sync_odds
+`sudo supervisorctl stop queue_sync_odds`
 
-sudo supervisorctl stop queue_sync_push_stream_odds
+`sudo supervisorctl stop queue_sync_push_stream_odds`
 
-sudo supervisorctl stop websockets
+`sudo supervisorctl stop websockets`
 
 ## How to start QUEUE & Websocket
 
-sudo supervisorctl start queue
+`sudo supervisorctl start queue`
 
-sudo supervisorctl start queue_sync_games
+`sudo supervisorctl start queue_sync_games`
 
-sudo supervisorctl start queue_sync_odds
+`sudo supervisorctl start queue_sync_odds`
 
-sudo supervisorctl start queue_sync_push_stream_odds
+`sudo supervisorctl start queue_sync_push_stream_odds`
 
-sudo supervisorctl start websockets
+`sudo supervisorctl start websockets`
 
 ## How to restart QUEUE & Websocket
 
-sudo supervisorctl restart queue
+`sudo supervisorctl restart queue`
 
-sudo supervisorctl restart queue_sync_games
+`sudo supervisorctl restart queue_sync_games`
 
-sudo supervisorctl restart queue_sync_odds
+`sudo supervisorctl restart queue_sync_odds`
 
-sudo supervisorctl restart queue_sync_push_stream_odds
+`sudo supervisorctl restart queue_sync_push_stream_odds`
 
-sudo supervisorctl restart websockets
+`sudo supervisorctl restart websockets
 
 
 ### PM2 Process Manager for Push Stream API
