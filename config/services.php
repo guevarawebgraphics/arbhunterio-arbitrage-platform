@@ -34,4 +34,8 @@ return [
         'key' => env('ODDSJAM_API_KEY')
     ],
 
+    'app'   =>  [
+        'env'   =>  env('APP_ENV')
+    ]
+
 ];
