@@ -13,16 +13,12 @@ Run `php artisan oddsjam_game_event_api:cron`
 
 2. Laravel Queue & Websockets - create separate terminals and execute these commands separately
 
+-   php artisan optimize
 -   php artisan queue:work
 -   php artisan queue:work --queue=sync_games
 -   php artisan queue:work --queue=sync_odds
 -   php artisan queue:work --queue=push_stream_odds
 -   php artisan websockets:serve
-
--   php artisan queue:clear
--   php artisan queue:clear --queue=sync_games
--   php artisan queue:clear --queue=sync_odds
--   php artisan queue:clear --queue=push_stream_odds
 
 ## Recompile:
 
@@ -42,17 +38,17 @@ Run `php artisan oddsjam_game_event_api:cron`
 
 Staging or Production
 
-0 0 \* \* \* /user/bin/php /var/www/html/artisan oddsjam_game_event_api:cron
+`0 0 \* \* \* /user/bin/php /var/www/html/artisan oddsjam_game_event_api:cron`
 
 ## Local
 
-php artisan oddsjam_game_event_api:cron
+`php artisan oddsjam_game_event_api:cron`
 
 ## Push Stream
 
-http://127.0.0.1/api/odds-push-streams
+`http://127.0.0.1/api/odds-push-streams`
 
-https://staging.arbhunter.io/api/odds-push-streams
+`https://staging.arbhunter.io/api/odds-push-streams`
 
 ## Server
 
@@ -102,80 +98,101 @@ php artisan queue:clear --queue=sync_odds
 
 php artisan queue:clear --queue=sync_push_stream_odds
 
+### /etc/supervisor.d/queue.conf
+
 [program:queue]
 command=/usr/bin/php /var/www/html/artisan queue:work
+
 numprocs=1
+
 autostart=true
+
 autorestart=true
+
 user=ec2-user-workers
 
 [program:queue_sync_games]
 command=/usr/bin/php /var/www/html/artisan queue:work --queue=sync_games
+
 numprocs=1
+
 autostart=true
+
 autorestart=true
+
 user=ec2-user-workers
 
 [program:queue_sync_odds]
 command=/usr/bin/php /var/www/html/artisan queue:work --queue=sync_odds
+
 numprocs=1
+
 autostart=true
+
 autorestart=true
+
 user=ec2-user-workers
 
 [program:queue_sync_push_stream_odds]
 command=/usr/bin/php /var/www/html/artisan queue:work --queue=sync_push_stream_odds
+
 numprocs=1
+
 autostart=true
+
 autorestart=true
+
 user=ec2-user-workers
 
 [program:websockets]
 command=/usr/bin/php /var/www/html/artisan websockets:serve
+
 numprocs=1
+
 autostart=true
+
 autorestart=true
+
 user=ec2-user-workers
 
-sudo supervisorctl stop queue
+### Supervisor Commands
 
-sudo supervisorctl stop queue_sync_games
+## How to stop QUEUE & Websocket
 
-sudo supervisorctl stop queue_sync_odds
+`sudo supervisorctl stop queue`
 
-sudo supervisorctl stop queue_sync_push_stream_odds
+`sudo supervisorctl stop queue_sync_games`
 
-sudo supervisorctl stop websockets
+`sudo supervisorctl stop queue_sync_odds`
 
-sudo supervisorctl start queue
+`sudo supervisorctl stop queue_sync_push_stream_odds`
 
-sudo supervisorctl start queue_sync_games
+`sudo supervisorctl stop websockets`
 
-sudo supervisorctl start queue_sync_odds
+## How to start QUEUE & Websocket
 
-sudo supervisorctl start queue_sync_push_stream_odds
+`sudo supervisorctl start queue`
 
-sudo supervisorctl start websockets
+`sudo supervisorctl start queue_sync_games`
 
-sudo supervisorctl restart queue
+`sudo supervisorctl start queue_sync_odds`
 
-sudo supervisorctl restart queue_sync_games
+`sudo supervisorctl start queue_sync_push_stream_odds`
 
-sudo supervisorctl restart queue_sync_odds
+`sudo supervisorctl start websockets`
 
-sudo supervisorctl restart queue_sync_push_stream_odds
+## How to restart QUEUE & Websocket
 
-sudo supervisorctl restart websockets
+`sudo supervisorctl restart queue`
 
-## Node Compatibility
+`sudo supervisorctl restart queue_sync_games`
 
-`[ec2-user@ip-172-31-16-34 html]$ nvm install 10
-Downloading and installing node v10.24.1...
-Downloading https://nodejs.org/dist/v10.24.1/node-v10.24.1-linux-x64.tar.xz...
-############################################################################################################################ 100.0%
-Computing checksum with sha256sum
-Checksums matched!
-Now using node v10.24.1 (npm v6.14.12)
-[ec2-user@ip-172-31-16-34 html]$ nvm use 10
-Now using node v10.24.1 (npm v6.14.12)
-[ec2-user@ip-172-31-16-34 html]$ pm2 list`
+`sudo supervisorctl restart queue_sync_odds`
+
+`sudo supervisorctl restart queue_sync_push_stream_odds`
+
+`sudo supervisorctl restart websockets
+
+### PM2 Process Manager for Push Stream API
+
+![image](https://github.com/guevarawebgraphics/oddsjam/assets/42199746/ed126b7b-0607-4da6-b5c4-9cbf3c3f25d4)
