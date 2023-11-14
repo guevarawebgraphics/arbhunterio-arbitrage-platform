@@ -166,3 +166,16 @@ sudo supervisorctl restart queue_sync_odds
 sudo supervisorctl restart queue_sync_push_stream_odds
 
 sudo supervisorctl restart websockets
+
+## Node Compatibility
+
+`[ec2-user@ip-172-31-16-34 html]$ nvm install 10
+Downloading and installing node v10.24.1...
+Downloading https://nodejs.org/dist/v10.24.1/node-v10.24.1-linux-x64.tar.xz...
+############################################################################################################################ 100.0%
+Computing checksum with sha256sum
+Checksums matched!
+Now using node v10.24.1 (npm v6.14.12)
+[ec2-user@ip-172-31-16-34 html]$ nvm use 10
+Now using node v10.24.1 (npm v6.14.12)
+[ec2-user@ip-172-31-16-34 html]$ pm2 list`
