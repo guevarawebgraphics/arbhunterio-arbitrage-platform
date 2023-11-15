@@ -100,7 +100,7 @@ php artisan queue:clear --queue=sync_push_stream_odds
 
 ### Configuration file for Websockets and Queue /etc/supervisor.d/queue.conf
 
-`[program:queue]
+[program:queue]
 command=/usr/bin/php /var/www/html/artisan queue:work
 
 numprocs=1
@@ -153,7 +153,7 @@ autostart=true
 
 autorestart=true
 
-user=ec2-user`
+user=ec2-user
 
 ### Supervisor Commands
 
