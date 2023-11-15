@@ -4,15 +4,7 @@
 
 ## Setup Online Betting
 
-Run `php artisan migrate:fresh --seed`
-
-Run `php artisan oddsjam_game_event_api:cron`
-
-## Additional Dependencies
-
-1. composer require livewire/livewire:^2.0
-
-2. Laravel Queue & Websockets - create separate terminals and execute these commands separately
+Run the following command on separate terminals
 
 -   php artisan optimize
 -   php artisan queue:work
@@ -20,6 +12,18 @@ Run `php artisan oddsjam_game_event_api:cron`
 -   php artisan queue:work --queue=sync_odds
 -   php artisan queue:work --queue=push_stream_odds
 -   php artisan websockets:serve
+
+and
+
+`php artisan migrate:fresh --seed`
+
+`php artisan oddsjam_game_event_api:cron`
+
+## Additional Dependencies
+
+1. composer require livewire/livewire:^2.0
+
+2. Laravel Queue & Websockets
 
 ## Recompile:
 
