@@ -98,7 +98,7 @@ php artisan queue:clear --queue=sync_odds
 
 php artisan queue:clear --queue=sync_push_stream_odds
 
-### /etc/supervisor.d/queue.conf
+### Configuration file for Websockets and Queue /etc/supervisor.d/queue.conf
 
 [program:queue]
 command=/usr/bin/php /var/www/html/artisan queue:work
@@ -109,7 +109,7 @@ autostart=true
 
 autorestart=true
 
-user=ec2-user-workers
+user=ec2-user
 
 [program:queue_sync_games]
 command=/usr/bin/php /var/www/html/artisan queue:work --queue=sync_games
@@ -120,7 +120,7 @@ autostart=true
 
 autorestart=true
 
-user=ec2-user-workers
+user=ec2-user
 
 [program:queue_sync_odds]
 command=/usr/bin/php /var/www/html/artisan queue:work --queue=sync_odds
@@ -131,7 +131,7 @@ autostart=true
 
 autorestart=true
 
-user=ec2-user-workers
+user=ec2-user
 
 [program:queue_sync_push_stream_odds]
 command=/usr/bin/php /var/www/html/artisan queue:work --queue=sync_push_stream_odds
@@ -142,7 +142,7 @@ autostart=true
 
 autorestart=true
 
-user=ec2-user-workers
+user=ec2-user
 
 [program:websockets]
 command=/usr/bin/php /var/www/html/artisan websockets:serve
@@ -153,7 +153,7 @@ autostart=true
 
 autorestart=true
 
-user=ec2-user-workers
+user=ec2-user
 
 ### Supervisor Commands
 
@@ -193,6 +193,13 @@ user=ec2-user-workers
 
 `sudo supervisorctl restart websockets
 
-### PM2 Process Manager for Push Stream API
+### NoHup for Push Stream API
 
-![image](https://github.com/guevarawebgraphics/oddsjam/assets/42199746/ed126b7b-0607-4da6-b5c4-9cbf3c3f25d4)
+This file `stream.sh` is located on our root directory.
+
+![image](https://github.com/guevarawebgraphics/oddsjam/assets/42199746/d74062bc-68c4-4306-99fd-28b34b8b096e)
+
+This will run the push stream api so that we can receive real time updates from OddsJam into Arbhunter.IO
+
+![image](https://github.com/guevarawebgraphics/oddsjam/assets/42199746/d851930e-6936-4c74-8dcd-618599449112)
+
