@@ -5,6 +5,7 @@
 ## Setup Online Betting
 
 Run php artisan migrate:fresh --seed
+
 Run `php artisan oddsjam_game_event_api:cron`
 
 ## Additional Dependencies
