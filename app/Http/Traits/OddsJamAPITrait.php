@@ -1261,11 +1261,15 @@ trait OddsJamAPITrait
             $matchedPoint = $matchedPoints->first();
 
             // Assuming bet_name is a direct attribute of your data items
-            $matchedOverBetName = $overCollection->where('selection_points', $matchedPoint)->pluck('bet_name')->first(); 
-            $matchedUnderBetName = $underCollection->where('selection_points', $matchedPoint)->pluck('bet_name')->first(); 
+            // $matchedOverBetName = $overCollection->where('selection_points', $matchedPoint)->pluck('bet_name')->first(); 
+            // $matchedUnderBetName = $underCollection->where('selection_points', $matchedPoint)->pluck('bet_name')->first(); 
+
 
             $matchedOverBestPrice = collect($queryA)->where('selection_points', $matchedPoint)->sortByDesc('max_bet_price')->first(); 
             $matchedUnderBestPrice = collect($queryB)->where('selection_points', $matchedPoint)->sortByDesc('max_bet_price')->first(); 
+
+            $matchedOverBetName =  $matchedOverBestPrice->bet_name ?? ''; 
+            $matchedUnderBetName = $matchedUnderBestPrice->bet_name ?? ''; 
 
             $matchedBetName = [
                 'over' => $matchedOverBetName,
