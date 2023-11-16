@@ -829,7 +829,7 @@ trait OddsJamAPITrait
         ->where('selection_line_b','!=',"")
         ->where('sportsbook_a', '!=' , "")
         ->where('sportsbook_b', '!=' , "")
-        ->where('is_below_one','<', 1)
+        // ->where('is_below_one','<', 1)
         ->select(
             'game_id as uid',
             'start_date',
@@ -965,7 +965,8 @@ trait OddsJamAPITrait
         }
     } 
 
-    public function gameIds(){
+    public function gameIds()
+    {
         $filePath = public_path('game.json');
 
         // Read the existing content
@@ -975,7 +976,8 @@ trait OddsJamAPITrait
         $gamesExists = json_decode($existingData, true);
     }
     
-    private function makeAPIRequest($url, $headers) {
+    private function makeAPIRequest($url, $headers)
+    {
         try {
             $curl = curl_init();
             curl_setopt($curl, CURLOPT_URL, $url);
@@ -1000,7 +1002,8 @@ trait OddsJamAPITrait
         }
     }  
 
-    public function getOdds($row) {
+    public function getOdds($row)
+    {
 
         $game_id = $row->uid;
 
@@ -1051,7 +1054,7 @@ trait OddsJamAPITrait
         ->first();
 
         if (strpos($game->selection, 'Draw') !== false || strpos($game->selection, 'No Goal') !== false ) {
-            
+
             $data = [
                 'best_odds_a'   =>  $best_odds_a,
                 'best_odds_b'   =>  $best_odds_b,
@@ -1157,8 +1160,13 @@ trait OddsJamAPITrait
             $sportsbooks_over_with_highest_bet_price = $highest_over_bet_price_records->pluck('sportsbook')->unique()->values()->all();
             $sportsbooks_under_with_highest_bet_price = $highest_under_bet_price_records->pluck('sportsbook')->unique()->values()->all();
 
-            $best_odds_a = convertAmericanToDecimalOdds($highest_over->max_bet_price) ?? 0.00;
-            $best_odds_b = convertAmericanToDecimalOdds($highest_under->max_bet_price) ?? 0.00;
+            // $best_odds_a = convertAmericanToDecimalOdds($highest_over->max_bet_price) ?? 0.00;
+            // $best_odds_b = convertAmericanToDecimalOdds($highest_under->max_bet_price) ?? 0.00;
+
+            \Log::info(json_encode($bet_name));
+
+            $best_odds_a = $bet_name ? convertAmericanToDecimalOdds($bet_name['over_best_price']) : 0.00;
+            $best_odds_b = $bet_name ? convertAmericanToDecimalOdds($bet_name['under_best_price']) : 0.00;
 
             $sportsbook_a = $this->sports_book_image($sportsbooks_over_with_highest_bet_price, $sports_book);
             $sportsbook_b = $this->sports_book_image($sportsbooks_under_with_highest_bet_price, $sports_book);
@@ -1185,7 +1193,8 @@ trait OddsJamAPITrait
         return $data;
     }
 
-    public function sports_book_image($arr, $sports_book) {
+    public function sports_book_image($arr, $sports_book)
+    {
         $imagesHTML = '';
         
         // Convert Eloquent Collection to array
@@ -1210,7 +1219,8 @@ trait OddsJamAPITrait
         return $imagesHTML;
     }
 
-    public function calculateProfit($oddsA, $oddsB) {
+    public function calculateProfit($oddsA, $oddsB)
+    {
         // Convert the input values to float
         $odds1 = floatval($oddsA);
         $odds2 = floatval($oddsB);
@@ -1230,7 +1240,8 @@ trait OddsJamAPITrait
         return number_format(abs($profitPercentage),2,'.',',');
     }
 
-    public function findMatchedBetName($queryA, $queryB) {
+    public function findMatchedBetName($queryA, $queryB)
+    {
         
         $overCollection = collect($queryA);
         $underCollection = collect($queryB);
@@ -1246,15 +1257,22 @@ trait OddsJamAPITrait
 
         // If there are matched points, find the corresponding bet_name for the matched selection_points
         if ($matchedPoints->isNotEmpty()) {
+            
             $matchedPoint = $matchedPoints->first();
 
             // Assuming bet_name is a direct attribute of your data items
-            $matchedOverBetName = $overCollection->where('selection_points', $matchedPoint)->pluck('bet_name')->first();
-            $matchedUnderBetName = $underCollection->where('selection_points', $matchedPoint)->pluck('bet_name')->first();
+            $matchedOverBetName = $overCollection->where('selection_points', $matchedPoint)->pluck('bet_name')->first(); 
+            $matchedUnderBetName = $underCollection->where('selection_points', $matchedPoint)->pluck('bet_name')->first(); 
+
+            $matchedOverBestPrice = collect($queryA)->where('selection_points', $matchedPoint)->sortByDesc('max_bet_price')->first(); 
+            $matchedUnderBestPrice = collect($queryB)->where('selection_points', $matchedPoint)->sortByDesc('max_bet_price')->first(); 
 
             $matchedBetName = [
                 'over' => $matchedOverBetName,
-                'under' => $matchedUnderBetName
+                'over_best_price'  =>  $matchedOverBestPrice->max_bet_price ?? 0.00,
+
+                'under' => $matchedUnderBetName,
+                'under_best_price'  =>  $matchedUnderBestPrice->max_bet_price ?? 0.00
             ];
         }
 
