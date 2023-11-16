@@ -36,8 +36,8 @@ class StoreGamesPerMarketJob implements ShouldQueue
     */
     public function handle($data)
     {
-
         $game_id = $data['game_id'];
+
         $market = $data['market'];
         
         $game = GameOdds::query()
@@ -70,6 +70,7 @@ class StoreGamesPerMarketJob implements ShouldQueue
         if ( !empty($game) ) {
 
             $odds_data = $this->getOdds($game);
+
             $games_per_market_stored = GamesPerMarket::create([
                 'name'  =>  $game->home_team . ' vs ' . $game->away_team,
                 'game_id'   =>  $game_id,

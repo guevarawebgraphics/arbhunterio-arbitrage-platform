@@ -64,12 +64,12 @@ Staging or Production
 1. php artisan migrate:fresh --seed
 2. Execute these commands on separate bash terminals.
 
--   php artisan optimize
--   php artisan queue:work
--   php artisan queue:work --queue=sync_games
--   php artisan queue:work --queue=sync_odds
--   php artisan queue:work --queue=push_stream_odds
--   php artisan websockets:serve
+    - php artisan optimize
+    - php artisan queue:work
+    - php artisan queue:work --queue=sync_games
+    - php artisan queue:work --queue=sync_odds
+    - php artisan queue:work --queue=push_stream_odds
+    - php artisan websockets:serve
 
 3. Execute this command to retrieve games and odds per game
 
@@ -207,4 +207,3 @@ This file `stream.sh` is located on our root directory.
 This will run the push stream api so that we can receive real time updates from OddsJam into Arbhunter.IO
 
 ![image](https://github.com/guevarawebgraphics/oddsjam/assets/42199746/d851930e-6936-4c74-8dcd-618599449112)
-

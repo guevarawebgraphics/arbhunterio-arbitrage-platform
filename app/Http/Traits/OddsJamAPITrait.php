@@ -1003,24 +1003,31 @@ trait OddsJamAPITrait
     public function getOdds($row) {
 
         $game_id = $row->uid;
+
         $bet_type = $row->bet_type;
         
         $home_team = $row->home_team;
+
         $away_team = $row->away_team;
 
         $best_odds_a = 0.00;
+
         $best_odds_b = 0.00;
 
-        $selection_line_a = '';
-        $selection_line_b = '';
+        $selection_line_a = ''; 
 
-        $sportsbook_a = '';
-        $sportsbook_b = '';
+        $selection_line_b = ''; 
+
+        $sportsbook_a = ''; 
+
+        $sportsbook_b = ''; 
 
         $sports_book = getSportsBook();
+
         $counter = 0;
 
         $best_over_odds_query = null;
+        
         $best_under_odds_query = null;
         
         $search_raw_a = "";
@@ -1037,13 +1044,14 @@ trait OddsJamAPITrait
             DB::raw("GROUP_CONCAT(DISTINCT(selection) SEPARATOR ',') AS selection"),
             DB::raw("GROUP_CONCAT(DISTINCT(selection_line) SEPARATOR ',') AS selection_line")
         )
-        ->where('game_id', $game_id)
-        ->where('bet_type', $bet_type)
-        ->whereNotIn('type',    ["locked"])
-        ->groupByRaw('game_id, bet_type')
+        ->where( 'game_id' , $game_id )
+        ->where( 'bet_type' , $bet_type )
+        ->whereNotIn( 'type' , ["locked"] )
+        ->groupByRaw( 'game_id, bet_type' )
         ->first();
 
         if (strpos($game->selection, 'Draw') !== false || strpos($game->selection, 'No Goal') !== false ) {
+            
             $data = [
                 'best_odds_a'   =>  $best_odds_a,
                 'best_odds_b'   =>  $best_odds_b,
@@ -1056,24 +1064,28 @@ trait OddsJamAPITrait
             return $data;
 
         } else if (strpos($game->selection_line, 'over') !== false || strpos($game->selection_line, 'under') !== false ) {
+
             $search_raw_a = "go.selection_line = 'over'";
             $search_raw_b = "go.selection_line = 'under'";
             $latest_raw_a = "x.selection_line = 'over'";
             $latest_raw_b = "x.selection_line = 'under'";
 
-        } else if(strpos($game->selection, $home_team ) !== false || strpos($game->selection,  $away_team) !== false ){
+        } else if(strpos($game->selection, $home_team ) !== false || strpos($game->selection,  $away_team) !== false ) {
+
             $search_raw_a = "go.selection LIKE '%".$home_team."%'";
             $search_raw_b = "go.selection LIKE '%".$away_team."%'";
             $latest_raw_a = "x.selection LIKE '%".$home_team."%'";
             $latest_raw_b = "x.selection LIKE '%".$away_team."%'";
 
         } else if (strpos($game->selection, 'yes') !== false || strpos($game->selection, 'no') !== false ) {
+
             $search_raw_a = "go.selection LIKE '%yes%'";
             $search_raw_b = "go.selection LIKE '%no%'";
             $latest_raw_a = "x.selection LIKE '%yes%'";
             $latest_raw_b = "x.selection LIKE '%no%'";
 
         } else if (strpos($game->selection, 'odd') !== false || strpos($game->selection, 'even') !== false ) { 
+
             $search_raw_a = "go.selection LIKE '%odd%'";
             $search_raw_b = "go.selection LIKE '%even%'";
             $latest_raw_a = "x.selection LIKE '%odd%'";
@@ -1095,6 +1107,8 @@ trait OddsJamAPITrait
             ->whereRaw($search_raw_a)
             ->where('go.game_id', $game_id)
             ->where('go.bet_type', $bet_type)
+            ->where('go.is_main', 1)
+            ->where('go.is_live', 0)
             ->whereNotIn('go.type', ["locked"])
             ->groupBy('go.sportsbook')
             ->get();
@@ -1109,7 +1123,6 @@ trait OddsJamAPITrait
 
             $notIn = $best_over_odds_query->where('max_bet_price', $notInMaxBetPrice)->pluck('sportsbook')->unique()->values()->all();
 
-
             $best_under_odds_query = DB::table('gameodds as go')
             ->select(
                 'go.bet_type', 
@@ -1122,6 +1135,8 @@ trait OddsJamAPITrait
             ->whereRaw($search_raw_b)
             ->where('go.game_id', $game_id)
             ->where('go.bet_type', $bet_type)
+            ->where('go.is_main', 1 )
+            ->where('go.is_live', 0 )
             ->whereNotIn('go.type', ["locked"])
             ->whereNotIn('go.sportsbook', $notIn )
             ->groupBy('go.sportsbook')

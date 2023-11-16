@@ -510,6 +510,7 @@ class APIController extends Controller
             'g.start_date',
             'g.home_team',
             'g.away_team',
+            'go.is_live',
             'go.bet_type',
             'g.sport',
             'g.league'
@@ -519,6 +520,7 @@ class APIController extends Controller
             'g.start_date',
             'g.home_team',
             'g.away_team',
+            'go.is_live',
             'go.bet_type',
             'g.sport',
             'g.league'
