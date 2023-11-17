@@ -431,68 +431,95 @@ class APIController extends Controller
     }
 
     public function testApi() {
-       $gamesArray = GameOdds::query()
-            ->withTrashed()
-            ->from('gameodds as go')
-            ->leftJoin('games as g', 'g.uid', '=', 'go.game_id')
-            
-            // Over and Under Best Odds
-            ->leftJoinSub(
-                GameOdds::select('game_id', 'bet_type',
-                    \DB::raw('CASE 
-                        WHEN MAX(bet_price) > 0 THEN (MAX(bet_price) / 100) + 1
-                        ELSE (100 / ABS(MAX(bet_price))) + 1
-                    END as best_over_odds'))
-                    ->where('selection_line', 'over')
-                    ->groupBy('game_id', 'bet_type'),
-                'over_odds',
-                function($join) {
-                    $join->on('over_odds.game_id', '=', 'g.uid')
-                         ->on('over_odds.bet_type', '=', 'go.bet_type');
-                }
-            )
-            ->leftJoinSub(
-                GameOdds::select('game_id', 'bet_type',
-                    \DB::raw('CASE 
-                        WHEN MAX(bet_price) > 0 THEN (MAX(bet_price) / 100) + 1
-                        ELSE (100 / ABS(MAX(bet_price))) + 1
-                    END as best_under_odds'))
-                    ->where('selection_line', 'under')
-                    ->groupBy('game_id', 'bet_type'),
-                'under_odds',
-                function($join) {
-                    $join->on('under_odds.game_id', '=', 'g.uid')
-                         ->on('under_odds.bet_type', '=', 'go.bet_type');
-                }
-            )
-            ->where('go.is_live', 0)
+        
+        $bet_type = "Puck Line";
+        $game_id = "10120-21344-2023-11-17";
+
+        $home_team = "Winnipeg Jets";
+        $away_team = "Buffalo Sabres";
+
+        $search_raw_a = "go.selection LIKE '%".$home_team."%'";
+        $search_raw_b = "go.selection LIKE '%".$away_team."%'";
+        $search_raw_x = "x.selection LIKE '%".$home_team."%'";
+        $search_raw_y = "y.selection LIKE '%".$away_team."%'";
+
+        $latestPricesSubqueryA = DB::table('gameodds as x')
             ->select(
-                'g.uid',
-                'g.start_date',
-                'g.home_team',
-                'g.away_team',
-                'go.bet_type',
-                'g.sport',
-                'g.league',
-
-                'over_odds.best_over_odds',
-                'under_odds.best_under_odds'
+                'x.game_id', 
+                'x.bet_type', 
+                'x.sportsbook', 
+                DB::raw('MAX(x.timestamp) as latest_timestamp'),
+                DB::raw('(SELECT x.bet_price FROM gameodds WHERE game_id = x.game_id AND bet_type = x.bet_type AND sportsbook = x.sportsbook ORDER BY timestamp DESC LIMIT 1) as latest_bet_price')
             )
-            ->groupBy(
-                'g.uid',
-                'g.start_date',
-                'g.home_team',
-                'g.away_team',
-                'go.bet_type',
-                'g.sport',
-                'g.league',
+            ->where('x.is_live', 0)
+            ->whereNotIn('x.type', ['locked'])
+            ->whereRaw($search_raw_x)
+            ->groupBy('x.game_id', 'x.bet_type', 'x.sportsbook');
 
-                'over_odds.best_over_odds',
-                'under_odds.best_under_odds'
+        $latestPricesSubqueryB = DB::table('gameodds as y')
+            ->select(
+                'y.game_id', 
+                'y.bet_type', 
+                'y.sportsbook', 
+                DB::raw('MAX(y.timestamp) as latest_timestamp'),
+                DB::raw('(SELECT y.bet_price FROM gameodds WHERE game_id = y.game_id AND bet_type = y.bet_type AND sportsbook = y.sportsbook ORDER BY timestamp DESC LIMIT 1) as latest_bet_price')
+            )
+            ->where('y.is_live', 0)
+            ->whereNotIn('y.type', ['locked'])
+            ->whereRaw($search_raw_y)
+            ->groupBy('y.game_id', 'y.bet_type', 'y.sportsbook');
+                
+        $queryA  =  DB::table('gameodds as go')
+            ->joinSub($latestPricesSubqueryA, 'latest_prices', function ($join) {
+                $join->on('go.game_id', '=', 'latest_prices.game_id')
+                    ->on('go.bet_type', '=', 'latest_prices.bet_type')
+                    ->on('go.sportsbook', '=', 'latest_prices.sportsbook');
+            })
+            ->select(
+                'go.bet_type', 
+                'go.selection_points', 
+                'go.selection_line', 
+                'go.bet_name', 
+                'go.sportsbook',
+                'latest_prices.latest_bet_price'
+            )
+            ->whereRaw($search_raw_a)
+            ->where('go.game_id', $game_id)
+            ->where('go.bet_type', $bet_type)
+            ->where('go.is_live', 0)
+            ->whereNotIn('go.type', ['locked'])
+            ->groupBy('go.sportsbook')
+            ->get();
 
-            )->paginate(10);
+        $queryB  = DB::table('gameodds as go')
+            ->joinSub($latestPricesSubqueryB, 'latest_prices', function ($join) {
+                $join->on('go.game_id', '=', 'latest_prices.game_id')
+                    ->on('go.bet_type', '=', 'latest_prices.bet_type')
+                    ->on('go.sportsbook', '=', 'latest_prices.sportsbook');
+            })
+            ->select(
+                'go.bet_type', 
+                'go.selection_points', 
+                'go.selection_line', 
+                'go.bet_name', 
+                'go.sportsbook',
+                'latest_prices.latest_bet_price'
+            )
+            ->whereRaw($search_raw_a)
+            ->where('go.game_id', $game_id)
+            ->where('go.bet_type', $bet_type)
+            ->where('go.is_live', 0)
+            ->whereNotIn('go.type', ['locked'])
+            ->groupBy('go.sportsbook')
+            ->get();
 
-        return $gamesArray;
+
+        $query = [
+            'queryA'    =>  $queryA,
+            'queryB'    =>  $queryB
+        ];
+
+        return $query;
     }
 
     public function getGameInfo($id, $type) {

@@ -20,7 +20,9 @@ class SendRequestFetchOddsJob implements ShouldQueue
      * Create a new job instance.
      *
      * @return void
-     */
+     * 
+    */
+
     public function __construct($data)
     {
         $this->data = $data;
@@ -32,6 +34,7 @@ class SendRequestFetchOddsJob implements ShouldQueue
      * @return void
      *  
     */
+
     public function handle()
     {
         $baseURL = url('api/fetch/odds');
@@ -39,7 +42,6 @@ class SendRequestFetchOddsJob implements ShouldQueue
         $game =  $this->data['game'];
         $sportsbook = $this->data['sportsbook'];
 
-        
         $data = [
             'game' => $game,
             'sportsbook' => $sportsbook,
@@ -56,8 +58,5 @@ class SendRequestFetchOddsJob implements ShouldQueue
         ]);
         $response = curl_exec($ch);
         curl_close($ch);
-
-
-        
     }
 }

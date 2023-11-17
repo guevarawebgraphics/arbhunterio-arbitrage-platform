@@ -1035,6 +1035,8 @@ trait OddsJamAPITrait
         
         $search_raw_a = "";
         $search_raw_b = "";
+        $search_raw_x = "";
+        $search_raw_y = "";
         $latest_raw_a = "";
         $latest_raw_b = "";
 
@@ -1070,13 +1072,22 @@ trait OddsJamAPITrait
 
             $search_raw_a = "go.selection_line = 'over'";
             $search_raw_b = "go.selection_line = 'under'";
+
+            $search_raw_x = "x.selection_line = 'over'";
+            $search_raw_y = "y.selection_line = 'under'";
+
             $latest_raw_a = "x.selection_line = 'over'";
             $latest_raw_b = "x.selection_line = 'under'";
+
 
         } else if(strpos($game->selection, $home_team ) !== false || strpos($game->selection,  $away_team) !== false ) {
 
             $search_raw_a = "go.selection LIKE '%".$home_team."%'";
             $search_raw_b = "go.selection LIKE '%".$away_team."%'";
+
+            $search_raw_x = "x.selection LIKE '%".$home_team."%'";
+            $search_raw_y = "y.selection LIKE '%".$away_team."%'";
+            
             $latest_raw_a = "x.selection LIKE '%".$home_team."%'";
             $latest_raw_b = "x.selection LIKE '%".$away_team."%'";
 
@@ -1084,6 +1095,10 @@ trait OddsJamAPITrait
 
             $search_raw_a = "go.selection LIKE '%yes%'";
             $search_raw_b = "go.selection LIKE '%no%'";
+
+            $search_raw_x = "x.selection LIKE '%yes%'";
+            $search_raw_y = "y.selection LIKE '%no%'";
+
             $latest_raw_a = "x.selection LIKE '%yes%'";
             $latest_raw_b = "x.selection LIKE '%no%'";
 
@@ -1091,6 +1106,10 @@ trait OddsJamAPITrait
 
             $search_raw_a = "go.selection LIKE '%odd%'";
             $search_raw_b = "go.selection LIKE '%even%'";
+
+            $search_raw_x = "x.selection LIKE '%odd%'";
+            $search_raw_y = "y.selection LIKE '%even%'";
+
             $latest_raw_a = "x.selection LIKE '%odd%'";
             $latest_raw_b = "x.selection LIKE '%even%'";
 
@@ -1106,15 +1125,52 @@ trait OddsJamAPITrait
                 'go.bet_name', 
                 'go.sportsbook',
                 DB::raw('MAX(go.bet_price) as max_bet_price')
+                // DB::raw('(SELECT x.bet_price FROM gameodds AS x WHERE x.game_id = go.game_id AND x.bet_type = go.bet_type ORDER BY timestamp DESC ) as max_bet_price')
             )
             ->whereRaw($search_raw_a)
             ->where('go.game_id', $game_id)
             ->where('go.bet_type', $bet_type)
-            ->where('go.is_main', 1)
+            // ->where('go.is_main', 1)
             ->where('go.is_live', 0)
             ->whereNotIn('go.type', ["locked"])
             ->groupBy('go.sportsbook')
             ->get();
+
+                            
+            // $latestPricesSubqueryA = DB::table('gameodds as x')
+            //     ->select(
+            //         'x.game_id', 
+            //         'x.bet_type', 
+            //         'x.sportsbook', 
+            //         DB::raw('MAX(x.timestamp) as latest_timestamp'),
+            //         DB::raw('(SELECT x.bet_price FROM gameodds WHERE game_id = x.game_id AND bet_type = x.bet_type AND sportsbook = x.sportsbook ORDER BY timestamp DESC LIMIT 1) as max_bet_price')
+            //     )
+            //     ->where('x.is_live', 0)
+            //     ->whereNotIn('x.type', ['locked'])
+            //     ->whereRaw($search_raw_x)
+            //     ->groupBy('x.game_id', 'x.bet_type', 'x.sportsbook');
+
+            // $best_over_odds_query = DB::table('gameodds as go')
+            // ->joinSub($latestPricesSubqueryA, 'max_bet_prices', function ($join) {
+            //     $join->on('go.game_id', '=', 'max_bet_prices.game_id')
+            //         ->on('go.bet_type', '=', 'max_bet_prices.bet_type')
+            //         ->on('go.sportsbook', '=', 'max_bet_prices.sportsbook');
+            // })
+            // ->select(
+            //     'go.bet_type', 
+            //     'go.selection_points', 
+            //     'go.selection_line', 
+            //     'go.bet_name', 
+            //     'go.sportsbook',
+            //     'max_bet_prices.max_bet_price'
+            // )
+            // ->whereRaw($search_raw_a)
+            // ->where('go.game_id', $game_id)
+            // ->where('go.bet_type', $bet_type)
+            // ->where('go.is_live', 0)
+            // ->whereNotIn('go.type', ['locked'])
+            // ->groupBy('go.sportsbook')
+            // ->get();
 
             $notInQuery = $best_over_odds_query->sortByDesc('max_bet_price')->first();
 
@@ -1126,6 +1182,46 @@ trait OddsJamAPITrait
 
             $notIn = $best_over_odds_query->where('max_bet_price', $notInMaxBetPrice)->pluck('sportsbook')->unique()->values()->all();
 
+
+            // $latestPricesSubqueryB = DB::table('gameodds as y')
+            //     ->select(
+            //         'y.game_id', 
+            //         'y.bet_type', 
+            //         'y.sportsbook', 
+            //         DB::raw('MAX(y.timestamp) as latest_timestamp'),
+            //         DB::raw('(SELECT y.bet_price FROM gameodds WHERE game_id = y.game_id AND bet_type = y.bet_type AND sportsbook = y.sportsbook ORDER BY timestamp DESC LIMIT 1) as max_bet_price')
+            //     )
+            //     ->where('y.is_live', 0)
+            //     ->whereNotIn('y.type', ['locked'])
+            //     ->whereNotIn('y.sportsbook', $notIn )
+            //     ->whereRaw($search_raw_y)
+            //     ->groupBy('y.game_id', 'y.bet_type', 'y.sportsbook');
+
+            // $best_under_odds_query = DB::table('gameodds as go')
+            // ->joinSub($latestPricesSubqueryB, 'max_bet_prices', function ($join) {
+            //     $join->on('go.game_id', '=', 'max_bet_prices.game_id')
+            //         ->on('go.bet_type', '=', 'max_bet_prices.bet_type')
+            //         ->on('go.sportsbook', '=', 'max_bet_prices.sportsbook');
+            // })
+            // ->select(
+            //     'go.bet_type', 
+            //     'go.selection_points', 
+            //     'go.selection_line', 
+            //     'go.bet_name', 
+            //     'go.sportsbook',
+            //     'max_bet_prices.max_bet_price'
+            // )
+            // ->whereRaw($search_raw_a)
+            // ->where('go.game_id', $game_id)
+            // ->where('go.bet_type', $bet_type)
+            // ->where('go.is_live', 0)
+            // ->whereNotIn('go.type', ['locked'])
+            // ->whereNotIn('go.sportsbook', $notIn )
+            // ->groupBy('go.sportsbook')
+            // ->get();
+
+                    
+
             $best_under_odds_query = DB::table('gameodds as go')
             ->select(
                 'go.bet_type', 
@@ -1134,11 +1230,12 @@ trait OddsJamAPITrait
                 'go.bet_name', 
                 'go.sportsbook',
                 DB::raw('MAX(go.bet_price) as max_bet_price')
+                // DB::raw('(SELECT x.bet_price FROM gameodds AS x WHERE x.game_id = go.game_id AND x.bet_type = go.bet_type ORDER BY timestamp DESC ) as max_bet_price')
             )
             ->whereRaw($search_raw_b)
             ->where('go.game_id', $game_id)
             ->where('go.bet_type', $bet_type)
-            ->where('go.is_main', 1 )
+            // ->where('go.is_main', 1 )
             ->where('go.is_live', 0 )
             ->whereNotIn('go.type', ["locked"])
             ->whereNotIn('go.sportsbook', $notIn )
@@ -1162,8 +1259,6 @@ trait OddsJamAPITrait
 
             // $best_odds_a = convertAmericanToDecimalOdds($highest_over->max_bet_price) ?? 0.00;
             // $best_odds_b = convertAmericanToDecimalOdds($highest_under->max_bet_price) ?? 0.00;
-
-            \Log::info(json_encode($bet_name));
 
             $best_odds_a = $bet_name ? convertAmericanToDecimalOdds($bet_name['over_best_price']) : 0.00;
             $best_odds_b = $bet_name ? convertAmericanToDecimalOdds($bet_name['under_best_price']) : 0.00;
@@ -1189,6 +1284,8 @@ trait OddsJamAPITrait
             'best_under_odds_query'  => $best_under_odds_query,
             'is_below_one' => ($best_odds_a > 0 && $best_odds_b > 0) ? (1 / $best_odds_a) + (1 / $best_odds_b) : 0
         ];
+
+        \Log::info('GAMEODDS ' . json_encode($data));
 
         return $data;
     }
@@ -1264,18 +1361,20 @@ trait OddsJamAPITrait
             // $matchedOverBetName = $overCollection->where('selection_points', $matchedPoint)->pluck('bet_name')->first(); 
             // $matchedUnderBetName = $underCollection->where('selection_points', $matchedPoint)->pluck('bet_name')->first(); 
 
-
             $matchedOverBestPrice = collect($queryA)->where('selection_points', $matchedPoint)->sortByDesc('max_bet_price')->first(); 
             $matchedUnderBestPrice = collect($queryB)->where('selection_points', $matchedPoint)->sortByDesc('max_bet_price')->first(); 
 
-            $matchedOverBetName =  $matchedOverBestPrice->bet_name ?? ''; 
-            $matchedUnderBetName = $matchedUnderBestPrice->bet_name ?? ''; 
+            // $matchedOverBetName =  $matchedOverBestPrice->bet_name ?? ''; 
+            // $matchedUnderBetName = $matchedUnderBestPrice->bet_name ?? ''; 
+
+            $matchedOverBetName =  collect($queryA)->sortByDesc('max_bet_price')->first(); 
+            $matchedUnderBetName = collect($queryB)->sortByDesc('max_bet_price')->first(); 
 
             $matchedBetName = [
-                'over' => $matchedOverBetName,
+                'over' => $matchedOverBestPrice->bet_name ?? '',
                 'over_best_price'  =>  $matchedOverBestPrice->max_bet_price ?? 0.00,
 
-                'under' => $matchedUnderBetName,
+                'under' => $matchedUnderBestPrice->bet_name ?? '',
                 'under_best_price'  =>  $matchedUnderBestPrice->max_bet_price ?? 0.00
             ];
         }
