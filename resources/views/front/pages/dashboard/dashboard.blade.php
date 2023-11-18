@@ -773,6 +773,10 @@
         var gameId = $(this).attr('data-id');
         var betType = $(this).attr('data-bet_type');
         var slug = $(this).attr('data-slug');
+        
+        
+        $("#view-modal-body-over").html(' ');
+        $("#view-modal-body-under").html(' ');
 
         $("#view-modal-body-over").addClass('placeholder-content');
         $("#view-modal-body-under").addClass('placeholder-content');
