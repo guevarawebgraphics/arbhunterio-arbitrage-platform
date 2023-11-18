@@ -762,6 +762,7 @@
             </td>
         </tr>`;
 
+    
     $(document).on('click','.btn--view-modal', function () {
 
         $(this).html(`<svg width="20" height="20" fill="currentColor" class="mr-2 animate-spin" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
@@ -773,12 +774,17 @@
         var betType = $(this).attr('data-bet_type');
         var slug = $(this).attr('data-slug');
 
+        $("#view-modal-body-over").addClass('placeholder-content');
+        $("#view-modal-body-under").addClass('placeholder-content');
+
         $.ajax({
             url: "{{ url('api/game') }}" + "/" + gameId + "/bet_type/" + betType,
             method: 'GET',
         success: function(response) {
             $("#viewModal-title").html(response.game.home_team + ' vs ' + response.game.away_team);
             $("#viewModal-market").html(response.game.bet_type);
+
+            console.log(response);
 
             $( slug ).html(`<svg class="w-6 h-6 text-gray-800 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 20">
                                     <path d="M16 14V2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v15a3 3 0 0 0 3 3h12a1 1 0 0 0 0-2h-1v-2a2 2 0 0 0 2-2ZM4 2h2v12H4V2Zm8 16H3a1 1 0 0 1 0-2h9v2Z"></path>
@@ -856,6 +862,9 @@
                     }
                     under_html += `</tr>`;
                 });
+
+                $("#view-modal-body-over").removeClass('placeholder-content');
+                $("#view-modal-body-under").removeClass('placeholder-content');
 
                 $("#view-modal-body-over").html(over_html);
                 $("#view-modal-body-under").html(under_html);
