@@ -25,6 +25,8 @@ class GamesTable extends Component
 
     private $games = [];
 
+    private $total_counts = [];
+
     public $page = 1;
 
     // protected $updatesQueryString = ['page'];
@@ -43,21 +45,26 @@ class GamesTable extends Component
         $this->is_hidden = request()->query('is_hidden', 0);
 
         $input = [];
+
         $input['is_live'] = $this->is_live;
+
         $input['is_hidden'] = $this->is_hidden;
+
         $this->games = $this->getGamesPerMarket($input);
+
+        $this->total_counts = $this->getTotalCounts();
     }
 
     public function render()
     {
         $games = $this->games;
 
-        $total_counts = $this->getTotalCounts();
+        $total_counts =  $this->total_counts;
 
         $pre_match_count = $total_counts['pre_match_count'];
 
         $live_count = $total_counts['live_count'];
-        
+
         $hidden_count = $total_counts['hidden_count'];
 
         return view('livewire.games-table', ['games' => $games, 'pre_match_count'   =>  $pre_match_count, 'live_count'  =>  $live_count, 'hidden_count' =>  $hidden_count ]);
@@ -67,18 +74,31 @@ class GamesTable extends Component
     {
         $this->mount();
 
+        $total_counts =  $this->total_counts;
+
+        $pre_match_count = $total_counts['pre_match_count'];
+
+        $live_count = $total_counts['live_count'];
+
+        $hidden_count = $total_counts['hidden_count'];
+
+        $this->emit('updateCounts', $pre_match_count, $live_count, $hidden_count);
+
         \Log::info( 'Data Table Refreshed: ' . date('H:i a',strtotime( now() )) );
     }
     
     public function updatedPage($value)
     {
         $this->is_live = request()->query('is_live', 0);
+
         $this->is_hidden = request()->query('is_hidden', 0);
 
         $input = [];
 
         $input['is_live'] = $this->is_live;
+
         $input['is_hidden'] = $this->is_hidden;
+
         $this->games = $this->getGamesPerMarket($input);
     }
 

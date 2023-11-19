@@ -43,19 +43,19 @@
                             <div class="page-offset-x mx-auto w-full lg:max-w-page">
                                 <ul class="no-scrollbar flex gap-4 flex-wrap" role="tablist">
                                     <li role="tab">
-                                        <a aria-current="page" class="bg-brand-gray-4 border border-gray-500 text-white hover:bg-brand-gray-3 block p-2 px-3 rounded-[2.5rem] text-sm" href="{{url('/dashboard')}}">
+                                        <a aria-current="page" class="bg-brand-gray-4 border border-gray-500 text-white hover:bg-brand-gray-3 block p-2 px-3 rounded-[2.5rem] text-sm {{ !isset($_GET['is_live']) &&  !isset($_GET['is_hidden']) ? 'active' : '' }}" href="{{url('/dashboard')}}">
                                             Pre-match
                                             <span class="text-inherit hidden rounded-full py-0.5 px-2.5 text-xs leading-4 dark:bg-brand-blue dark:text-brand-gray-1 md:inline-block" id="pre-match">--</span>
                                         </a>
                                     </li>
                                     <li role="tab">
-                                        <a class="bg-transparent border border-gray-500 text-white hover:bg-brand-gray-2 block p-2 px-3 rounded-[2.5rem] text-sm" href="{{url('/dashboard?is_live=1')}}">
+                                        <a class="bg-transparent border border-gray-500 text-white hover:bg-brand-gray-2 block p-2 px-3 rounded-[2.5rem] text-sm {{ isset($_GET['is_live']) && $_GET['is_live'] == 1 ? 'active' : '' }}" href="{{url('/dashboard?is_live=1')}}">
                                             Live (in-play)
                                             <span class="text-inherit hidden rounded-full py-0.5 px-2.5 text-xs leading-4 dark:bg-brand-blue dark:text-brand-gray-1 md:inline-block" id="live-count">--</span>
                                         </a>
                                     </li>
                                     <li role="tab">
-                                        <a class="bg-transparent border border-gray-500 hover:bg-brand-gray-2 block p-2 px-3 rounded-[2.5rem] text-sm text-white" href="{{url('/dashboard?is_hidden=1')}}">
+                                        <a class="bg-transparent border border-gray-500 hover:bg-brand-gray-2 block p-2 px-3 rounded-[2.5rem] text-sm text-white {{ isset($_GET['is_hidden']) && $_GET['is_hidden'] == 1 ? 'active' : '' }}" href="{{url('/dashboard?is_hidden=1')}}">
                                             Hidden Bets
                                             <span class="text-inherit hidden rounded-full py-0.5 px-2.5 text-xs leading-4 dark:bg-brand-blue dark:text-brand-gray-1 md:inline-block" id="hidden-count">--</span>
                                         </a>
@@ -901,7 +901,6 @@
             method: 'GET',
             success: function(response) {
                 if (response.status) {
-                    alert(response.message);
                     Livewire.emit('refreshTable');
                 } else {
                     alert('Something went wrong..');
