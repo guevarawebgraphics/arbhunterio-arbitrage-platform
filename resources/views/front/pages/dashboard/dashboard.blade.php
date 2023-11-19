@@ -51,11 +51,13 @@
                                     <li role="tab">
                                         <a class="bg-transparent border border-gray-500 text-white hover:bg-brand-gray-2 block p-2 px-3 rounded-[2.5rem] text-sm" href="{{url('/dashboard?is_live=1')}}">
                                             Live (in-play)
+                                            <span class="text-inherit hidden rounded-full py-0.5 px-2.5 text-xs leading-4 dark:bg-brand-blue dark:text-brand-gray-1 md:inline-block" id="live-count">--</span>
                                         </a>
                                     </li>
                                     <li role="tab">
-                                        <a class="bg-transparent border border-gray-500 hover:bg-brand-gray-2 block p-2 px-3 rounded-[2.5rem] text-sm text-white" href="#">
+                                        <a class="bg-transparent border border-gray-500 hover:bg-brand-gray-2 block p-2 px-3 rounded-[2.5rem] text-sm text-white" href="{{url('/dashboard?is_hidden=1')}}">
                                             Hidden Bets
+                                            <span class="text-inherit hidden rounded-full py-0.5 px-2.5 text-xs leading-4 dark:bg-brand-blue dark:text-brand-gray-1 md:inline-block" id="hidden-count">--</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -880,6 +882,33 @@
             },
             error: function() {
 
+            }
+        });
+
+    });
+
+    $(document).on('click','.btn--hidden-bet', function () {
+        var gameId = $(this).attr('data-id');
+
+        var betType = $(this).attr('data-bet_type');
+
+        var slug = $(this).attr('data-slug');
+
+        var status = $(this).attr('data-is_hidden');
+
+        $.ajax({
+            url: "{{ url('api/game') }}" + "/" + gameId + "/hidden/" + betType + "/status/" + status,
+            method: 'GET',
+            success: function(response) {
+                if (response.status) {
+                    alert(response.message);
+                    Livewire.emit('refreshTable');
+                } else {
+                    alert('Something went wrong..');
+                }
+            },
+            error: function() {
+                alert('Something went wrong..');
             }
         });
 

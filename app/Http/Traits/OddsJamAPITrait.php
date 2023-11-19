@@ -822,7 +822,7 @@ trait OddsJamAPITrait
     public function getGamesPerMarket($data) {
 
         $is_live = isset($data['is_live']) ? $data['is_live'] : 0;
-
+        $is_hidden = isset($data['is_hidden']) ? $data['is_hidden'] : 0;
         $gamesArray = GamesPerMarket::where('is_live', $is_live )
         ->where('profit_percentage','>=', 0)
         ->whereNotIn('selection_line_a', ['Draw','No Goal'])
@@ -830,6 +830,7 @@ trait OddsJamAPITrait
         ->where('selection_line_b','!=',"")
         ->where('sportsbook_a', '!=' , "")
         ->where('sportsbook_b', '!=' , "")
+        ->where('is_hidden', $is_hidden)
         // ->where('is_below_one','<', 1)
         ->select(
             'game_id as uid',
@@ -845,7 +846,8 @@ trait OddsJamAPITrait
             'selection_line_b',
             'profit_percentage',
             'sportsbook_a',
-            'sportsbook_b'
+            'sportsbook_b',
+            'is_hidden'
         )
         ->groupBy(
             'game_id',
@@ -861,6 +863,47 @@ trait OddsJamAPITrait
 
         return $gamesArray;
 
+    }
+
+    public function getTotalCounts() {
+        
+        $pre_match_count = GamesPerMarket::where('is_live', 0 )
+        ->where('profit_percentage','>=', 0)
+        ->whereNotIn('selection_line_a', ['Draw','No Goal'])
+        ->where('selection_line_a','!=',"")
+        ->where('selection_line_b','!=',"")
+        ->where('sportsbook_a', '!=' , "")
+        ->where('sportsbook_b', '!=' , "")
+        ->where('is_hidden', 0 )
+        ->count();
+
+        $live_count = GamesPerMarket::where('is_live', 1 )
+        ->where('profit_percentage','>=', 0)
+        ->whereNotIn('selection_line_a', ['Draw','No Goal'])
+        ->where('selection_line_a','!=',"")
+        ->where('selection_line_b','!=',"")
+        ->where('sportsbook_a', '!=' , "")
+        ->where('sportsbook_b', '!=' , "")
+        ->where('is_hidden', 0 )
+        ->count();
+
+         $hidden_count = GamesPerMarket::where('is_live', 0 )
+        ->where('profit_percentage','>=', 0)
+        ->whereNotIn('selection_line_a', ['Draw','No Goal'])
+        ->where('selection_line_a','!=',"")
+        ->where('selection_line_b','!=',"")
+        ->where('sportsbook_a', '!=' , "")
+        ->where('sportsbook_b', '!=' , "")
+        ->where('is_hidden', 1 )
+        ->count();
+
+        $data = [
+            'pre_match_count'  =>   $pre_match_count,
+            'live_count'    => $live_count,
+            'hidden_count' => $hidden_count
+        ];
+
+        return $data;
     }
 
     public function createGamesPerMarket($gameId, $marketArray) {

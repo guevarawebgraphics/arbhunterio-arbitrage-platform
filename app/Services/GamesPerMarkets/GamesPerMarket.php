@@ -60,6 +60,9 @@ class GamesPerMarket extends Model
         'sportsbook_b',
 
         'is_below_one',
+
+        'is_hidden',
+
         'is_active'
     ];
 }

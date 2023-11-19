@@ -596,5 +596,19 @@ class APIController extends Controller
         return $data;
 
     }
+
+    public function updateGameHidden($gameId, $betType, $status){
+        
+        $games_per_market = GamesPerMarket::where('game_id', $gameId)->where('bet_type', $betType)->update([
+            'is_hidden' =>  $status
+        ]);
+
+        $response = [
+            'status'    =>  true,
+            'message'   =>  'Successfully hidden!'
+        ];
+
+        return $response;
+    }
     
 }

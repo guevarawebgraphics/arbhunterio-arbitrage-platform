@@ -56,3 +56,5 @@ Route::get('/odds-push-streams', '\App\Http\Controllers\Api\APIController@oddsPu
 Route::get('/test-api', '\App\Http\Controllers\Api\APIController@testApi')->name('test.api');
 
 Route::get('/game/{id}/bet_type/{bet_type}','\App\Http\Controllers\Api\APIController@getGameInfo')->name('api.games.info');
+
+Route::get('/game/{gameId}/hidden/{betType}/status/{statusId}','\App\Http\Controllers\Api\APIController@updateGameHidden')->name('api.game.hidden.status');
