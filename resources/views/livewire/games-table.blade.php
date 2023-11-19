@@ -120,16 +120,15 @@
     @if( !empty(  $games ) )
     <!-- Livewire pagination links -->
     <div wire:loading.remove>
+
         {{ $games->render() }}
+
+        
     </div>
     @endif
 
-    {{-- <div wire:loading class="flex justify-center items-center">
-        <center> <p class="text-white">
-            <img src="{{url('public/images/loading2.gif')}}" style="width:24px; height: 24px;"/>
-            Loading content..
-           </p>
-        </center>
-    </div> --}}
-
 </div>
+
+<script>
+    document.getElementById("pre-match").innerHTML = "{{ $games->total() }}";
+</script>

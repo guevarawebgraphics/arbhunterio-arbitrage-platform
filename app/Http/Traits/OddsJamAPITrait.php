@@ -829,7 +829,7 @@ trait OddsJamAPITrait
         ->where('selection_line_b','!=',"")
         ->where('sportsbook_a', '!=' , "")
         ->where('sportsbook_b', '!=' , "")
-        ->where('is_below_one','<', 1)
+        // ->where('is_below_one','<', 1)
         ->select(
             'game_id as uid',
             'start_date',
