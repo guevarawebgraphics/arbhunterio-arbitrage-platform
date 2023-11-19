@@ -182,17 +182,21 @@
 </div>
 
 <script>
+
     document.getElementById("pre-match").innerHTML = "{{$pre_match_count}}";
     document.getElementById("live-count").innerHTML = "{{$live_count}}";
     document.getElementById("hidden-count").innerHTML = "{{$hidden_count}}";
+
 </script>
 
 <script>
-document.addEventListener('livewire:load', function () {
-    window.livewire.on('updateCounts', (preMatchCount, liveCount, hiddenCount) => {
-        document.getElementById("pre-match").innerHTML = preMatchCount;
-        document.getElementById("live-count").innerHTML = liveCount;
-        document.getElementById("hidden-count").innerHTML = hiddenCount;
+
+    document.addEventListener('livewire:load', function () {
+        window.livewire.on('updateCounts', (preMatchCount, liveCount, hiddenCount) => {
+            document.getElementById("pre-match").innerHTML = preMatchCount;
+            document.getElementById("live-count").innerHTML = liveCount;
+            document.getElementById("hidden-count").innerHTML = hiddenCount;
+        });
     });
-});
+
 </script>

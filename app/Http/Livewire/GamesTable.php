@@ -25,7 +25,11 @@ class GamesTable extends Component
 
     private $games = [];
 
-    private $total_counts = [];
+    private $total_counts = [
+        'pre_match_count'   => 0,
+        'live_count'    =>  0,
+        'hidden_count'  =>  0
+    ];
 
     public $page = 1;
 
