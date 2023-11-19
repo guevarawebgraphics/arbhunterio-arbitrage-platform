@@ -7,10 +7,10 @@
 Run the following command on separate terminals
 
 -   php artisan optimize
--   php artisan queue:work
--   php artisan queue:work --queue=sync_games
--   php artisan queue:work --queue=sync_odds
--   php artisan queue:work --queue=push_stream_odds
+-   php artisan queue:work --tries=3
+-   php artisan queue:work --queue=sync_games --tries=3
+-   php artisan queue:work --queue=sync_odds --tries=3
+-   php artisan queue:work --queue=push_stream_odds --tries=3
 -   php artisan websockets:serve
 
 and
@@ -65,10 +65,10 @@ Staging or Production
 2. Execute these commands on separate bash terminals.
 
     - php artisan optimize
-    - php artisan queue:work
-    - php artisan queue:work --queue=sync_games
-    - php artisan queue:work --queue=sync_odds
-    - php artisan queue:work --queue=push_stream_odds
+    - php artisan queue:work --tries=3
+    - php artisan queue:work --queue=sync_games --tries=3
+    - php artisan queue:work --queue=sync_odds --tries=3
+    - php artisan queue:work --queue=push_stream_odds --tries=3
     - php artisan websockets:serve
 
 3. Execute this command to retrieve games and odds per game
@@ -85,13 +85,13 @@ Staging or Production
 
 ![image](https://github.com/guevarawebgraphics/oddsjam/assets/42199746/20bfe292-7537-41ec-aa1d-25684794ae52)
 
-php artisan queue:work
+php artisan queue:work --tries=3
 
-php artisan queue:work --queue=sync_games
+php artisan queue:work --queue=sync_games --tries=3
 
-php artisan queue:work --queue=sync_odds
+php artisan queue:work --queue=sync_odds --tries=3
 
-php artisan queue:work --queue=sync_push_stream_odds
+php artisan queue:work --queue=sync_push_stream_odds --tries=3
 
 php artisan websockets:serve
 

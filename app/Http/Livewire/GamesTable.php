@@ -27,11 +27,22 @@ class GamesTable extends Component
 
     public $page = 1;
 
-    protected $updatesQueryString = ['page'];
+    // protected $updatesQueryString = ['page'];
+
+    public $is_live;
+
+    protected $updatesQueryString = [
+        'page' => ['except' => 1],
+        'is_live'
+    ];
 
     public function mount()
     {
-        $this->games = $this->getGamesPerMarket([]);
+        $this->is_live = request()->query('is_live', 0);
+
+        $input = [];
+        $input['is_live'] = $this->is_live;
+        $this->games = $this->getGamesPerMarket($input);
     }
 
     public function render()
@@ -43,20 +54,33 @@ class GamesTable extends Component
 
     public function refreshTable()
     {
-        // This will refresh the data by re-fetching from the database.
         $this->mount();
+        
         \Log::info( 'Data Table Refreshed: ' . date('H:i a',strtotime( now() )) );
     }
     
     public function updatedPage($value)
     {
-        $this->games = $this->getGamesPerMarket([]);
+        $this->is_live = request()->query('is_live', 0);
+
+        $input = [];
+
+        $input['is_live'] = $this->is_live;
+
+        $this->games = $this->getGamesPerMarket($input);
     }
 
     public function goToPage($page)
     {
+        $this->is_live = request()->query('is_live', 0);
+
+        $input = [];
+
+        $input['is_live'] = $this->is_live;
+
         $this->setPage($page);
-        $this->games = $this->getGamesPerMarket([]);
+
+        $this->games = $this->getGamesPerMarket($input);
     }
 
 }

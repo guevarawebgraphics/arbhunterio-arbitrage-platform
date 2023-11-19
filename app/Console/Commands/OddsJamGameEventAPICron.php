@@ -23,10 +23,12 @@ use DateTimeZone;
 class OddsJamGameEventAPICron extends Command
 {
     /**
-     * The name and signature of the console command.
-     * @var string
      * 
-     */
+     * The name and signature of the console command.
+     * @var string 
+     * 
+     * 
+    */
 
     protected $signature = 'oddsjam_game_event_api:cron';
 
@@ -73,20 +75,13 @@ class OddsJamGameEventAPICron extends Command
     }
 
     private function timeInterval() {
-
         $currentDate = new DateTime('now', new DateTimeZone(date_default_timezone_get()));
-
-        $currentDate->modify('+1 day'); // This adds one day to the current date
-
-        // $currentDate = new DateTime('2023-10-22', new DateTimeZone(date_default_timezone_get()));
-
         $currentDate->setTime(0, 0, 0); // Set time to start of the day (12 am / 00:00)
 
         $intervals = [];
 
-        // for ($i = 0; $i < 72; $i++) {
-        for ($i = 0; $i < 72; $i++) {
-
+        // 24 hours * 4 days = 96 hours
+        for ($i = 0; $i < 96; $i++) {
             // Create a clone of the DateTime object for the start of the current hour
             $startOfHour = clone $currentDate;
             $startOfHour->modify("+$i hour");
@@ -97,14 +92,13 @@ class OddsJamGameEventAPICron extends Command
 
             // Append to intervals array
             $intervals[] = [
-                'start_date_after'  => $startOfHour->format(DateTime::ATOM), // ISO 8601 format
-                'start_date_before' => $endOfHour->format(DateTime::ATOM),
+                'start_date_after'  => $startOfHour->format(DateTime::ATOM), // ISO 8601 format for the start of the hour
+                'start_date_before' => $endOfHour->format(DateTime::ATOM), // ISO 8601 format for the end of the hour
             ];
-
         }
 
         return $intervals;
-
     }
+
 
 }

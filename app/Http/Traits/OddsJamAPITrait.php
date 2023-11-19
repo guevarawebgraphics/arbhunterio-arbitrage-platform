@@ -123,7 +123,7 @@ trait OddsJamAPITrait
                 'game_id' => $data['game_id'],
                 'team_id' => $data['team_id']
             ];
-                        
+            
             $sportsbook = $data['sportsbook'];
 
             // Convert the non-sportsbook parameters to a query string
@@ -146,7 +146,6 @@ trait OddsJamAPITrait
                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                 CURLOPT_CUSTOMREQUEST => 'GET',
             ));
-
 
             $response = curl_exec($curl);
 
@@ -822,7 +821,9 @@ trait OddsJamAPITrait
     
     public function getGamesPerMarket($data) {
 
-        $gamesArray = GamesPerMarket::where('is_live', 0)
+        $is_live = isset($data['is_live']) ? $data['is_live'] : 0;
+
+        $gamesArray = GamesPerMarket::where('is_live', $is_live )
         ->where('profit_percentage','>=', 0)
         ->whereNotIn('selection_line_a', ['Draw','No Goal'])
         ->where('selection_line_a','!=',"")

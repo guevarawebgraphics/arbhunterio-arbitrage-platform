@@ -67,12 +67,15 @@ class APIController extends Controller
         }
 
         $games = $gameData['data']['data'];
+
         $games = array_slice($games, 0, 1000); 
 
         $gameArray = [];
 
         foreach ($games as $game) {
+
             if (isset($game['home_team_info']) && isset($game['away_team_info'])) {
+
                 if ($game['status'] != "completed") {
 
                     $gameArray[] = $this->createGames($game, $sportsBook);
@@ -81,9 +84,11 @@ class APIController extends Controller
                         'game'  =>  $game ?? [],
                         'sportsbook'    =>  $sportsBook ?? []
                     ]);
+
                     Queue::pushOn('sync_odds', $job);
 
                 }
+
             }
         }
 
@@ -402,12 +407,17 @@ class APIController extends Controller
     public function getMarketCategories(Request $request) {
 
         $input = $request->all();
+        
         $input['sports'] = [];
+
         foreach( getSports() ?? [] as $field) {
             array_push( $input['sports'], $field );
         }
+
         $response = $this->marketCategories($input);
+        
         return $response;
+
     }
 
     public function getMarkets(Request $request) {
