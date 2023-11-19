@@ -1,7 +1,9 @@
 const Echo = require('laravel-echo').default;
+
 console.log('Echo:', Echo);
 
 window.Pusher = require('pusher-js');
+
 console.log('Pusher:', window.Pusher);
 
 window.Echo = new Echo({
