@@ -822,7 +822,7 @@ trait OddsJamAPITrait
     public function getGamesPerMarket($data) {
 
         $is_live = isset($data['is_live']) ? $data['is_live'] : 0;
-        
+
         $is_hidden = isset($data['is_hidden']) ? $data['is_hidden'] : 0;
         
         $gamesArray = GamesPerMarket::where('is_live', $is_live )
@@ -1169,53 +1169,6 @@ trait OddsJamAPITrait
 
         if ($search_raw_a && $search_raw_b ) {
 
-            // $best_over_odds_query = DB::table('gameodds as go')
-            // ->select(
-            //     'go.bet_type', 
-            //     'go.selection_points', 
-            //     'go.selection_line', 
-            //     'go.bet_name', 
-            //     'go.sportsbook',
-            //     DB::raw('MAX(go.bet_price) as max_bet_price')
-            // )
-            // ->whereRaw($search_raw_a)
-            // ->where('go.game_id', $game_id)
-            // ->where('go.bet_type', $bet_type)
-            // ->where('go.is_live', 0)
-            // ->whereNotIn('go.type', ["locked"])
-            // ->groupBy('go.sportsbook')
-            // ->get();
-
-            // $notInQuery = $best_over_odds_query->sortByDesc('max_bet_price')->first();
-
-            // if ($notInQuery !== null) {
-            //     $notInMaxBetPrice = $notInQuery->max_bet_price;
-            // } else {
-            //     $notInMaxBetPrice = 0;
-            // }
-
-            // $notIn = $best_over_odds_query->where('max_bet_price', $notInMaxBetPrice)->pluck('sportsbook')->unique()->values()->all();
-
-
-            // $best_under_odds_query = DB::table('gameodds as go')
-            // ->select(
-            //     'go.bet_type', 
-            //     'go.selection_points', 
-            //     'go.selection_line', 
-            //     'go.bet_name', 
-            //     'go.sportsbook',
-            //     DB::raw('MAX(go.bet_price) as max_bet_price')
-            // )
-            // ->whereRaw($search_raw_b)
-            // ->where('go.game_id', $game_id)
-            // ->where('go.bet_type', $bet_type)
-            // ->where('go.is_live', 0 )
-            // ->whereNotIn('go.type', ["locked"])
-            // ->whereNotIn('go.sportsbook', $notIn )
-            // ->groupBy('go.sportsbook')
-            // ->get();
-
-
             $latestPricesSubqueryA = DB::table('gameodds as x')
             ->select(
                 'x.game_id', 
@@ -1321,20 +1274,22 @@ trait OddsJamAPITrait
             $sportsbook_b = $this->sports_book_image($sportsbooks_under_with_highest_bet_price, $sports_book);
             
 
-            // if ( !empty($highest_over->selection_points) &&  !empty($highest_under->selection_points) ) {
+            if ( !empty($highest_over->selection_points) &&  !empty($highest_under->selection_points) ) {
             
-            $selection_line_a = $bet_query['over'] ?? '';
-            $selection_line_b = $bet_query['under'] ?? '';
-            $best_odds_a = $bet_query ? convertAmericanToDecimalOdds($bet_query['over_best_price']) : 0.00;
-            $best_odds_b = $bet_query ? convertAmericanToDecimalOdds($bet_query['under_best_price']) : 0.00;
-            
-            // } else {
-            //     $selection_line_a = $highest_over->bet_name ?? '';
-            //     $selection_line_b = $highest_under->bet_name ?? '';
+                $selection_line_a = $bet_query['over'] ?? '';
+                $selection_line_b = $bet_query['under'] ?? '';
+                $best_odds_a = $bet_query ? convertAmericanToDecimalOdds($bet_query['over_best_price']) : 0.00;
+                $best_odds_b = $bet_query ? convertAmericanToDecimalOdds($bet_query['under_best_price']) : 0.00;
+                
+            } else {
 
-            //     $best_odds_a = convertAmericanToDecimalOdds($highest_over->max_bet_price) ?? 0.00;
-            //     $best_odds_b = convertAmericanToDecimalOdds($highest_under->max_bet_price) ?? 0.00;
-            // }
+                $selection_line_a = $highest_over->bet_name ?? '';
+                $selection_line_b = $highest_under->bet_name ?? '';
+
+                $best_odds_a = convertAmericanToDecimalOdds($highest_over->max_bet_price) ?? 0.00;
+                $best_odds_b = convertAmericanToDecimalOdds($highest_under->max_bet_price) ?? 0.00;
+
+            }
         
         }
 

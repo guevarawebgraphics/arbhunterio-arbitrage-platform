@@ -68,16 +68,11 @@ class GamesTable extends Component
         $hidden_count = $total_counts['hidden_count'];
 
         return view('livewire.games-table', ['games' => $games, 'pre_match_count'   =>  $pre_match_count, 'live_count'  =>  $live_count, 'hidden_count' =>  $hidden_count ]);
-        
+
     }
 
-    public function refreshTable($is_live = null, $is_hidden = null)
+    public function refreshTable($data = [])
     {
-        $this->is_live = $is_live ?? $this->is_live;
-        
-        $this->is_hidden = $is_hidden ?? $this->is_hidden;
-
-        \Log::info("refreshTable called with is_live: $is_live, is_hidden: $is_hidden");
 
         $this->mount();
 
