@@ -737,6 +737,9 @@
     var sports_book = {!! json_encode(getSportsBook()) !!};
     var pageID = {!! isset($_GET['page']) ? $_GET['page'] : 1 !!};
     var baseURI = "{{url('/')}}";
+
+    var is_live = {{ $_GET['is_live'] ?? 0 }};
+    var is_hidden = {{ $_GET['is_hidden'] ?? 0 }};
 </script>
 
 {{Html::script('public/js/bjcdl/libraries/dashboard.js')}}

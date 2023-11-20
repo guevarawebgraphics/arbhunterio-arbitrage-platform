@@ -68,10 +68,17 @@ class GamesTable extends Component
         $hidden_count = $total_counts['hidden_count'];
 
         return view('livewire.games-table', ['games' => $games, 'pre_match_count'   =>  $pre_match_count, 'live_count'  =>  $live_count, 'hidden_count' =>  $hidden_count ]);
+        
     }
 
-    public function refreshTable()
+    public function refreshTable($is_live = null, $is_hidden = null)
     {
+        $this->is_live = $is_live ?? $this->is_live;
+        
+        $this->is_hidden = $is_hidden ?? $this->is_hidden;
+
+        \Log::info("refreshTable called with is_live: $is_live, is_hidden: $is_hidden");
+
         $this->mount();
 
         $total_counts =  $this->total_counts;
@@ -82,7 +89,7 @@ class GamesTable extends Component
 
         $hidden_count = $total_counts['hidden_count'];
 
-        $this->emit('updateCounts', $pre_match_count, $live_count, $hidden_count);
+        $this->emit('updateCounts', $pre_match_count, $live_count, $hidden_count );
 
         \Log::info( 'Data Table Refreshed: ' . date('H:i a',strtotime( now() )) );
     }
@@ -90,12 +97,12 @@ class GamesTable extends Component
     public function updatedPage($value)
     {
         $input = ['is_live' => $this->is_live, 'is_hidden' => $this->is_hidden];
+        
         $this->games = $this->getGamesPerMarket($input);
     }
 
     public function goToPage($page)
     {
-
         $this->setPage($page);
 
         $this->games = $this->getGamesPerMarket([]);

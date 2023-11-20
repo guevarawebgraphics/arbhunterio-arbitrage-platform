@@ -163,7 +163,7 @@ $(document).on('click','.btn--hidden-bet', function () {
         method: 'GET',
         success: function(response) {
             if (response.status) {
-                Livewire.emit('refreshTable');
+                Livewire.emit('refreshTable', is_live, is_hidden);
             } else {
                 alert('Something went wrong..');
             }
