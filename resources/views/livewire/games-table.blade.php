@@ -30,7 +30,7 @@
         <tbody class="text-white" id="arbitrage_body">
             {{-- how do you sort this to desc. Please note that the profit_percentage is not  a field from database and also this is paginated array ($games) --}}
             @forelse($games ?? [] as $field)
-            
+                {{-- {{dd($field)}} --}}
                 <tr class="border-b hover:bg-[#1D2F41]" id="table--row-{!! str_slug($field->bet_type) !!}-{!! str_slug($field->uid) !!}">
                     <td class="w-4 p-4">
                         <div class="flex items-center">
@@ -99,6 +99,7 @@
                         </div>
                     </td>
                     <td class="px-6 py-4">
+                        
                         @if($field->uid)
                         <span wire:loading class="placeholder-content">&nbsp;</span>
                         <span wire:loading.remove>
@@ -148,12 +149,9 @@
         </tbody>
     </table>
     <!-- Livewire pagination links -->
-    @if( !empty(  $games ) )
+    @if($games)
         <div wire:loading.remove>
-            {{ $games->appends(array_filter([
-                'is_live' => isset($this->is_live) ? $this->is_live : null,
-                'is_hidden' => isset($this->is_hidden) ? $this->is_hidden : null,
-            ]))->links() }}
+            {{ $games->links() }}
         </div>
     @endif
 
@@ -178,3 +176,5 @@
     });
 
 </script>
+
+

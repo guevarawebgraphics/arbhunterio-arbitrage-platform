@@ -33,10 +33,11 @@ class GamesTable extends Component
 
     public $is_live;
 
-    public $is_hidden;
-
-    protected $updatesQueryString = ['page' => ['except' => 1], 'is_live', 'is_hidden'];
-
+    protected $updatesQueryString = [
+        'page' => ['except' => 1],
+        'is_live',
+        'is_hidden'
+    ];
 
     public function mount()
     {
@@ -89,16 +90,34 @@ class GamesTable extends Component
     
     public function updatedPage($value)
     {
-        $input = ['is_live' => $this->is_live, 'is_hidden' => $this->is_hidden];
+        $this->is_live = request()->query('is_live', 0);
+
+        $this->is_hidden = request()->query('is_hidden', 0);
+
+        $input = [];
+
+        $input['is_live'] = $this->is_live;
+
+        $input['is_hidden'] = $this->is_hidden;
+
         $this->games = $this->getGamesPerMarket($input);
     }
 
     public function goToPage($page)
     {
+        $this->is_live = request()->query('is_live', 0);
+
+        $this->is_hidden = request()->query('is_hidden', 0);
+
+        $input = [];
+
+        $input['is_live'] = $this->is_live;
+
+        $input['is_hidden'] = $this->is_hidden;
 
         $this->setPage($page);
 
-        $this->games = $this->getGamesPerMarket([]);
+        $this->games = $this->getGamesPerMarket($input);
     }
 
 }
