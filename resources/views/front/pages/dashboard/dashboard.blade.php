@@ -315,7 +315,9 @@
                                     <div class="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap">Percentage
                                         <span class="text-xs text-inherit ml-1 font-light">(1)</span>
                                     </div>
-                                    <div class="h-4 w-4"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" height="20" class="pb-0.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path></svg>
+                                    <div class="h-4 w-4">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" height="20" class="pb-0.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path>
+                                        </svg>
                                     </div>
                                 </div>
                             </button>
@@ -337,7 +339,7 @@
                                             <label for="min">Minimum Percentage
                                                 <div class="relative">
                                                     <div class="min-w-0 rounded border border-solid text-left dark h-10 border-[#1D2F41] bg-[#1D2F41] flex w-full dark">
-                                                        <input name="value" placeholder="1.5" type="number" class="all-unset text-sm w-0 min-w-0 flex-1 items-center text-white focus:ring-0 pl-4 bg-[#1D2F41] placeholder-gray-500 focus-within:border-slate-500 rounded-l border-none" value="">
+                                                        <input name="value" id="minimum_profit_percentage" placeholder="1.5" type="number" class="all-unset text-sm w-0 min-w-0 flex-1 items-center text-white focus:ring-0 pl-4 bg-[#1D2F41] placeholder-gray-500 focus-within:border-slate-500 rounded-l border-none" value="">
                                                         <div class="flex shrink-0 items-center justify-center bg-[#1D2F41] rounded-r w-10 text-brand-gray-6">
                                                             <svg width="12" height="12" viewBox="-2 -2 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5.24456 9.09091V8.55398C5.24456 8.18277 5.32079 7.84304 5.47326 7.5348C5.62903 7.22325 5.85441 6.97467 6.14939 6.78906C6.44769 6.60014 6.80896 6.50568 7.2332 6.50568C7.66407 6.50568 8.02534 6.60014 8.31701 6.78906C8.60867 6.97467 8.82908 7.22325 8.97823 7.5348C9.12737 7.84304 9.20195 8.18277 9.20195 8.55398V9.09091C9.20195 9.46212 9.12572 9.8035 8.97326 10.1151C8.82411 10.4233 8.60204 10.6719 8.30706 10.8608C8.0154 11.0464 7.65744 11.1392 7.2332 11.1392C6.80233 11.1392 6.4394 11.0464 6.14442 10.8608C5.84944 10.6719 5.62572 10.4233 5.47326 10.1151C5.32079 9.8035 5.24456 9.46212 5.24456 9.09091ZM6.25877 8.55398V9.09091C6.25877 9.39915 6.33168 9.6759 6.47752 9.92116C6.62335 10.1631 6.87524 10.2841 7.2332 10.2841C7.58121 10.2841 7.82648 10.1631 7.96899 9.92116C8.11483 9.6759 8.18774 9.39915 8.18774 9.09091V8.55398C8.18774 8.24574 8.11814 7.97064 7.97894 7.72869C7.83973 7.48343 7.59115 7.3608 7.2332 7.3608C6.88519 7.3608 6.63495 7.48343 6.48249 7.72869C6.33334 7.97064 6.25877 8.24574 6.25877 8.55398ZM0.17354 3.2642V2.72727C0.17354 2.35606 0.249771 2.01634 0.402233 1.7081C0.558009 1.39654 0.783388 1.14796 1.07837 0.962358C1.37666 0.773437 1.73793 0.678977 2.16218 0.678977C2.59305 0.678977 2.95432 0.773437 3.24598 0.962358C3.53765 1.14796 3.75806 1.39654 3.9072 1.7081C4.05635 2.01634 4.13093 2.35606 4.13093 2.72727V3.2642C4.13093 3.63542 4.0547 3.9768 3.90223 4.28835C3.75309 4.59659 3.53102 4.84517 3.23604 5.03409C2.94437 5.2197 2.58642 5.3125 2.16218 5.3125C1.7313 5.3125 1.36838 5.2197 1.0734 5.03409C0.778417 4.84517 0.554695 4.59659 0.402233 4.28835C0.249771 3.9768 0.17354 3.63542 0.17354 3.2642ZM1.18774 2.72727V3.2642C1.18774 3.57244 1.26066 3.8492 1.40649 4.09446C1.55233 4.33641 1.80422 4.45739 2.16218 4.45739C2.51019 4.45739 2.75545 4.33641 2.89797 4.09446C3.0438 3.8492 3.11672 3.57244 3.11672 3.2642V2.72727C3.11672 2.41903 3.04712 2.14394 2.90791 1.90199C2.76871 1.65672 2.52013 1.53409 2.16218 1.53409C1.81416 1.53409 1.56393 1.65672 1.41147 1.90199C1.26232 2.14394 1.18774 2.41903 1.18774 2.72727ZM0.551381 11L7.55138 0.818182H8.6849L1.6849 11H0.551381Z" fill="currentColor"></path></svg>
                                                         </div>
@@ -346,7 +348,7 @@
                                             </label>
                                             <label for="max">Maximum Percentage<div class="relative">
                                                 <div class="min-w-0 rounded border border-solid text-left dark h-10 border-[#1D2F41] bg-[#1D2F41] flex w-full dark">
-                                                    <input name="value" placeholder="10" type="number" class="all-unset text-sm w-0 min-w-0 flex-1 items-center text-white focus:ring-0 pl-4 bg-[#1D2F41] placeholder-gray-500 focus-within:border-slate-500  rounded-l border-none" value="">
+                                                    <input name="value" placeholder="10" id="id="maximum_profit_percentage"" type="number" class="all-unset text-sm w-0 min-w-0 flex-1 items-center text-white focus:ring-0 pl-4 bg-[#1D2F41] placeholder-gray-500 focus-within:border-slate-500  rounded-l border-none" value="">
                                                     <div class="flex shrink-0 items-center justify-center bg-[#1D2F41] rounded-r w-10 text-brand-gray-6">
                                                         <svg width="12" height="12" viewBox="-2 -2 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5.24456 9.09091V8.55398C5.24456 8.18277 5.32079 7.84304 5.47326 7.5348C5.62903 7.22325 5.85441 6.97467 6.14939 6.78906C6.44769 6.60014 6.80896 6.50568 7.2332 6.50568C7.66407 6.50568 8.02534 6.60014 8.31701 6.78906C8.60867 6.97467 8.82908 7.22325 8.97823 7.5348C9.12737 7.84304 9.20195 8.18277 9.20195 8.55398V9.09091C9.20195 9.46212 9.12572 9.8035 8.97326 10.1151C8.82411 10.4233 8.60204 10.6719 8.30706 10.8608C8.0154 11.0464 7.65744 11.1392 7.2332 11.1392C6.80233 11.1392 6.4394 11.0464 6.14442 10.8608C5.84944 10.6719 5.62572 10.4233 5.47326 10.1151C5.32079 9.8035 5.24456 9.46212 5.24456 9.09091ZM6.25877 8.55398V9.09091C6.25877 9.39915 6.33168 9.6759 6.47752 9.92116C6.62335 10.1631 6.87524 10.2841 7.2332 10.2841C7.58121 10.2841 7.82648 10.1631 7.96899 9.92116C8.11483 9.6759 8.18774 9.39915 8.18774 9.09091V8.55398C8.18774 8.24574 8.11814 7.97064 7.97894 7.72869C7.83973 7.48343 7.59115 7.3608 7.2332 7.3608C6.88519 7.3608 6.63495 7.48343 6.48249 7.72869C6.33334 7.97064 6.25877 8.24574 6.25877 8.55398ZM0.17354 3.2642V2.72727C0.17354 2.35606 0.249771 2.01634 0.402233 1.7081C0.558009 1.39654 0.783388 1.14796 1.07837 0.962358C1.37666 0.773437 1.73793 0.678977 2.16218 0.678977C2.59305 0.678977 2.95432 0.773437 3.24598 0.962358C3.53765 1.14796 3.75806 1.39654 3.9072 1.7081C4.05635 2.01634 4.13093 2.35606 4.13093 2.72727V3.2642C4.13093 3.63542 4.0547 3.9768 3.90223 4.28835C3.75309 4.59659 3.53102 4.84517 3.23604 5.03409C2.94437 5.2197 2.58642 5.3125 2.16218 5.3125C1.7313 5.3125 1.36838 5.2197 1.0734 5.03409C0.778417 4.84517 0.554695 4.59659 0.402233 4.28835C0.249771 3.9768 0.17354 3.63542 0.17354 3.2642ZM1.18774 2.72727V3.2642C1.18774 3.57244 1.26066 3.8492 1.40649 4.09446C1.55233 4.33641 1.80422 4.45739 2.16218 4.45739C2.51019 4.45739 2.75545 4.33641 2.89797 4.09446C3.0438 3.8492 3.11672 3.57244 3.11672 3.2642V2.72727C3.11672 2.41903 3.04712 2.14394 2.90791 1.90199C2.76871 1.65672 2.52013 1.53409 2.16218 1.53409C1.81416 1.53409 1.56393 1.65672 1.41147 1.90199C1.26232 2.14394 1.18774 2.41903 1.18774 2.72727ZM0.551381 11L7.55138 0.818182H8.6849L1.6849 11H0.551381Z" fill="currentColor"></path></svg>
                                                     </div>
@@ -734,185 +736,7 @@
     var loading_image = "{{url('public/images/loading2.gif')}}";
     var sports_book = {!! json_encode(getSportsBook()) !!};
     var pageID = {!! isset($_GET['page']) ? $_GET['page'] : 1 !!};
-
-    function convertAmericanToDecimalOdds(americanOdds) {
-        console.log(americanOdds); // This will log to the browser console
-
-        var formula = 0.00;
-        if (americanOdds > 0) {
-            formula = 1 + (americanOdds / 100);
-        } else if (americanOdds < 0) {
-            formula = 1 - (100 / americanOdds);
-        }
-
-        // JavaScript's toFixed() method is similar to PHP's number_format function
-        return formula.toFixed(2);
-    }
-    
-    var loading_html = `<tr>
-            <!-- colspan is set to 9 since there are 9 columns in the table -->
-            <td colspan="9" class="px-6 py-3 text-center">
-            <center><img src="${sBaseURI}/public/images/loading2.gif" style="width: 25px; height: auto;" />
-            Loading content..</center>
-            </td>
-        </tr>`;
-
-    var no_record_found = `<tr>
-            <!-- colspan is set to 9 since there are 9 columns in the table -->
-            <td colspan="9" class="px-6 py-3 text-center">
-            <center>No record found..</center>
-            </td>
-        </tr>`;
-
-    
-    $(document).on('click','.btn--view-modal', function () {
-
-        $(this).html(`<svg width="20" height="20" fill="currentColor" class="mr-2 animate-spin" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
-                <path d="M526 1394q0 53-37.5 90.5t-90.5 37.5q-52 0-90-38t-38-90q0-53 37.5-90.5t90.5-37.5 90.5 37.5 37.5 90.5zm498 206q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-704-704q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm1202 498q0 52-38 90t-90 38q-53 0-90.5-37.5t-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-964-996q0 66-47 113t-113 47-113-47-47-113 47-113 113-47 113 47 47 113zm1170 498q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-640-704q0 80-56 136t-136 56-136-56-56-136 56-136 136-56 136 56 56 136zm530 206q0 93-66 158.5t-158 65.5q-93 0-158.5-65.5t-65.5-158.5q0-92 65.5-158t158.5-66q92 0 158 66t66 158z">
-                </path>
-            </svg>`);
-
-        var gameId = $(this).attr('data-id');
-
-        var betType = $(this).attr('data-bet_type');
-
-        var slug = $(this).attr('data-slug');
-        
-        $("#view-modal-body-over").html(' ');
-
-        $("#view-modal-body-under").html(' ');
-
-        $("#view-modal-body-over").addClass('placeholder-content');
-
-        $("#view-modal-body-under").addClass('placeholder-content');
-
-        $.ajax({
-            url: "{{ url('api/game') }}" + "/" + gameId + "/bet_type/" + betType,
-            method: 'GET',
-            success: function(response) {
-
-                $("#viewModal-title").html(response.game.home_team + ' vs ' + response.game.away_team);
-
-                $("#viewModal-market").html(response.game.bet_type);
-
-                $( slug ).html(`<svg class="w-6 h-6 text-gray-800 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 20">
-                    <path d="M16 14V2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v15a3 3 0 0 0 3 3h12a1 1 0 0 0 0-2h-1v-2a2 2 0 0 0 2-2ZM4 2h2v12H4V2Zm8 16H3a1 1 0 0 1 0-2h9v2Z"></path>
-                </svg>`);
-            
-                if(response.odds.best_over_odds_query.length > 0 ) {
-
-                    var over_html = ``;
-
-                    over_html += `<tr>
-                            <th></th>
-                            <td>
-                                <div class="p-6">
-                        <div class="flex text-sm my-2">
-                            <div class="flex-initial w-48">
-                                <div class="flex flex-col text-center items-center justify-center">
-                                    <span class="font-bold">${response.odds.selection_line_a}</span>
-                                </div>
-                            </div>
-                        </div>
-                        </td>
-                    </tr>`;
-                    
-                    $.each(response.odds.best_over_odds_query, function(index, value) {
-                        over_html += `<tr>`;
-                        over_html += `<th>${value.sportsbook}</th>`;
-                        if (response.odds.best_odds_a == convertAmericanToDecimalOdds(value.max_bet_price)) {
-                            over_html += `<td><span style="background-color:green; color: #fff;" class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">${value.max_bet_price}</span></td>`;
-                            over_html += `<td></td>`;
-                            over_html += `<td><span style="background-color:green; color: #fff;" class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">${convertAmericanToDecimalOdds(value.max_bet_price)}</span></td>`;
-                            over_html += `<td></td>`;
-                            over_html += `<td><small>${value.bet_name}</small></td>`;
-                        } else {
-                            over_html += `<td><span style="background-color:#f3f4f6;" class="bg-gray-100 text-black text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-gray-700 dark:text-gray-300">${value.max_bet_price}</span></td>`;
-                            over_html += `<td></td>`;
-                            over_html += `<td><span style="background-color:#f3f4f6;" class="bg-gray-100 text-black text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-gray-700 dark:text-gray-300">${convertAmericanToDecimalOdds(value.max_bet_price)}</span></td>`;
-                            over_html += `<td></td>`;
-                            over_html += `<td><small>${value.bet_name}</small></td>`;
-                        }
-                        
-                        over_html += `</tr>`;
-                    });
-
-                    var under_html = ``;
-
-                    under_html += `<tr>
-                        <th></th>
-                        <td>
-                            <div class="p-6">
-                    <div class="flex text-sm my-2">
-                        <div class="flex-initial w-48">
-                            <div class="flex flex-col text-center items-center justify-center">
-                                <span class="font-bold">${response.odds.selection_line_b}</span>
-                            </div>
-                        </div>
-                    </div>
-                    </td>
-                    </tr>`;
-
-                    $.each(response.odds.best_under_odds_query, function(index, value) {
-                        under_html += `<tr>`;
-                        under_html += `<th>${value.sportsbook}</th>`;
-                    if (response.odds.best_odds_b == convertAmericanToDecimalOdds(value.max_bet_price)) {
-                            under_html += `<td><span style="background-color:green; color: #fff;" class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">${value.max_bet_price}</span></td>`;
-                            under_html += `<td></td>`;
-                            under_html += `<td><span style="background-color:green; color: #fff;" class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">${convertAmericanToDecimalOdds(value.max_bet_price)}</span></td>`;
-                            under_html += `<td></td>`;
-                            under_html += `<td><small>${value.bet_name}</small></td>`;
-                        } else {
-                            under_html += `<td><span style="background-color:#f3f4f6;" class="bg-gray-100 text-black text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-gray-700 dark:text-gray-300">${value.max_bet_price}</span></td>`;
-                            under_html += `<td></td>`;
-                            under_html += `<td><span style="background-color:#f3f4f6;" class="bg-gray-100 text-black text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-gray-700 dark:text-gray-300">${convertAmericanToDecimalOdds(value.max_bet_price)}</span></td>`;
-                            under_html += `<td></td>`;
-                            under_html += `<td><small>${value.bet_name}</small></td>`;
-                        }
-                        under_html += `</tr>`;
-                    });
-
-                    $("#view-modal-body-over").removeClass('placeholder-content');
-                    $("#view-modal-body-under").removeClass('placeholder-content');
-
-                    $("#view-modal-body-over").html(over_html);
-                    $("#view-modal-body-under").html(under_html);
-                }
-
-            },
-            error: function() {
-
-            }
-        });
-
-    });
-
-    $(document).on('click','.btn--hidden-bet', function () {
-        var gameId = $(this).attr('data-id');
-
-        var betType = $(this).attr('data-bet_type');
-
-        var slug = $(this).attr('data-slug');
-
-        var status = $(this).attr('data-is_hidden');
-
-        $.ajax({
-            url: "{{ url('api/game') }}" + "/" + gameId + "/hidden/" + betType + "/status/" + status,
-            method: 'GET',
-            success: function(response) {
-                if (response.status) {
-                    Livewire.emit('refreshTable');
-                } else {
-                    alert('Something went wrong..');
-                }
-            },
-            error: function() {
-                alert('Something went wrong..');
-            }
-        });
-
-    });
-
+    var baseURI = "{{url('/')}}";
 </script>
 
 {{Html::script('public/js/bjcdl/libraries/dashboard.js')}}

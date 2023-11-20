@@ -15,12 +15,10 @@ class GamesTable extends Component
 {
     use WithPagination, OddsJamAPITrait;
 
-    protected $paginationTheme = 'tailwind'; // 'tailwind' or 'bootstrap', based on your preference
+    protected $paginationTheme = 'tailwind'; // 'tailwind' or 'bootstrap'
 
-    // Removed due to it automatically refreshes frontend. This can be triggered through client side
     // protected $listeners = ['echo:odds-updates,NewOddsReceived' => 'refreshTable'];
 
-    // This tends to receive request of echo from client side.
     protected $listeners = ['refreshTable' => 'refreshTable'];
 
     private $games = [];
@@ -33,19 +31,18 @@ class GamesTable extends Component
 
     public $page = 1;
 
-    // protected $updatesQueryString = ['page'];
-
     public $is_live;
 
     protected $updatesQueryString = [
         'page' => ['except' => 1],
-        'is_live',
-        'is_hidden'
+        'is_live' => ['except' => ''],
+        'is_hidden' => ['except' => ''],
     ];
 
     public function mount()
     {
         $this->is_live = request()->query('is_live', 0);
+        
         $this->is_hidden = request()->query('is_hidden', 0);
 
         $input = [];
@@ -109,11 +106,13 @@ class GamesTable extends Component
     public function goToPage($page)
     {
         $this->is_live = request()->query('is_live', 0);
+
         $this->is_hidden = request()->query('is_hidden', 0);
 
         $input = [];
 
         $input['is_live'] = $this->is_live;
+
         $input['is_hidden'] = $this->is_hidden;
 
         $this->setPage($page);

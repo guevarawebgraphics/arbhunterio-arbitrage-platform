@@ -1,22 +1,176 @@
-if (typeof jQuery === "undefined") {
-    throw new Error("jQuery plugins need to be before this file");
-}
+var loading_html = `<tr>
+    <!-- colspan is set to 9 since there are 9 columns in the table -->
+    <td colspan="9" class="px-6 py-3 text-center">
+    <center><img src="${sBaseURI}/public/images/loading2.gif" style="width: 25px; height: auto;" />
+    Loading content..</center>
+    </td>
+</tr>`;
 
-$.ajaxSetup({
-    headers: {
-        'X-CSRF-Token': "<?php echo csrf_token() ?>"
+var no_record_found = `<tr>
+    <!-- colspan is set to 9 since there are 9 columns in the table -->
+    <td colspan="9" class="px-6 py-3 text-center">
+    <center>No record found..</center>
+    </td>
+</tr>`;
+
+function convertAmericanToDecimalOdds(americanOdds) {
+    console.log(americanOdds); // This will log to the browser console
+
+    var formula = 0.00;
+    if (americanOdds > 0) {
+        formula = 1 + (americanOdds / 100);
+    } else if (americanOdds < 0) {
+        formula = 1 - (100 / americanOdds);
     }
+
+    // JavaScript's toFixed() method is similar to PHP's number_format function
+    return formula.toFixed(2);
+}
+    
+$(document).on('click','.btn--view-modal', function () {
+
+    $(this).html(`<svg width="20" height="20" fill="currentColor" class="mr-2 animate-spin" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
+            <path d="M526 1394q0 53-37.5 90.5t-90.5 37.5q-52 0-90-38t-38-90q0-53 37.5-90.5t90.5-37.5 90.5 37.5 37.5 90.5zm498 206q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-704-704q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm1202 498q0 52-38 90t-90 38q-53 0-90.5-37.5t-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-964-996q0 66-47 113t-113 47-113-47-47-113 47-113 113-47 113 47 47 113zm1170 498q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-640-704q0 80-56 136t-136 56-136-56-56-136 56-136 136-56 136 56 56 136zm530 206q0 93-66 158.5t-158 65.5q-93 0-158.5-65.5t-65.5-158.5q0-92 65.5-158t158.5-66q92 0 158 66t66 158z">
+            </path>
+        </svg>`);
+
+    var gameId = $(this).attr('data-id');
+
+    var betType = $(this).attr('data-bet_type');
+
+    var slug = $(this).attr('data-slug');
+    
+    $("#view-modal-body-over").html(' ');
+
+    $("#view-modal-body-under").html(' ');
+
+    $("#view-modal-body-over").addClass('placeholder-content');
+
+    $("#view-modal-body-under").addClass('placeholder-content');
+
+    $.ajax({
+        url: baseURI + "/api/game" + "/" + gameId + "/bet_type/" + betType,
+        method: 'GET',
+        success: function(response) {
+
+            $("#viewModal-title").html(response.game.home_team + ' vs ' + response.game.away_team);
+
+            $("#viewModal-market").html(response.game.bet_type);
+
+            $( slug ).html(`<svg class="w-6 h-6 text-gray-800 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 20">
+                <path d="M16 14V2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v15a3 3 0 0 0 3 3h12a1 1 0 0 0 0-2h-1v-2a2 2 0 0 0 2-2ZM4 2h2v12H4V2Zm8 16H3a1 1 0 0 1 0-2h9v2Z"></path>
+            </svg>`);
+        
+            if(response.odds.best_over_odds_query.length > 0 ) {
+
+                var over_html = ``;
+
+                over_html += `<tr>
+                        <th></th>
+                        <td>
+                            <div class="p-6">
+                    <div class="flex text-sm my-2">
+                        <div class="flex-initial w-48">
+                            <div class="flex flex-col text-center items-center justify-center">
+                                <span class="font-bold">${response.odds.selection_line_a}</span>
+                            </div>
+                        </div>
+                    </div>
+                    </td>
+                </tr>`;
+                
+                $.each(response.odds.best_over_odds_query, function(index, value) {
+                    over_html += `<tr>`;
+                    over_html += `<th>${value.sportsbook}</th>`;
+                    if (response.odds.best_odds_a == convertAmericanToDecimalOdds(value.max_bet_price)) {
+                        over_html += `<td><span style="background-color:green; color: #fff;" class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">${value.max_bet_price}</span></td>`;
+                        over_html += `<td></td>`;
+                        over_html += `<td><span style="background-color:green; color: #fff;" class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">${convertAmericanToDecimalOdds(value.max_bet_price)}</span></td>`;
+                        over_html += `<td></td>`;
+                        over_html += `<td><small>${value.bet_name}</small></td>`;
+                    } else {
+                        over_html += `<td><span style="background-color:#f3f4f6;" class="bg-gray-100 text-black text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-gray-700 dark:text-gray-300">${value.max_bet_price}</span></td>`;
+                        over_html += `<td></td>`;
+                        over_html += `<td><span style="background-color:#f3f4f6;" class="bg-gray-100 text-black text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-gray-700 dark:text-gray-300">${convertAmericanToDecimalOdds(value.max_bet_price)}</span></td>`;
+                        over_html += `<td></td>`;
+                        over_html += `<td><small>${value.bet_name}</small></td>`;
+                    }
+                    
+                    over_html += `</tr>`;
+                });
+
+                var under_html = ``;
+
+                under_html += `<tr>
+                    <th></th>
+                    <td>
+                        <div class="p-6">
+                <div class="flex text-sm my-2">
+                    <div class="flex-initial w-48">
+                        <div class="flex flex-col text-center items-center justify-center">
+                            <span class="font-bold">${response.odds.selection_line_b}</span>
+                        </div>
+                    </div>
+                </div>
+                </td>
+                </tr>`;
+
+                $.each(response.odds.best_under_odds_query, function(index, value) {
+                    under_html += `<tr>`;
+                    under_html += `<th>${value.sportsbook}</th>`;
+                if (response.odds.best_odds_b == convertAmericanToDecimalOdds(value.max_bet_price)) {
+                        under_html += `<td><span style="background-color:green; color: #fff;" class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">${value.max_bet_price}</span></td>`;
+                        under_html += `<td></td>`;
+                        under_html += `<td><span style="background-color:green; color: #fff;" class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">${convertAmericanToDecimalOdds(value.max_bet_price)}</span></td>`;
+                        under_html += `<td></td>`;
+                        under_html += `<td><small>${value.bet_name}</small></td>`;
+                    } else {
+                        under_html += `<td><span style="background-color:#f3f4f6;" class="bg-gray-100 text-black text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-gray-700 dark:text-gray-300">${value.max_bet_price}</span></td>`;
+                        under_html += `<td></td>`;
+                        under_html += `<td><span style="background-color:#f3f4f6;" class="bg-gray-100 text-black text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-gray-700 dark:text-gray-300">${convertAmericanToDecimalOdds(value.max_bet_price)}</span></td>`;
+                        under_html += `<td></td>`;
+                        under_html += `<td><small>${value.bet_name}</small></td>`;
+                    }
+                    under_html += `</tr>`;
+                });
+
+                $("#view-modal-body-over").removeClass('placeholder-content');
+                $("#view-modal-body-under").removeClass('placeholder-content');
+
+                $("#view-modal-body-over").html(over_html);
+                $("#view-modal-body-under").html(under_html);
+            }
+
+        },
+        error: function() {
+
+        }
+    });
+
 });
 
-$.dashboard = {};
+$(document).on('click','.btn--hidden-bet', function () {
+    var gameId = $(this).attr('data-id');
 
-$.dashboard.init = {
-    activate: function () {
+    var betType = $(this).attr('data-bet_type');
 
-        
-    }
-}
+    var slug = $(this).attr('data-slug');
 
-$(function () {
-    $.dashboard.init.activate();
+    var status = $(this).attr('data-is_hidden');
+
+    $.ajax({
+        url: baseURI + "/api/game" + "/" + gameId + "/hidden/" + betType + "/status/" + status,
+        method: 'GET',
+        success: function(response) {
+            if (response.status) {
+                Livewire.emit('refreshTable');
+            } else {
+                alert('Something went wrong..');
+            }
+        },
+        error: function() {
+            alert('Something went wrong..');
+        }
+    });
+
 });

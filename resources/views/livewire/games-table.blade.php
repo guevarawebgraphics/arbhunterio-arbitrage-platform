@@ -13,9 +13,6 @@
                 <th scope="col" class="px-6 py-3">
                     Event
                 </th>
-                 {{-- <th scope="col" class="px-6 py-3">
-                    Status
-                </th> --}}
                 <th scope="col" class="px-6 py-3">
                     Market
                 </th>
@@ -59,27 +56,6 @@
                             {!! formatEvent($field) !!}
                         </span>
                     </td>
-                    {{-- <td class="px-6 py-4">
-                        <span wire:loading class="placeholder-content">&nbsp;</span>
-                        <span wire:loading.remove>
-                            @if($field->is_live == 1 && (  $field->is_hidden == 1 || $field->is_hidden == 0 ) )
-                                <span class="text-inherit hidden rounded-full py-0.5 px-2.5 text-xs leading-4 dark:bg-brand-blue dark:text-brand-gray-1 md:inline-block">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
-                                    <path d="M3.25 4A2.25 2.25 0 001 6.25v7.5A2.25 2.25 0 003.25 16h7.5A2.25 2.25 0 0013 13.75v-7.5A2.25 2.25 0 0010.75 4h-7.5zM19 4.75a.75.75 0 00-1.28-.53l-3 3a.75.75 0 00-.22.53v4.5c0 .199.079.39.22.53l3 3a.75.75 0 001.28-.53V4.75z" />
-                                    </svg> LIVE
-                                </span>
-                            @elseif($field->is_live == 0 && $field->is_hidden == 0)
-                                <span class="text-inherit hidden rounded-full py-0.5 px-2.5 text-xs leading-4 dark:bg-brand-blue dark:text-brand-gray-1 md:inline-block">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
-                                    <path d="M1 13.75V7.182L9.818 16H3.25A2.25 2.25 0 011 13.75zM13 6.25v6.568L4.182 4h6.568A2.25 2.25 0 0113 6.25zM19 4.75a.75.75 0 00-1.28-.53l-3 3a.75.75 0 00-.22.53v4.5c0 .199.079.39.22.53l3 3a.75.75 0 001.28-.53V4.75zM2.28 4.22a.75.75 0 00-1.06 1.06l10.5 10.5a.75.75 0 101.06-1.06L2.28 4.22z" />
-                                    </svg>PRE-MATCH
-                                </span>
-                            @elseif($field->is_live == 0 && $field->is_hidden == 1)
-                                
-                            @endif
-                        </span>
-                         
-                    </td> --}}
                     <td class="px-6 py-4">
                         <span wire:loading class="placeholder-content">&nbsp;</span>
                         <span wire:loading.remove>{!!$field->bet_type !!}</span>
@@ -173,9 +149,11 @@
     </table>
     <!-- Livewire pagination links -->
     @if( !empty(  $games ) )
-        <!-- Livewire pagination links -->
         <div wire:loading.remove>
-            {{ $games->render() }}
+            {{ $games->appends(array_filter([
+                'is_live' => isset($this->is_live) ? $this->is_live : null,
+                'is_hidden' => isset($this->is_hidden) ? $this->is_hidden : null,
+            ]))->links() }}
         </div>
     @endif
 

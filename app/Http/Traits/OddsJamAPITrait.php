@@ -822,7 +822,9 @@ trait OddsJamAPITrait
     public function getGamesPerMarket($data) {
 
         $is_live = isset($data['is_live']) ? $data['is_live'] : 0;
+        
         $is_hidden = isset($data['is_hidden']) ? $data['is_hidden'] : 0;
+        
         $gamesArray = GamesPerMarket::where('is_live', $is_live )
         ->where('profit_percentage','>=', 0)
         ->whereNotIn('selection_line_a', ['Draw','No Goal'])
