@@ -32,6 +32,7 @@ and
 1. npx webpack --mode=production
 2. npm run dev
 3. Activate HTACCESS force SSL
+   s
 
 ## If local only
 

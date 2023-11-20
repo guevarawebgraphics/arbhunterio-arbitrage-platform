@@ -27,7 +27,8 @@ function convertAmericanToDecimalOdds(americanOdds) {
     return formula.toFixed(2);
 }
     
-$(document).on('click','.btn--view-modal', function () {
+$(document).on('click', '.btn--view-modal', function () {
+    
 
     $(this).html(`<svg width="20" height="20" fill="currentColor" class="mr-2 animate-spin" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
             <path d="M526 1394q0 53-37.5 90.5t-90.5 37.5q-52 0-90-38t-38-90q0-53 37.5-90.5t90.5-37.5 90.5 37.5 37.5 90.5zm498 206q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-704-704q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm1202 498q0 52-38 90t-90 38q-53 0-90.5-37.5t-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-964-996q0 66-47 113t-113 47-113-47-47-113 47-113 113-47 113 47 47 113zm1170 498q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-640-704q0 80-56 136t-136 56-136-56-56-136 56-136 136-56 136 56 56 136zm530 206q0 93-66 158.5t-158 65.5q-93 0-158.5-65.5t-65.5-158.5q0-92 65.5-158t158.5-66q92 0 158 66t66 158z">
@@ -57,7 +58,7 @@ $(document).on('click','.btn--view-modal', function () {
 
             $("#viewModal-market").html(response.game.bet_type);
 
-            $( slug ).html(`<svg class="w-6 h-6 text-gray-800 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 20">
+            $( '#' + slug ).html(`<svg class="w-6 h-6 text-gray-800 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 20">
                 <path d="M16 14V2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v15a3 3 0 0 0 3 3h12a1 1 0 0 0 0-2h-1v-2a2 2 0 0 0 2-2ZM4 2h2v12H4V2Zm8 16H3a1 1 0 0 1 0-2h9v2Z"></path>
             </svg>`);
         
@@ -74,7 +75,7 @@ $(document).on('click','.btn--view-modal', function () {
                     <div class="flex text-sm my-2">
                         <div class="flex-initial w-48">
                             <div class="flex flex-col text-center items-center justify-center">
-                                <span class="font-bold">${response.odds.selection_line_a}</span>
+                                <span class="font-bold">${response.game.selection_line_a}</span>
                             </div>
                         </div>
                     </div>
@@ -84,7 +85,7 @@ $(document).on('click','.btn--view-modal', function () {
                 $.each(response.odds.best_over_odds_query, function(index, value) {
                     over_html += `<tr>`;
                     over_html += `<th>${value.sportsbook}</th>`;
-                    if (response.odds.best_odds_a == convertAmericanToDecimalOdds(value.max_bet_price) && response.odds.selection_line_a == value.bet_name  ) {
+                    if (response.game.best_odds_a == convertAmericanToDecimalOdds(value.max_bet_price) && response.game.selection_line_a == value.bet_name  ) {
                         over_html += `<td><span style="background-color:green; color: #fff;" class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">${value.max_bet_price}</span></td>`;
                         over_html += `<td></td>`;
                         over_html += `<td><span style="background-color:green; color: #fff;" class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">${convertAmericanToDecimalOdds(value.max_bet_price)}</span></td>`;
@@ -110,7 +111,7 @@ $(document).on('click','.btn--view-modal', function () {
                 <div class="flex text-sm my-2">
                     <div class="flex-initial w-48">
                         <div class="flex flex-col text-center items-center justify-center">
-                            <span class="font-bold">${response.odds.selection_line_b}</span>
+                            <span class="font-bold">${response.game.selection_line_b}</span>
                         </div>
                     </div>
                 </div>
@@ -120,7 +121,7 @@ $(document).on('click','.btn--view-modal', function () {
                 $.each(response.odds.best_under_odds_query, function(index, value) {
                     under_html += `<tr>`;
                     under_html += `<th>${value.sportsbook}</th>`;
-                if (response.odds.best_odds_b == convertAmericanToDecimalOdds(value.max_bet_price) && response.odds.selection_line_b == value.bet_name ) {
+                if (response.game.best_odds_b == convertAmericanToDecimalOdds(value.max_bet_price) && response.game.selection_line_b == value.bet_name ) {
                         under_html += `<td><span style="background-color:green; color: #fff;" class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">${value.max_bet_price}</span></td>`;
                         under_html += `<td></td>`;
                         under_html += `<td><span style="background-color:green; color: #fff;" class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">${convertAmericanToDecimalOdds(value.max_bet_price)}</span></td>`;

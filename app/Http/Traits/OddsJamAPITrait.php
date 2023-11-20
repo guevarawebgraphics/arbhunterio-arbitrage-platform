@@ -1312,7 +1312,7 @@ trait OddsJamAPITrait
             'best_under_odds_query'  => $best_under_odds_query,
 
             'is_below_one' => ($best_odds_a > 0 && $best_odds_b > 0) ? (1 / $best_odds_a) + (1 / $best_odds_b) : 0
-            
+
         ];
 
         \Log::info('GAMEODDS ' . json_encode($data));
@@ -1320,6 +1320,99 @@ trait OddsJamAPITrait
         return $data;
     }
 
+    public function getOddsPerTeam($game) {
+          $latestPricesSubqueryA = DB::table('gameodds as x')
+        ->select(
+            'x.game_id', 
+            'x.bet_type', 
+            'x.sportsbook', 
+            DB::raw('MAX(x.timestamp) as latest_timestamp'),
+            DB::raw('(SELECT x.bet_price FROM gameodds WHERE game_id = x.game_id AND bet_type = x.bet_type AND sportsbook = x.sportsbook ORDER BY timestamp DESC LIMIT 1) as max_bet_price')
+        )
+        ->where('x.is_live', 0)
+        ->whereNotIn('x.type', ['locked'])
+        ->where('x.bet_name', $game->selection_line_a)
+        ->groupBy('x.game_id', 'x.bet_type', 'x.sportsbook');
+
+        $latestPricesSubqueryB = DB::table('gameodds as y')
+        ->select(
+            'y.game_id', 
+            'y.bet_type', 
+            'y.sportsbook', 
+            DB::raw('MAX(y.timestamp) as latest_timestamp'),
+            DB::raw('(SELECT y.bet_price FROM gameodds WHERE game_id = y.game_id AND bet_type = y.bet_type AND sportsbook = y.sportsbook ORDER BY timestamp DESC LIMIT 1) as max_bet_price')
+        )
+        ->where('y.is_live', 0)
+        ->whereNotIn('y.type', ['locked'])
+        ->where('y.bet_name', $game->selection_line_b )
+        ->groupBy('y.game_id', 'y.bet_type', 'y.sportsbook');
+                    
+        $best_over_odds_query  =  DB::table('gameodds as go')
+            ->joinSub($latestPricesSubqueryA, 'max_bet_prices', function ($join) {
+                $join->on('go.game_id', '=', 'max_bet_prices.game_id')
+                    ->on('go.bet_type', '=', 'max_bet_prices.bet_type')
+                    ->on('go.sportsbook', '=', 'max_bet_prices.sportsbook');
+            })
+            ->select(
+                'go.bet_type', 
+                'go.selection_points', 
+                'go.selection_line', 
+                'go.bet_name', 
+                'go.sportsbook',
+                'max_bet_prices.max_bet_price'
+            )
+        ->where('go.bet_name', $game->selection_line_a)
+        ->where('go.game_id', $game->game_id )
+        ->where('go.bet_type', $game->bet_type)
+        ->where('go.is_live', 0)
+        ->whereNotIn('go.type', ['locked'])
+        ->groupBy('go.sportsbook')
+        ->orderBy('max_bet_price','DESC')
+            ->get();
+
+        $notInQuery = $best_over_odds_query->sortByDesc('max_bet_price')->first();
+
+        if ($notInQuery !== null) {
+            $notInMaxBetPrice = $notInQuery->max_bet_price;
+        } else {
+            $notInMaxBetPrice = 0;
+        }
+
+        $notIn = $best_over_odds_query->where('max_bet_price', $notInMaxBetPrice)->pluck('sportsbook')->unique()->values()->all();
+
+
+        $best_under_odds_query  = DB::table('gameodds as go')
+            ->joinSub($latestPricesSubqueryB, 'max_bet_prices', function ($join) {
+                $join->on('go.game_id', '=', 'max_bet_prices.game_id')
+                    ->on('go.bet_type', '=', 'max_bet_prices.bet_type')
+                    ->on('go.sportsbook', '=', 'max_bet_prices.sportsbook');
+            })
+            ->select(
+                'go.bet_type', 
+                'go.selection_points', 
+                'go.selection_line', 
+                'go.bet_name', 
+                'go.sportsbook',
+                'max_bet_prices.max_bet_price'
+            )
+        ->where('go.bet_name', $game->selection_line_b)
+        ->where('go.game_id', $game->game_id)
+        ->where('go.bet_type', $game->bet_type)
+        ->where('go.is_live', 0)
+        ->whereNotIn('go.type', ['locked'])
+        ->whereNotIn('go.sportsbook', $notIn )
+        ->groupBy('go.sportsbook')
+        ->orderBy('max_bet_price','DESC')
+        ->get();
+
+        $response = [
+            'best_over_odds_query'  =>  $best_over_odds_query,
+            'best_under_odds_query' =>  $best_under_odds_query
+        ];
+
+        return $response;
+       
+    }
     public function sports_book_image($arr, $sports_book)
     {
         $imagesHTML = '';

@@ -557,37 +557,10 @@ class APIController extends Controller
 
     public function getGameInfo($id, $type) {
 
-        $game = GameOdds::query()
-        ->withTrashed()
-        ->from('gameodds as go')
-        ->leftJoin('games as g', 'g.uid', '=', 'go.game_id')
-        ->where('go.is_live', 0)
-        ->where('go.game_id', $id)
-        ->where('go.bet_type', $type)
-        ->select(
-            'g.uid',
-            'g.start_date',
-            'g.home_team',
-            'g.away_team',
-            'go.is_live',
-            'go.bet_type',
-            'g.sport',
-            'g.league'
-        )
-        ->groupBy(
-            'g.uid',
-            'g.start_date',
-            'g.home_team',
-            'g.away_team',
-            'go.is_live',
-            'go.bet_type',
-            'g.sport',
-            'g.league'
-        )
-        ->first();
+        $game = GamesPerMarket::where('game_id', $id)->where('bet_type', $type)->first();
 
-        $odds = $this->getOdds($game);
-        
+        $odds = $this->getOddsPerTeam($game);
+
         $data = [
             'game'  => $game,
             'odds'  => $odds
