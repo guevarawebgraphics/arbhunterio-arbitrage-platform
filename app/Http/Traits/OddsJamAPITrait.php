@@ -1296,16 +1296,23 @@ trait OddsJamAPITrait
         $profit_percentage = $this->calculateProfit($best_odds_a, $best_odds_b);
 
         $data = [
+
             'best_odds_a'   => $best_odds_a,
             'best_odds_b'   => $best_odds_b,
+
             'selection_line_a'   => $selection_line_a,
             'selection_line_b'   => $selection_line_b,
+
             'profit_percentage' => $profit_percentage,
+
             'sportsbook_a'  => $sportsbook_a,
             'sportsbook_b'  => $sportsbook_b,
+
             'best_over_odds_query'  => $best_over_odds_query,
             'best_under_odds_query'  => $best_under_odds_query,
+
             'is_below_one' => ($best_odds_a > 0 && $best_odds_b > 0) ? (1 / $best_odds_a) + (1 / $best_odds_b) : 0
+            
         ];
 
         \Log::info('GAMEODDS ' . json_encode($data));
@@ -1359,43 +1366,6 @@ trait OddsJamAPITrait
         // Return the result rounded to two decimal places
         return number_format(abs($profitPercentage),2,'.',',');
     }
-
-    // public function findMatchedPoints($queryA, $queryB)
-    // {
-        
-    //     $overCollection = collect($queryA);
-
-    //     $underCollection = collect($queryB);
-
-    //     $matchedBetName = '';
-
-    //     $overPoints = $overCollection->pluck('selection_points');
-        
-    //     $underPoints = $underCollection->pluck('selection_points');
-
-    //     $matchedPoints = $overPoints->intersect($underPoints);
-
-    //     if ($matchedPoints->isNotEmpty()) {
-            
-    //         $matchedPoint = $matchedPoints->first();
-
-    //         $matchedOverBestPrice = collect($queryA)->where('selection_points', $matchedPoint)->sortByDesc('max_bet_price')->first(); 
-    //         $matchedUnderBestPrice = collect($queryB)->where('selection_points', $matchedPoint)->sortByDesc('max_bet_price')->first(); 
-
-    //         $matchedOverBetName =  collect($queryA)->where('selection_points', $matchedPoint)->sortByDesc('max_bet_price')->first(); 
-    //         $matchedUnderBetName = collect($queryB)->where('selection_points', $matchedPoint)->sortByDesc('max_bet_price')->first();
-
-    //         $matchedBetName = [
-    //             'over' => $matchedOverBestPrice->bet_name ?? '',
-    //             'over_best_price'  =>  $matchedOverBestPrice->max_bet_price ?? 0.00,
-
-    //             'under' => $matchedUnderBestPrice->bet_name ?? '',
-    //             'under_best_price'  =>  $matchedUnderBestPrice->max_bet_price ?? 0.00
-    //         ];
-    //     }
-
-    //     return $matchedBetName;
-    // }
 
     public function findMatchedPoints($queryA, $queryB , $is_home_or_away)
     {
