@@ -837,55 +837,58 @@ trait OddsJamAPITrait
         ->where('is_hidden', $is_hidden)
         ->where(function ($query) use ($filter_param) {
             
-            $max_profit = $filter_param['max_profit'];
+            if ( !empty( $filter_param ) ) {
+                $max_profit = $filter_param['max_profit'];
 
-            $min_profit = $filter_param['min_profit'];
+                $min_profit = $filter_param['min_profit'];
 
-            $sports = $filter_param['sports'];
+                $sports = $filter_param['sports'];
 
-            $sportsbook = $filter_param['sportsbook'];
+                $sportsbook = $filter_param['sportsbook'];
 
-            $market = $filter_param['market'];
+                $market = $filter_param['market'];
 
-            $date_time = $filter_param['date_time'];
+                $date_time = $filter_param['date_time'];
 
-            if ($max_profit != 0 && $max_profit ) {
-                $query->where('profit_percentage', '<=', $max_profit );
-            }
-
-            if ($min_profit != 0 && $min_profit ) {
-                $query->where('profit_percentage', '>=', $min_profit );
-            }
-
-            if (!empty($sports)) {
-                $query->whereIn('sport', $sports );
-            }
-
-            foreach ($sportsbook ?? [] as $item) {
-                \Log::info($item);
-                $query->where('sportsbook_a_values', 'like', '%' . $item . '%');
-                $query->orWhere('sportsbook_b_values', 'like', '%' . $item . '%');
-            }
-
-            foreach ($market ?? [] as $item) {
-                if($item == "Alternate Market") {
-
-                } else if ($item == "Main Market") {
-
-                } else if ($item == "Player Prop") {
-
+                if ($max_profit != 0 && $max_profit ) {
+                    $query->where('profit_percentage', '<=', $max_profit );
                 }
-            }
+
+                if ($min_profit != 0 && $min_profit ) {
+                    $query->where('profit_percentage', '>=', $min_profit );
+                }
+
+                if (!empty($sports)) {
+                    $query->whereIn('sport', $sports );
+                }
+
+                foreach ($sportsbook ?? [] as $item) {
+                    \Log::info($item);
+                    $query->where('sportsbook_a_values', 'like', '%' . $item . '%');
+                    $query->orWhere('sportsbook_b_values', 'like', '%' . $item . '%');
+                }
+
+                foreach ($market ?? [] as $item) {
+                    if($item == "Alternate Market") {
+
+                    } else if ($item == "Main Market") {
+
+                    } else if ($item == "Player Prop") {
+
+                    }
+                }
 
 
-            if ($date_time == "1") {
-                // Today
-                $currentDate = Carbon::now()->format('Y-m-d');
-                $query->where(DB::raw("DATE(start_date)"), $currentDate);
-            } else if ($date_time == "2") {
-                // Next 24 Hours (Tomorrow)
-                $nextDay = Carbon::now()->addDay()->format('Y-m-d');
-                $query->where(DB::raw("DATE(start_date)"), $nextDay);
+                if ($date_time == "1") {
+                    // Today
+                    $currentDate = Carbon::now()->format('Y-m-d');
+                    $query->where(DB::raw("DATE(start_date)"), $currentDate);
+                } else if ($date_time == "2") {
+                    // Next 24 Hours (Tomorrow)
+                    $nextDay = Carbon::now()->addDay()->format('Y-m-d');
+                    $query->where(DB::raw("DATE(start_date)"), $nextDay);
+                }
+
             }
 
         })
