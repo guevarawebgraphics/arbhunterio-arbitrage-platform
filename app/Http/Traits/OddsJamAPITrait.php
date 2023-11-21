@@ -14,6 +14,7 @@ use URL;
 use DB;
 use DateTime;
 use DateTimeZone;
+use Carbon\Carbon;
 
 /**
  * Class OddsJamAPITrait
@@ -836,8 +837,6 @@ trait OddsJamAPITrait
         ->where('is_hidden', $is_hidden)
         ->where(function ($query) use ($filter_param) {
             
-            \Log::info(json_encode($filter_param));
-
             $max_profit = $filter_param['max_profit'];
 
             $min_profit = $filter_param['min_profit'];
@@ -879,12 +878,14 @@ trait OddsJamAPITrait
             }
 
 
-            if ( $date_time == 1 ) {
+            if ($date_time == "1") {
                 // Today
-
-            } else if ( $date_time == 2 ) {
-                // Next 24 Hours
-
+                $currentDate = Carbon::now()->format('Y-m-d');
+                $query->where(DB::raw("DATE(start_date)"), $currentDate);
+            } else if ($date_time == "2") {
+                // Next 24 Hours (Tomorrow)
+                $nextDay = Carbon::now()->addDay()->format('Y-m-d');
+                $query->where(DB::raw("DATE(start_date)"), $nextDay);
             }
 
         })
@@ -1340,7 +1341,7 @@ trait OddsJamAPITrait
             $sportsbook_b = $this->sports_book_image($sportsbooks_under_with_highest_bet_price, $sports_book);
             
 
-            if ( !empty($highest_over->selection_points) &&  !empty($highest_under->selection_points) ) {
+            if ( !empty($highest_over->selection_points) || !empty($highest_under->selection_points) ) {
             
                 $selection_line_a = $bet_query['over'] ?? '';
                 $selection_line_b = $bet_query['under'] ?? '';

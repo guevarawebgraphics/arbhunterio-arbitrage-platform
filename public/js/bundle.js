@@ -36,7 +36,7 @@ eval("/*!\n * Pusher JavaScript Library v8.3.0\n * https://pusher.com/\n *\n * C
   \********************************/
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-eval("const Echo = (__webpack_require__(/*! laravel-echo */ \"./node_modules/laravel-echo/dist/echo.js\")[\"default\"]);\r\n\r\nconsole.log('Echo:', Echo);\r\n\r\nwindow.Pusher = __webpack_require__(/*! pusher-js */ \"./node_modules/pusher-js/dist/web/pusher.js\");\r\n\r\nconsole.log('Pusher:', window.Pusher);\r\n\r\nwindow.Echo = new Echo({\r\n    broadcaster: 'pusher',\r\n    key: 'dev', // change to `dev` if local or non-https. Else if production make it `app`\r\n    cluster: 'mt1',\r\n    wsHost: window.location.hostname,\r\n    wsPort: 6001,\r\n    wssPort: 6001,\r\n    forceTLS: false,\r\n    encrypted: true,\r\n    enabledTransports: ['ws','wss'],\r\n    authEndpoint: 'broadcasting/auth',\r\n});   \n\n//# sourceURL=webpack:///./public/js/websocket.js?");
+eval("const Echo = (__webpack_require__(/*! laravel-echo */ \"./node_modules/laravel-echo/dist/echo.js\")[\"default\"]);\r\n\r\nconsole.log('Echo:', Echo);\r\n\r\nwindow.Pusher = __webpack_require__(/*! pusher-js */ \"./node_modules/pusher-js/dist/web/pusher.js\");\r\n\r\nconsole.log('Pusher:', window.Pusher);\r\n\r\nwindow.Echo = new Echo({\r\n    broadcaster: 'pusher',\r\n    key: 'app', // change to `dev` if local or non-https. Else if production make it `app`\r\n    cluster: 'mt1',\r\n    wsHost: window.location.hostname,\r\n    wsPort: 6001,\r\n    wssPort: 6001,\r\n    forceTLS: false,\r\n    encrypted: true,\r\n    enabledTransports: ['ws','wss'],\r\n    authEndpoint: 'broadcasting/auth',\r\n});   \n\n//# sourceURL=webpack:///./public/js/websocket.js?");
 
 /***/ })
 

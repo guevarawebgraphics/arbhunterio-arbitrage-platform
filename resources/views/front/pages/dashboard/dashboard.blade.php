@@ -326,7 +326,7 @@
                                     <div class="w-72">
                                         <div class="flex flex-row items-center justify-between p-4">
                                             <span class="text-sm text-inherit font-semibold">1 selected</span>
-                                            <button class="min-w-0 max-w-md font-semibold inline-flex transition-all duration-200 ease-in-out items-center text-brand-blue-5 border border-brand-blue-5 bg-[#1D2F41] hover:border-brand-blue-3 hover:text-brand-blue-3 hover:bg-brand-gray active:text-brand-blue-2 active:border-brand-blue-2 active:bg-brand-gray text-xs h-8 px-3 rounded" type="button">
+                                            <button class="btn--clear-profit min-w-0 max-w-md font-semibold inline-flex transition-all duration-200 ease-in-out items-center text-brand-blue-5 border border-brand-blue-5 bg-[#1D2F41] hover:border-brand-blue-3 hover:text-brand-blue-3 hover:bg-brand-gray active:text-brand-blue-2 active:border-brand-blue-2 active:bg-brand-gray text-xs h-8 px-3 rounded" type="button">
                                                 <div class="flex min-w-0 flex-1 items-center justify-center gap-1.5">
                                                     <div class="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap">Clear
     
