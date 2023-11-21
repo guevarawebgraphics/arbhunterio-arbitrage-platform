@@ -868,6 +868,25 @@ trait OddsJamAPITrait
                 $query->orWhere('sportsbook_b_values', 'like', '%' . $item . '%');
             }
 
+            foreach ($market ?? [] as $item) {
+                if($item == "Alternate Market") {
+
+                } else if ($item == "Main Market") {
+
+                } else if ($item == "Player Prop") {
+
+                }
+            }
+
+
+            if ( $date_time == 1 ) {
+                // Today
+
+            } else if ( $date_time == 2 ) {
+                // Next 24 Hours
+
+            }
+
         })
         ->select(
             'game_id as uid',
