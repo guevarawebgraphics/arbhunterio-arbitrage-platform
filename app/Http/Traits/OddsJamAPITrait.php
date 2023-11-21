@@ -822,9 +822,10 @@ trait OddsJamAPITrait
     public function getGamesPerMarket($data) {
 
         $is_live = isset($data['is_live']) ? $data['is_live'] : 0;
-
         $is_hidden = isset($data['is_hidden']) ? $data['is_hidden'] : 0;
-        
+
+        $filter_param = $data['filter_param'];
+
         $gamesArray = GamesPerMarket::where('is_live', $is_live )
         ->where('profit_percentage','>=', 0)
         ->whereNotIn('selection_line_a', ['Draw','No Goal'])
@@ -833,7 +834,41 @@ trait OddsJamAPITrait
         ->where('sportsbook_a', '!=' , "")
         ->where('sportsbook_b', '!=' , "")
         ->where('is_hidden', $is_hidden)
-        // ->where('is_below_one','<', 1)
+        ->where(function ($query) use ($filter_param) {
+            
+            \Log::info(json_encode($filter_param));
+
+            $max_profit = $filter_param['max_profit'];
+
+            $min_profit = $filter_param['min_profit'];
+
+            $sports = $filter_param['sports'];
+
+            $sportsbook = $filter_param['sportsbook'];
+
+            $market = $filter_param['market'];
+
+            $date_time = $filter_param['date_time'];
+
+            if ($max_profit != 0 && $max_profit ) {
+                $query->where('profit_percentage', '<=', $max_profit );
+            }
+
+            if ($min_profit != 0 && $min_profit ) {
+                $query->where('profit_percentage', '>=', $min_profit );
+            }
+
+            if (!empty($sports)) {
+                $query->whereIn('sport', $sports );
+            }
+
+            foreach ($sportsbook ?? [] as $item) {
+                \Log::info($item);
+                $query->where('sportsbook_a_values', 'like', '%' . $item . '%');
+                $query->orWhere('sportsbook_b_values', 'like', '%' . $item . '%');
+            }
+
+        })
         ->select(
             'game_id as uid',
             'start_date',
@@ -952,6 +987,10 @@ trait OddsJamAPITrait
 
                     $game_info = Game::where('uid', $game_id)->first();
 
+                    \Log::info($odds_data['sportsbook_a_values']);
+                    \Log::info($odds_data['sportsbook_b_values']);
+
+
                     if ( !empty($checkExists) ) {
 
                         $games_per_market_stored = GamesPerMarket::where('game_id', $game_id)->where('bet_type', $field['label'])->update([
@@ -969,6 +1008,8 @@ trait OddsJamAPITrait
                             'profit_percentage' =>  $odds_data['profit_percentage'],
                             'sportsbook_a'  =>  $odds_data['sportsbook_a'],
                             'sportsbook_b'  =>  $odds_data['sportsbook_b'],
+                            'sportsbook_a_values'  =>  $odds_data['sportsbook_a_values'],
+                            'sportsbook_b_values'  =>  $odds_data['sportsbook_b_values'],
                             'is_below_one'  =>  $odds_data['is_below_one']  
                         ]);
 
@@ -991,6 +1032,8 @@ trait OddsJamAPITrait
                             'profit_percentage' =>  $odds_data['profit_percentage'],
                             'sportsbook_a'  =>  $odds_data['sportsbook_a'],
                             'sportsbook_b'  =>  $odds_data['sportsbook_b'],
+                            'sportsbook_a_values'  =>  $odds_data['sportsbook_a_values'],
+                            'sportsbook_b_values'  =>  $odds_data['sportsbook_b_values'],
                             'is_below_one'  =>  $odds_data['is_below_one']  
                         ]);
 
@@ -1089,6 +1132,10 @@ trait OddsJamAPITrait
         $is_home_or_away = 0;
 
         $bet_query = null;
+
+        $sportsbooks_over_with_highest_bet_price = '';
+
+        $sportsbooks_under_with_highest_bet_price = '';
 
         $game = DB::table('gameodds')
         ->select(
@@ -1307,6 +1354,9 @@ trait OddsJamAPITrait
 
             'sportsbook_a'  => $sportsbook_a,
             'sportsbook_b'  => $sportsbook_b,
+
+            'sportsbook_a_values'  => $sportsbooks_over_with_highest_bet_price ? implode(',', $sportsbooks_over_with_highest_bet_price) : '',
+            'sportsbook_b_values'  => $sportsbooks_under_with_highest_bet_price ? implode(',', $sportsbooks_under_with_highest_bet_price) : '',
 
             'best_over_odds_query'  => $best_over_odds_query,
             'best_under_odds_query'  => $best_under_odds_query,

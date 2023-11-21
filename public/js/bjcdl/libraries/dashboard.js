@@ -193,17 +193,21 @@ async function refreshDataTable() {
 
     let input = [];
 
-    var min_profit = $("#minimum_profit_percentage").val();
+    let min_profit = 0;
 
-    var max_profit = $("#maximum_profit_percentage").val();
+    let max_profit = 0;
 
-    var sports = [];
+    min_profit = $("#minimum_profit_percentage").val() ?  $("#minimum_profit_percentage").val() : 0 ;
 
-    var sportsbook = [];
+    max_profit = $("#maximum_profit_percentage").val() ? $("#maximum_profit_percentage").val() : 0;
 
-    var market = [];
+    let sports = [];
 
-    var date_time = 0;
+    let sportsbook = [];
+
+    let market = [];
+
+    let date_time = 0;  // 0 = NONE; 1 = Today; 2 = Next 24 Hours
     
     $('input[name="sports[]"]:checked').each(function() {
         sports.push($(this).val());
@@ -220,7 +224,7 @@ async function refreshDataTable() {
     if ($('input[name="date_time[]"]:checked').val()) {
         date_time = $('input[name="date_time[]"]:checked').val();
     }
-    
+
     input.push({
         min_profit: min_profit,
         max_profit: max_profit,
@@ -229,8 +233,10 @@ async function refreshDataTable() {
         market: market,
         date_time: date_time
     });
+
+    console.log(input);
     
-    Livewire.emit('refreshTable', input);
+    Livewire.emit('refreshTable', input[0]);
 
     
 }

@@ -59,6 +59,9 @@ class GamesPerMarket extends Model
         'sportsbook_a',
         'sportsbook_b',
 
+        'sportsbook_a_values',
+        'sportsbook_b_values',
+
         'is_below_one',
 
         'is_hidden',

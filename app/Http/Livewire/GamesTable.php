@@ -35,6 +35,15 @@ class GamesTable extends Component
 
     public $is_hidden;
 
+    public $filter_param = [
+        'min_profit'    =>   0,
+        'max_profit'    =>   0,
+        'sports'    =>   [],
+        'sportsbook'    =>   [],
+        'market'    =>   [],
+        'date_time'    =>   0 // 0 = NONE; 1 = Today; 2 = Next 24 Hours
+    ];
+
     protected $updatesQueryString = ['page' => ['except' => 1], 'is_live', 'is_hidden'];
 
 
@@ -49,6 +58,8 @@ class GamesTable extends Component
         $input['is_live'] = $this->is_live;
 
         $input['is_hidden'] = $this->is_hidden;
+
+        $input['filter_param']  =  $this->filter_param;
 
         $this->games = $this->getGamesPerMarket($input);
 
@@ -71,29 +82,36 @@ class GamesTable extends Component
 
     }
 
-    public function refreshTable($data = [])
+    public function refreshTable($data = [
+            'min_profit'    =>   0,
+            'max_profit'    =>   0,
+            'sports'    =>   [],
+            'sportsbook'    =>   [],
+            'market'    =>   [],
+            'date_time'    =>   0 // 0 = NONE; 1 = Today; 2 = Next 24 Hours
+        ])
     {
-
-        \Log::info(json_encode($data));
+        
+        $this->filter_param = $data;
 
         $this->mount();
 
         $total_counts =  $this->total_counts;
 
-        $pre_match_count = $total_counts['pre_match_count'];
-
-        $live_count = $total_counts['live_count'];
-
-        $hidden_count = $total_counts['hidden_count'];
-
-        $this->emit('updateCounts', $pre_match_count, $live_count, $hidden_count );
+        $this->emit('updateCounts', $total_counts['pre_match_count'], $total_counts['live_count'], $total_counts['hidden_count'] );
 
         \Log::info( 'Data Table Refreshed: ' . date('H:i a',strtotime( now() )) );
     }
     
     public function updatedPage($value)
     {
-        $input = ['is_live' => $this->is_live, 'is_hidden' => $this->is_hidden];
+        $input = [];
+
+        $input['is_live'] = $this->is_live;
+
+        $input['is_hidden'] = $this->is_hidden;
+
+        $input['filter_param']  =  $this->filter_param;
         
         $this->games = $this->getGamesPerMarket($input);
     }
@@ -102,7 +120,15 @@ class GamesTable extends Component
     {
         $this->setPage($page);
 
-        $this->games = $this->getGamesPerMarket([]);
+        $input = [];
+
+        $input['is_live'] = $this->is_live;
+
+        $input['is_hidden'] = $this->is_hidden;
+
+        $input['filter_param']  =  $this->filter_param;
+
+        $this->games = $this->getGamesPerMarket($input);
     }
 
 }
