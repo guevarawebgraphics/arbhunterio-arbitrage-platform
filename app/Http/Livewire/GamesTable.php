@@ -74,6 +74,8 @@ class GamesTable extends Component
     public function refreshTable($data = [])
     {
 
+        \Log::info(json_encode($data));
+
         $this->mount();
 
         $total_counts =  $this->total_counts;

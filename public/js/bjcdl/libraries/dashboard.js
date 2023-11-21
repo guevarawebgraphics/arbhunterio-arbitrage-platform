@@ -220,6 +220,7 @@ async function refreshDataTable() {
     if ($('input[name="date_time[]"]:checked').val()) {
         date_time = $('input[name="date_time[]"]:checked').val();
     }
+    
     input.push({
         min_profit: min_profit,
         max_profit: max_profit,
@@ -228,7 +229,7 @@ async function refreshDataTable() {
         market: market,
         date_time: date_time
     });
-    console.log(input);
+    
     Livewire.emit('refreshTable', input);
 
     
