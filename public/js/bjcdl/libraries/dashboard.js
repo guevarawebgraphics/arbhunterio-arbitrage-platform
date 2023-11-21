@@ -189,6 +189,33 @@ $(document).on('change', 'input[name="sports[]"], input[name="sportsbook[]"], in
     refreshDataTable();
 });
 
+$(document).on('click', '.btn--clear-profit', function () {
+    $("#minimum_profit_percentage").val('');
+    $("#maximum_profit_percentage").val('');
+});
+
+$(document).on('click', '.btn--toggle-select-sportsbook', function () {
+    if(this.checked) {
+        // If the toggle is checked, check all checkboxes
+        $('input[name="sportsbook[]"]').prop('checked', true);
+    } else {
+        // If the toggle is unchecked, uncheck all checkboxes
+        $('input[name="sportsbook[]"]').prop('checked', false);
+    }
+    refreshDataTable();
+});
+
+$(document).on('click', '.btn--toggle-select-sports', function () {
+    if(this.checked) {
+        // If the toggle is checked, check all checkboxes
+        $('input[name="sports[]"]').prop('checked', true);
+    } else {
+        // If the toggle is unchecked, uncheck all checkboxes
+        $('input[name="sports[]"]').prop('checked', false);
+    }
+    refreshDataTable();
+});
+
 async function refreshDataTable() {
 
     let input = [];
