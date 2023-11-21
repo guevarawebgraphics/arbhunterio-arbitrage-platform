@@ -180,6 +180,13 @@ $(document).on('click','.btn--hidden-bet', function () {
 
 });
 
+async function filterCounts() {
+    $(".sportsbook-count").html($('input[name="sportsbook[]"]:checked').length);
+
+    $(".sports-count").html($('input[name="sports[]"]:checked').length);
+
+    $(".market-count").html($('input[name="market[]"]:checked').length);
+}
 
 $(document).on('change keyup', '#minimum_profit_percentage, #maximum_profit_percentage', function () {
     refreshDataTable();
@@ -215,6 +222,8 @@ $(document).on('click', '.btn--toggle-select-sports', function () {
     }
     refreshDataTable();
 });
+
+filterCounts();
 
 async function refreshDataTable() {
 
@@ -264,6 +273,8 @@ async function refreshDataTable() {
     console.log(input);
     
     Livewire.emit('refreshTable', input[0]);
+
+    filterCounts();
 
     
 }
