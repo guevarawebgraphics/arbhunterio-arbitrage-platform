@@ -548,10 +548,20 @@
                                         <div class="max-h-[400px] overflow-y-auto">
                                             <div class="mt-1 flex flex-col gap-3 p-6">
                                                 <div class="form-check">
-                                                    <label class="flex flex-row items-center text-white"><input class="mr-2 border-2 border-brand-gray-5 bg-transparent hover:bg-brand-gray-3 checked:border-brand-blue-3 checked:bg-brand-blue-3 focus:!border-brand-blue-3 focus:ring-brand-blue-8 focus:checked:!bg-brand-blue-3" type="radio">Today</label>
+                                                    <label class="flex flex-row items-center text-white">
+                                                        <input name="date_time[]" value="1" class="mr-2 border-2 border-brand-gray-5 bg-transparent hover:bg-brand-gray-3 
+                                                        checked:border-brand-blue-3 checked:bg-brand-blue-3 focus:!border-brand-blue-3 focus:ring-brand-blue-8 
+                                                        focus:checked:!bg-brand-blue-3" type="radio">
+                                                        Today
+                                                    </label>
                                                 </div>
                                                 <div class="form-check">
-                                                    <label class="flex flex-row items-center text-white"><input class="mr-2 border-2 border-brand-gray-5 bg-transparent hover:bg-brand-gray-3 checked:border-brand-blue-3 checked:bg-brand-blue-3 focus:!border-brand-blue-3 focus:ring-brand-blue-8 focus:checked:!bg-brand-blue-3" type="radio">Next 24 hours</label>
+                                                    <label class="flex flex-row items-center text-white">
+                                                    <input name="date_time[]" value="2" class="mr-2 border-2 border-brand-gray-5 
+                                                        bg-transparent hover:bg-brand-gray-3 checked:border-brand-blue-3 checked:bg-brand-blue-3 
+                                                        focus:!border-brand-blue-3 focus:ring-brand-blue-8 focus:checked:!bg-brand-blue-3" type="radio">
+                                                        Next 24 hours
+                                                    </label>
                                                 </div>
                                             </div>
                                         </div>

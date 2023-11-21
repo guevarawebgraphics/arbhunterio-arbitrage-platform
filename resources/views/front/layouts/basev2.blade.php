@@ -22,6 +22,9 @@
     
     <link href="{{asset('public/css/app.css')}}" rel="stylesheet">
     <script src="{{ asset('public/js/bundle.js') }}"></script>
+
+    <link href="{{asset('public/bsbmd/plugins/toastr/toastr.css')}}" rel="stylesheet">
+
     <style>       
         body{
             background-color: #09131E;
@@ -128,7 +131,7 @@
     {{Html::script('public/bsbmd/plugins/momentjs/moment.js')}}
     <script src="{{asset('public/assets/js/flowbite.min.js')}}"></script>
     <script src="{{asset('public/assets/js/switch.js')}}"></script>
-    
+    <script src="{{asset('public/bsbmd/plugins/toastr/toastr.js')}}"></script>
     @yield('extra-script')
 
     @livewireScripts

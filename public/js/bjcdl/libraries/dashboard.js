@@ -167,12 +167,14 @@ $(document).on('click','.btn--hidden-bet', function () {
         success: function(response) {
             if (response.status) {
                 Livewire.emit('refreshTable', is_live, is_hidden);
+                toastr.success('Successfully updated!');
             } else {
-                alert('Something went wrong..');
+                // alert('Something went wrong..');
+                toastr.error('Something went wrong..');
             }
         },
         error: function() {
-            alert('Something went wrong..');
+            toastr.error('Something went wrong..');
         }
     });
 
@@ -183,17 +185,25 @@ $(document).on('change keyup', '#minimum_profit_percentage, #maximum_profit_perc
     refreshDataTable();
 });
 
-$(document).on('change', 'input[name="sports[]"], input[name="sportsbook[]"], input[name="market[]"]', function () {
+$(document).on('change', 'input[name="sports[]"], input[name="sportsbook[]"], input[name="market[]"], input[name="date_time[]"]', function () {
     refreshDataTable();
 });
 
 async function refreshDataTable() {
 
+    let input = [];
+
     var min_profit = $("#minimum_profit_percentage").val();
+
     var max_profit = $("#maximum_profit_percentage").val();
+
     var sports = [];
+
     var sportsbook = [];
+
     var market = [];
+
+    var date_time = 0;
     
     $('input[name="sports[]"]:checked').each(function() {
         sports.push($(this).val());
@@ -207,17 +217,19 @@ async function refreshDataTable() {
         market.push($(this).val());
     });
 
-    console.log('Max Profit: ', max_profit);
-    
-    console.log('Min Profit: ', min_profit);
-
-    console.log('Sports', sports);
-
-    console.log('Sportsbook', sportsbook);
-
-    console.log('Market', market);
-
-    Livewire.emit('refreshTable', 1, 1);
+    if ($('input[name="date_time[]"]:checked').val()) {
+        date_time = $('input[name="date_time[]"]:checked').val();
+    }
+    input.push({
+        min_profit: min_profit,
+        max_profit: max_profit,
+        sports: sports,
+        sportsbook: sportsbook,
+        market: market,
+        date_time: date_time
+    });
+    console.log(input);
+    Livewire.emit('refreshTable', input);
 
     
 }
