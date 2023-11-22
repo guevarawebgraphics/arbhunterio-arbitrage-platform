@@ -10,6 +10,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use App\Http\Traits\OddsJamAPITrait;
 use App\Services\GameOdds\GameOdds;
+use App\Services\Games\Game;
 use Illuminate\Support\Facades\File;
 use App\Events\NewOddsReceived;
 

@@ -896,6 +896,8 @@ trait OddsJamAPITrait
             }
 
         })
+
+        ->where('is_below_one','<=',1)
         ->select(
             'game_id as uid',
             'start_date',
@@ -994,6 +996,7 @@ trait OddsJamAPITrait
             }
 
         })
+        ->where('is_below_one','<=',1)
         ->count();
 
         $live_count = GamesPerMarket::where('is_live', 1 )
@@ -1053,6 +1056,7 @@ trait OddsJamAPITrait
             }
 
         })
+        ->where('is_below_one','<=',1)
         ->count();
 
          $hidden_count = GamesPerMarket::where('is_live', 0 )
@@ -1112,6 +1116,7 @@ trait OddsJamAPITrait
             }
 
         })
+        ->where('is_below_one','<=',1)
         ->count();
 
         $data = [

@@ -153,10 +153,15 @@
 
                 console.log('Stopped Streaming');
             } else {
+
+
+
+
+
                 // Start listening to the Echo channel
                 echoChannel = Echo.channel('odds-updates');
                 echoChannel.listen('NewOddsReceived', (event) => {
-                    Livewire.emit('refreshTable');
+                    refreshDataTable();
                     console.log(event);
                 });
                 $('#playButtonText').text('Stop');
