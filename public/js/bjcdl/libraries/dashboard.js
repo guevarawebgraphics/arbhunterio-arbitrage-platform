@@ -181,22 +181,36 @@ $(document).on('click','.btn--hidden-bet', function () {
 });
 
 async function filterCounts() {
-    $(".sportsbook-count").html($('input[name="sportsbook[]"]:checked').length);
 
-    $(".sports-count").html($('input[name="sports[]"]:checked').length);
+    var sportsbook = $('input[name="sportsbook[]"]:checked').length;
 
-    $(".market-count").html($('input[name="market[]"]:checked').length);
+    var sports = $('input[name="sports[]"]:checked').length;
 
-    $(".datetime-count").html($('input[name="date_time[]"]:checked').length);
+    var market = $('input[name="market[]"]:checked').length;
 
+    var date_time = $('input[name="date_time[]"]:checked').length;
 
-    var count = 0;
+    var percentage = 0;
+
+    $(".sportsbook-count").html(sportsbook);
+
+    $(".sports-count").html(sports);
+
+    $(".market-count").html(market);
+
+    $(".datetime-count").html(date_time);
+
     $('input[name="percentage_value[]"]').each(function() {
         if ($(this).val()) {
-            count++;
+            percentage++;
         }
     });
-    $(".percentage-count").html(count);
+    $(".percentage-count").html(percentage);
+
+    var total = sportsbook + sports + market + date_time + percentage;
+    
+    $(".total-filter").html(total);
+
 }
 
 $(document).on('change keyup', '#minimum_profit_percentage, #maximum_profit_percentage', function () {
@@ -218,6 +232,10 @@ $(document).on('click', '.btn--clear-datetime', function () {
     $('input[name="date_time[]"]').prop('checked', false);
     refreshDataTable();
     filterCounts();
+});
+
+$(document).on('click', '.btn--clear-all', function () {
+    location.reload();
 });
 
 

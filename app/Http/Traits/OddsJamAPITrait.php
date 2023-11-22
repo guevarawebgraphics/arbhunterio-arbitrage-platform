@@ -850,6 +850,18 @@ trait OddsJamAPITrait
 
                 $date_time = $filter_param['date_time'];
 
+                
+                if ($date_time == "1") {
+                    // Today
+                    $currentDate = Carbon::now()->format('Y-m-d');
+                    $query->where(DB::raw("DATE(start_date)"), $currentDate);
+
+                } else if ($date_time == "2") {
+                    // Next 24 Hours (Tomorrow)
+                    $nextDay = Carbon::now()->addDay()->format('Y-m-d');
+                    $query->where(DB::raw("DATE(start_date)"), $nextDay);
+                }
+
                 if ($max_profit != 0 && $max_profit ) {
                     $query->where('profit_percentage', '<=', $max_profit );
                 }
@@ -863,7 +875,6 @@ trait OddsJamAPITrait
                 }
 
                 foreach ($sportsbook ?? [] as $item) {
-                    \Log::info($item);
                     $query->where('sportsbook_a_values', 'like', '%' . $item . '%');
                     $query->orWhere('sportsbook_b_values', 'like', '%' . $item . '%');
                 }
@@ -878,16 +889,6 @@ trait OddsJamAPITrait
                     }
                 }
 
-
-                if ($date_time == "1") {
-                    // Today
-                    $currentDate = Carbon::now()->format('Y-m-d');
-                    $query->where(DB::raw("DATE(start_date)"), $currentDate);
-                } else if ($date_time == "2") {
-                    // Next 24 Hours (Tomorrow)
-                    $nextDay = Carbon::now()->addDay()->format('Y-m-d');
-                    $query->where(DB::raw("DATE(start_date)"), $nextDay);
-                }
 
             }
 

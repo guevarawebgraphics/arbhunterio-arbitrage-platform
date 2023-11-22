@@ -64,6 +64,10 @@ class GamesTable extends Component
         $this->games = $this->getGamesPerMarket($input);
 
         $this->total_counts = $this->getTotalCounts();
+
+        $total_counts =  $this->total_counts;
+
+        $this->emit('updateCounts', $total_counts['pre_match_count'], $total_counts['live_count'], $total_counts['hidden_count'] );
     }
 
     public function render()
@@ -95,10 +99,6 @@ class GamesTable extends Component
         $this->filter_param = $data;
 
         $this->mount();
-
-        $total_counts =  $this->total_counts;
-
-        $this->emit('updateCounts', $total_counts['pre_match_count'], $total_counts['live_count'], $total_counts['hidden_count'] );
 
         \Log::info( 'Data Table Refreshed: ' . date('H:i a',strtotime( now() )) );
     }

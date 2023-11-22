@@ -244,13 +244,13 @@
             <!-- filter section -->
             <section id="filter-section">
                 <div class="flex items-center justify-end gap-4 flex-wrap my-5">
-                    <a data-testid="link" id="settings-button" class="min-w-0 max-w-md font-semibold inline-flex rounded-md bg-[#314457] hover:bg-[#3d546b] transition-all duration-200 ease-in-out items-center text-white active:bg-brand-gray-5 text-sm h-10 px-[1.11rem]" href="#">
+                    {{-- <a data-testid="link" id="settings-button" class="min-w-0 max-w-md font-semibold inline-flex rounded-md bg-[#314457] hover:bg-[#3d546b] transition-all duration-200 ease-in-out items-center text-white active:bg-brand-gray-5 text-sm h-10 px-[1.11rem]" href="#">
                             <div class="flex min-w-0 flex-1 items-center justify-center gap-1.5"><div class="h-4 w-4">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.004 10.407c.138.435-.216.842-.672.842h-3.465a.75.75 0 01-.65-.375l-1.732-3c-.229-.396-.053-.907.393-1.004a5.252 5.252 0 016.126 3.537zM8.12 8.464c.307-.338.838-.235 1.066.16l1.732 3a.75.75 0 010 .75l-1.732 3.001c-.229.396-.76.498-1.067.16A5.231 5.231 0 016.75 12c0-1.362.519-2.603 1.37-3.536zM10.878 17.13c-.447-.097-.623-.608-.394-1.003l1.733-3.003a.75.75 0 01.65-.375h3.465c.457 0 .81.408.672.843a5.252 5.252 0 01-6.126 3.538z"></path><path fill-rule="evenodd" d="M21 12.75a.75.75 0 000-1.5h-.783a8.22 8.22 0 00-.237-1.357l.734-.267a.75.75 0 10-.513-1.41l-.735.268a8.24 8.24 0 00-.689-1.191l.6-.504a.75.75 0 10-.964-1.149l-.6.504a8.3 8.3 0 00-1.054-.885l.391-.678a.75.75 0 10-1.299-.75l-.39.677a8.188 8.188 0 00-1.295-.471l.136-.77a.75.75 0 00-1.477-.26l-.136.77a8.364 8.364 0 00-1.377 0l-.136-.77a.75.75 0 10-1.477.26l.136.77c-.448.121-.88.28-1.294.47l-.39-.676a.75.75 0 00-1.3.75l.392.678a8.29 8.29 0 00-1.054.885l-.6-.504a.75.75 0 00-.965 1.149l.6.503a8.243 8.243 0 00-.689 1.192L3.8 8.217a.75.75 0 10-.513 1.41l.735.267a8.222 8.222 0 00-.238 1.355h-.783a.75.75 0 000 1.5h.783c.042.464.122.917.238 1.356l-.735.268a.75.75 0 10.513 1.41l.735-.268c.197.417.428.816.69 1.192l-.6.504a.75.75 0 10.963 1.149l.601-.505c.326.323.679.62 1.054.885l-.392.68a.75.75 0 101.3.75l.39-.679c.414.192.847.35 1.294.471l-.136.771a.75.75 0 101.477.26l.137-.772a8.376 8.376 0 001.376 0l.136.773a.75.75 0 101.477-.26l-.136-.772a8.19 8.19 0 001.294-.47l.391.677a.75.75 0 101.3-.75l-.393-.679a8.282 8.282 0 001.054-.885l.601.504a.75.75 0 10.964-1.15l-.6-.503a8.24 8.24 0 00.69-1.191l.735.268a.75.75 0 10.512-1.41l-.734-.268c.115-.438.195-.892.237-1.356h.784zm-2.657-3.06a6.744 6.744 0 00-1.19-2.053 6.784 6.784 0 00-1.82-1.51A6.704 6.704 0 0012 5.25a6.801 6.801 0 00-1.225.111 6.7 6.7 0 00-2.15.792 6.784 6.784 0 00-2.952 3.489.758.758 0 01-.036.099A6.74 6.74 0 005.251 12a6.739 6.739 0 003.355 5.835l.01.006.01.005a6.706 6.706 0 002.203.802c.007 0 .014.002.021.004a6.792 6.792 0 002.301 0l.022-.004a6.707 6.707 0 002.228-.816 6.781 6.781 0 001.762-1.483l.009-.01.009-.012a6.744 6.744 0 001.18-2.064c.253-.708.39-1.47.39-2.264a6.74 6.74 0 00-.408-2.308z" clip-rule="evenodd"></path></svg>
                             </div>
                             <div class="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap">Settings</div>
                         </div>
-                    </a>
+                    </a> --}}
                     <button data-testid="betting-tools-refresh" id="refresh-button" class="min-w-0 max-w-md font-semibold inline-flex rounded-md transition-all duration-200 ease-in-out items-center text-white bg-[#314457] hover:bg-[#3d546b] active:bg-brand-gray-5 text-sm h-10 px-[1.11rem]" type="button">
                         <div class="flex min-w-0 flex-1 items-center justify-center gap-1.5">
                             <div class="h-4 w-4"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M4.755 10.059a7.5 7.5 0 0112.548-3.364l1.903 1.903h-3.183a.75.75 0 100 1.5h4.992a.75.75 0 00.75-.75V4.356a.75.75 0 00-1.5 0v3.18l-1.9-1.9A9 9 0 003.306 9.67a.75.75 0 101.45.388zm15.408 3.352a.75.75 0 00-.919.53 7.5 7.5 0 01-12.548 3.364l-1.902-1.903h3.183a.75.75 0 000-1.5H2.984a.75.75 0 00-.75.75v4.992a.75.75 0 001.5 0v-3.18l1.9 1.9a9 9 0 0015.059-4.035.75.75 0 00-.53-.918z" clip-rule="evenodd"></path></svg>
@@ -275,7 +275,7 @@
                                 <div class="flex flex-row items-center gap-2" data-testid="filters-toggle">
                                     <div class="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap">Filters</div>
                                     <div class="h-6 w-[1.5px] bg-white opacity-75 duration-200"></div>
-                                        <span class="text-base text-inherit">2</span>
+                                        <span class="text-base text-inherit total-filter">2</span>
                                 </div>
                             </div>
                         </div>
@@ -285,7 +285,7 @@
                     <div class="flex flex-row justify-between p-4">
                         <div class="mb-4 flex flex-row flex-wrap items-center text-white md:mb-0">
                             <h3 class="font-semibold text-xl font-code-next text-white">Filters</h3>
-                            <span class="text-base ml-2 text-white">(2 selected)</span>
+                            <span class="text-base ml-2 text-white">(<span class="total-filter">2</span> selected)</span>
                         </div>
                         <div class="flex w-full flex-row gap-4 md:w-auto">
                             <button id="save-filters" class="min-w-0 max-w-md font-semibold inline-flex rounded-md transition-all duration-200 ease-in-out items-center text-white bg-[#314457] hover:bg-[#3d546b] active:bg-brand-gray-5 text-sm h-10 px-[1.11rem] w-full md:w-auto" type="button">
@@ -301,7 +301,7 @@
                                     <div class="h-4 w-4">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
                                     </div>
-                                    <div class="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap">Clear All</div>
+                                    <div class="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap btn--clear-all">Clear All</div>
                                 </div>
                             </button>
                         </div>
