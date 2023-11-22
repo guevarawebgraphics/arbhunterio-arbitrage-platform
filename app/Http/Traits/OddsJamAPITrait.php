@@ -827,69 +827,72 @@ trait OddsJamAPITrait
 
         $filter_param = $data['filter_param'];
 
+        $currentDate = Carbon::now()->format('Y-m-d');
+        $nextDay = Carbon::now()->addDay()->format('Y-m-d');
+        $date = $filter_param['date_time'] == 2 ? $nextDay : $currentDate;
+
         $gamesArray = GamesPerMarket::where('is_live', $is_live )
+
         ->where('profit_percentage','>=', 0)
         ->whereNotIn('selection_line_a', ['Draw','No Goal'])
+
         ->where('selection_line_a','!=',"")
         ->where('selection_line_b','!=',"")
         ->where('sportsbook_a', '!=' , "")
         ->where('sportsbook_b', '!=' , "")
+
         ->where('is_hidden', $is_hidden)
+
+        ->whereIn('sport', $filter_param['sports'] )
+
+        ->where('profit_percentage', '<=', $filter_param['max_profit'] )
+
+        ->where('profit_percentage', '>=', $filter_param['min_profit'] )
+
+        ->where(DB::raw("DATE(start_date)"), $date)
+
         ->where(function ($query) use ($filter_param) {
             
-            if ( !empty( $filter_param ) ) {
-                $max_profit = $filter_param['max_profit'];
+            $market = $filter_param['market'];
+            
+            $market_type = marketTypes();
 
-                $min_profit = $filter_param['min_profit'];
+            $sportsbook = $filter_param['sportsbook'];
 
-                $sports = $filter_param['sports'];
-
-                $sportsbook = $filter_param['sportsbook'];
-
-                $market = $filter_param['market'];
-
-                $date_time = $filter_param['date_time'];
-
+            foreach ($sportsbook ?? [] as $item) {
+                $query->orWhere('sportsbook_a_values', 'like', '%' . $item . '%');
                 
-                if ($date_time == "1") {
-                    // Today
-                    $currentDate = Carbon::now()->format('Y-m-d');
-                    $query->where(DB::raw("DATE(start_date)"), $currentDate);
+                $query->orWhere('sportsbook_b_values', 'like', '%' . $item . '%');
+            }
 
-                } else if ($date_time == "2") {
-                    // Next 24 Hours (Tomorrow)
-                    $nextDay = Carbon::now()->addDay()->format('Y-m-d');
-                    $query->where(DB::raw("DATE(start_date)"), $nextDay);
-                }
+            foreach ($market ?? [] as $item) {
 
-                if ($max_profit != 0 && $max_profit ) {
-                    $query->where('profit_percentage', '<=', $max_profit );
-                }
+                if($item == "Alternate Market") {
 
-                if ($min_profit != 0 && $min_profit ) {
-                    $query->where('profit_percentage', '>=', $min_profit );
-                }
+                    foreach ( $market_type['alternate_markets'] ?? [] as $item) {
 
-                if (!empty($sports)) {
-                    $query->whereIn('sport', $sports );
-                }
-
-                foreach ($sportsbook ?? [] as $item) {
-                    $query->where('sportsbook_a_values', 'like', '%' . $item . '%');
-                    $query->orWhere('sportsbook_b_values', 'like', '%' . $item . '%');
-                }
-
-                foreach ($market ?? [] as $item) {
-                    if($item == "Alternate Market") {
-
-                    } else if ($item == "Main Market") {
-
-                    } else if ($item == "Player Prop") {
+                        $query->where('bet_type', 'like', '%' . $item . '%' );
 
                     }
+
+                } else if ($item == "Main Market") {
+
+                    foreach ( $market_type['main_markets'] ?? [] as $item) {
+
+                        $query->where('bet_type', 'like', '%' . $item . '%' );
+
+                    }
+
+                } else if ($item == "Player Prop") {
+
+                    foreach ( $market_type['player_props'] ?? [] as $item) {
+
+                        $query->where('bet_type', 'like', '%' . $item . '%' );
+
+                    }
+
                 }
-
-
+                
             }
 
         })
@@ -920,13 +923,19 @@ trait OddsJamAPITrait
             'league',
         )
         ->orderBy('profit_percentage','DESC')
-        ->paginate(10);
+        ->paginate(30);
 
         return $gamesArray;
 
     }
 
-    public function getTotalCounts() {
+    public function getTotalCounts( $data ) {
+
+        $filter_param = $data;
+
+        $currentDate = Carbon::now()->format('Y-m-d');
+        $nextDay = Carbon::now()->addDay()->format('Y-m-d');
+        $date = $filter_param['date_time'] == 2 ? $nextDay : $currentDate;
         
         $pre_match_count = GamesPerMarket::where('is_live', 0 )
         ->where('profit_percentage','>=', 0)
@@ -936,6 +945,55 @@ trait OddsJamAPITrait
         ->where('sportsbook_a', '!=' , "")
         ->where('sportsbook_b', '!=' , "")
         ->where('is_hidden', 0 )
+        ->whereIn('sport', $filter_param['sports'] )
+        ->where('profit_percentage', '<=', $filter_param['max_profit'] )
+        ->where('profit_percentage', '>=', $filter_param['min_profit'] )
+        ->where(DB::raw("DATE(start_date)"), $date)
+        ->where(function ($query) use ($filter_param) {
+            
+            $market = $filter_param['market'];
+            
+            $market_type = marketTypes();
+
+            $sportsbook = $filter_param['sportsbook'];
+
+            foreach ($sportsbook ?? [] as $item) {
+                $query->orWhere('sportsbook_a_values', 'like', '%' . $item . '%');
+                
+                $query->orWhere('sportsbook_b_values', 'like', '%' . $item . '%');
+            }
+
+            foreach ($market ?? [] as $item) {
+
+                if($item == "Alternate Market") {
+
+                    foreach ( $market_type['alternate_markets'] ?? [] as $item) {
+
+                        $query->where('bet_type', 'like', '%' . $item . '%' );
+
+                    }
+
+                } else if ($item == "Main Market") {
+
+                    foreach ( $market_type['main_markets'] ?? [] as $item) {
+
+                        $query->where('bet_type', 'like', '%' . $item . '%' );
+
+                    }
+
+                } else if ($item == "Player Prop") {
+
+                    foreach ( $market_type['player_props'] ?? [] as $item) {
+
+                        $query->where('bet_type', 'like', '%' . $item . '%' );
+
+                    }
+
+                }
+                
+            }
+
+        })
         ->count();
 
         $live_count = GamesPerMarket::where('is_live', 1 )
@@ -946,6 +1004,55 @@ trait OddsJamAPITrait
         ->where('sportsbook_a', '!=' , "")
         ->where('sportsbook_b', '!=' , "")
         ->where('is_hidden', 0 )
+        ->whereIn('sport', $filter_param['sports'] )
+        ->where('profit_percentage', '<=', $filter_param['max_profit'] )
+        ->where('profit_percentage', '>=', $filter_param['min_profit'] )
+        ->where(DB::raw("DATE(start_date)"), $date)
+        ->where(function ($query) use ($filter_param) {
+            
+            $market = $filter_param['market'];
+            
+            $market_type = marketTypes();
+
+            $sportsbook = $filter_param['sportsbook'];
+
+            foreach ($sportsbook ?? [] as $item) {
+                $query->orWhere('sportsbook_a_values', 'like', '%' . $item . '%');
+                
+                $query->orWhere('sportsbook_b_values', 'like', '%' . $item . '%');
+            }
+
+            foreach ($market ?? [] as $item) {
+
+                if($item == "Alternate Market") {
+
+                    foreach ( $market_type['alternate_markets'] ?? [] as $item) {
+
+                        $query->where('bet_type', 'like', '%' . $item . '%' );
+
+                    }
+
+                } else if ($item == "Main Market") {
+
+                    foreach ( $market_type['main_markets'] ?? [] as $item) {
+
+                        $query->where('bet_type', 'like', '%' . $item . '%' );
+
+                    }
+
+                } else if ($item == "Player Prop") {
+
+                    foreach ( $market_type['player_props'] ?? [] as $item) {
+
+                        $query->where('bet_type', 'like', '%' . $item . '%' );
+
+                    }
+
+                }
+                
+            }
+
+        })
         ->count();
 
          $hidden_count = GamesPerMarket::where('is_live', 0 )
@@ -956,6 +1063,55 @@ trait OddsJamAPITrait
         ->where('sportsbook_a', '!=' , "")
         ->where('sportsbook_b', '!=' , "")
         ->where('is_hidden', 1 )
+        ->whereIn('sport', $filter_param['sports'] )
+        ->where('profit_percentage', '<=', $filter_param['max_profit'] )
+        ->where('profit_percentage', '>=', $filter_param['min_profit'] )
+        ->where(DB::raw("DATE(start_date)"), $date)
+        ->where(function ($query) use ($filter_param) {
+            
+            $market = $filter_param['market'];
+            
+            $market_type = marketTypes();
+
+            $sportsbook = $filter_param['sportsbook'];
+
+            foreach ($sportsbook ?? [] as $item) {
+                $query->orWhere('sportsbook_a_values', 'like', '%' . $item . '%');
+                
+                $query->orWhere('sportsbook_b_values', 'like', '%' . $item . '%');
+            }
+
+            foreach ($market ?? [] as $item) {
+
+                if($item == "Alternate Market") {
+
+                    foreach ( $market_type['alternate_markets'] ?? [] as $item) {
+
+                        $query->where('bet_type', 'like', '%' . $item . '%' );
+
+                    }
+
+                } else if ($item == "Main Market") {
+
+                    foreach ( $market_type['main_markets'] ?? [] as $item) {
+
+                        $query->where('bet_type', 'like', '%' . $item . '%' );
+
+                    }
+
+                } else if ($item == "Player Prop") {
+
+                    foreach ( $market_type['player_props'] ?? [] as $item) {
+
+                        $query->where('bet_type', 'like', '%' . $item . '%' );
+
+                    }
+
+                }
+                
+            }
+
+        })
         ->count();
 
         $data = [

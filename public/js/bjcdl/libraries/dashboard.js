@@ -279,6 +279,8 @@ async function refreshDataTable() {
 
     let input = [];
 
+    let first_time = false;
+
     let min_profit = 0;
 
     let max_profit = 0;
@@ -317,7 +319,8 @@ async function refreshDataTable() {
         sports: sports,
         sportsbook: sportsbook,
         market: market,
-        date_time: date_time
+        date_time: date_time,
+        first_time:first_time
     });
 
     console.log(input);

@@ -184,3 +184,92 @@ function formatEvent($row) {
         <span><small>' . strtoupper($row->league) . '</small></span>
     </div>';
 }   
+
+function marketTypes () {
+    $main_markets = [
+        '1st Half Moneyline',
+        '1st Half Moneyline 3-Way',
+        '2nd Half Moneyline',
+        'Moneyline',
+        'Moneyline 3-Way',
+        'Game Spread',
+        'Point Spread',
+        'Total Goals',
+        'Total Points',
+        'Total Sets',
+        'Both Teams To Score',
+        'Draw No Bet',
+        'First Team To Score',
+        'Last Team To Score',
+        'Total Corners',
+        'Total Games'
+    ];
+
+    $alternate_markets = [
+        '1st Half Asian Handicap',
+        '1st Half Point Spread',
+        '1st Half Total Corners',
+        '1st Half Total Goals',
+        '1st Half Total Goals Odd/Even',
+        '1st Half Total Points',
+        '1st Half Total Points Odd/Even',
+        '2nd Half Asian Handicap',
+        '2nd Half Point Spread',
+        '2nd Half Total Corners',
+        '2nd Half Total Goals Odd/Even',
+        '2nd Half Total Points',
+        'Total Corners Odd/Even',
+        'Total Goals Odd/Even',
+        'Total Points Odd/Even',
+        'Total Sets Exact',
+        'Total Tiebreaks',
+        '1st Map Handicap',
+        '2nd Map Handicap',
+        '3rd Map Handicap',
+        '1st Map Moneyline',
+        '2nd Map Moneyline',
+        '3rd Map Moneyline',
+        '1st Map Total Kills',
+        '2nd Map Total Kills',
+        '3rd Map Total Kills',
+        'Asian Handicap',
+        'Set Handicap',
+        'Map Handicap',
+        '1st Set Total Games',
+        '1st Set Game Spread',
+        '2nd Set Moneyline',
+        '1st Half Race To 10 Points',
+        '1st Half Race To 15 Points',
+        '1st Half Race To 20 Points',
+        '1st Half Race To 25 Points',
+        '2nd Half Race To 10 Points',
+        '2nd Half Race To 15 Points',
+        '2nd Half Race To 20 Points',
+        '2nd Half Race To 25 Points',
+        'Team Total Corners',
+        'Team Total'
+    ];
+
+
+    $player_props = [
+        'Anytime Goal Scorer',
+        'First Goal Scorer',
+        'Last Goal Scorer',
+        'Player Assists',
+        'Player Goals',
+        'Player Shots Attempted',
+        'Player Shots On Target',
+        'Set Betting',
+        'To Win 1st Set',
+        'Will There Be Overtime'
+    ];
+
+
+    return $data = [
+        'main_markets'  =>  $main_markets,
+        'alternate_markets' =>  $alternate_markets,
+        'player_props'  =>  $player_props
+    ] ;
+
+
+}
