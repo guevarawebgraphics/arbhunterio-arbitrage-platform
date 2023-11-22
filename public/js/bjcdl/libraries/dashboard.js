@@ -186,20 +186,40 @@ async function filterCounts() {
     $(".sports-count").html($('input[name="sports[]"]:checked').length);
 
     $(".market-count").html($('input[name="market[]"]:checked').length);
+
+    $(".datetime-count").html($('input[name="date_time[]"]:checked').length);
+
+
+    var count = 0;
+    $('input[name="percentage_value[]"]').each(function() {
+        if ($(this).val()) {
+            count++;
+        }
+    });
+    $(".percentage-count").html(count);
 }
 
 $(document).on('change keyup', '#minimum_profit_percentage, #maximum_profit_percentage', function () {
     refreshDataTable();
 });
 
-$(document).on('change', 'input[name="sports[]"], input[name="sportsbook[]"], input[name="market[]"], input[name="date_time[]"]', function () {
+$(document).on('change keyup', 'input[name="sports[]"], input[name="sportsbook[]"], input[name="market[]"], input[name="date_time[]"]', function () {
     refreshDataTable();
 });
 
 $(document).on('click', '.btn--clear-profit', function () {
     $("#minimum_profit_percentage").val('');
     $("#maximum_profit_percentage").val('');
+    refreshDataTable();
+    filterCounts();
 });
+
+$(document).on('click', '.btn--clear-datetime', function () {
+    $('input[name="date_time[]"]').prop('checked', false);
+    refreshDataTable();
+    filterCounts();
+});
+
 
 $(document).on('click', '.btn--toggle-select-sportsbook', function () {
     if(this.checked) {
@@ -219,6 +239,18 @@ $(document).on('click', '.btn--toggle-select-sports', function () {
     } else {
         // If the toggle is unchecked, uncheck all checkboxes
         $('input[name="sports[]"]').prop('checked', false);
+    }
+    refreshDataTable();
+});
+
+
+$(document).on('click', '.btn--toggle-select-market', function () {
+    if(this.checked) {
+        // If the toggle is checked, check all checkboxes
+        $('input[name="market[]"]').prop('checked', true);
+    } else {
+        // If the toggle is unchecked, uncheck all checkboxes
+        $('input[name="market[]"]').prop('checked', false);
     }
     refreshDataTable();
 });

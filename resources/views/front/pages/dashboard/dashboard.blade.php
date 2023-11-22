@@ -313,7 +313,7 @@
                             <button aria-expanded="false" data-target="percentagePopOver" class="filter-btn min-w-0 max-w-md font-semibold inline-flex rounded-md transition-all duration-200 ease-in-out items-center border border-[#4DC2EF] bg-[#25394D] hover:border-brand-blue-3 hover:bg-[#09131E] active:text-brand-blue-2 active:border-brand-blue-2 active:bg-brand-gray text-sm h-10 px-[1.11rem] no-underline disabled:text-brand-gray-4 text-[#86A5B1] hover:text-white" type="button" id="percentage-filter">
                                 <div class="flex min-w-0 flex-1 items-center justify-center gap-1.5 text-left space-between">
                                     <div class="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap">Percentage
-                                        <span class="text-xs text-inherit ml-1 font-light">(1)</span>
+                                        <span class="text-xs text-inherit ml-1 font-light percentage-count">(0)</span>
                                     </div>
                                     <div class="h-4 w-4">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" height="20" class="pb-0.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path>
@@ -325,7 +325,9 @@
                                 <div class="rounded-lg border border-gray-500  bg-[#25394D] text-white shadow-lg">
                                     <div class="w-72">
                                         <div class="flex flex-row items-center justify-between p-4">
-                                            <span class="text-sm text-inherit font-semibold">1 selected</span>
+                                            <span class="text-sm text-inherit font-semibold">
+                                                <i class="percentage-count">0</i> selected
+                                            </span>
                                             <button class="btn--clear-profit min-w-0 max-w-md font-semibold inline-flex transition-all duration-200 ease-in-out items-center text-brand-blue-5 border border-brand-blue-5 bg-[#1D2F41] hover:border-brand-blue-3 hover:text-brand-blue-3 hover:bg-brand-gray active:text-brand-blue-2 active:border-brand-blue-2 active:bg-brand-gray text-xs h-8 px-3 rounded" type="button">
                                                 <div class="flex min-w-0 flex-1 items-center justify-center gap-1.5">
                                                     <div class="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap">Clear
@@ -339,7 +341,7 @@
                                             <label for="min">Minimum Percentage
                                                 <div class="relative">
                                                     <div class="min-w-0 rounded border border-solid text-left dark h-10 border-[#1D2F41] bg-[#1D2F41] flex w-full dark">
-                                                        <input name="value" id="minimum_profit_percentage" placeholder="1.5" type="number" class="all-unset text-sm w-0 min-w-0 flex-1 items-center text-white focus:ring-0 pl-4 bg-[#1D2F41] placeholder-gray-500 focus-within:border-slate-500 rounded-l border-none" value="">
+                                                        <input name="percentage_value[]" id="minimum_profit_percentage" placeholder="1.5" type="number" class="all-unset text-sm w-0 min-w-0 flex-1 items-center text-white focus:ring-0 pl-4 bg-[#1D2F41] placeholder-gray-500 focus-within:border-slate-500 rounded-l border-none" value="">
                                                         <div class="flex shrink-0 items-center justify-center bg-[#1D2F41] rounded-r w-10 text-brand-gray-6">
                                                             <svg width="12" height="12" viewBox="-2 -2 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5.24456 9.09091V8.55398C5.24456 8.18277 5.32079 7.84304 5.47326 7.5348C5.62903 7.22325 5.85441 6.97467 6.14939 6.78906C6.44769 6.60014 6.80896 6.50568 7.2332 6.50568C7.66407 6.50568 8.02534 6.60014 8.31701 6.78906C8.60867 6.97467 8.82908 7.22325 8.97823 7.5348C9.12737 7.84304 9.20195 8.18277 9.20195 8.55398V9.09091C9.20195 9.46212 9.12572 9.8035 8.97326 10.1151C8.82411 10.4233 8.60204 10.6719 8.30706 10.8608C8.0154 11.0464 7.65744 11.1392 7.2332 11.1392C6.80233 11.1392 6.4394 11.0464 6.14442 10.8608C5.84944 10.6719 5.62572 10.4233 5.47326 10.1151C5.32079 9.8035 5.24456 9.46212 5.24456 9.09091ZM6.25877 8.55398V9.09091C6.25877 9.39915 6.33168 9.6759 6.47752 9.92116C6.62335 10.1631 6.87524 10.2841 7.2332 10.2841C7.58121 10.2841 7.82648 10.1631 7.96899 9.92116C8.11483 9.6759 8.18774 9.39915 8.18774 9.09091V8.55398C8.18774 8.24574 8.11814 7.97064 7.97894 7.72869C7.83973 7.48343 7.59115 7.3608 7.2332 7.3608C6.88519 7.3608 6.63495 7.48343 6.48249 7.72869C6.33334 7.97064 6.25877 8.24574 6.25877 8.55398ZM0.17354 3.2642V2.72727C0.17354 2.35606 0.249771 2.01634 0.402233 1.7081C0.558009 1.39654 0.783388 1.14796 1.07837 0.962358C1.37666 0.773437 1.73793 0.678977 2.16218 0.678977C2.59305 0.678977 2.95432 0.773437 3.24598 0.962358C3.53765 1.14796 3.75806 1.39654 3.9072 1.7081C4.05635 2.01634 4.13093 2.35606 4.13093 2.72727V3.2642C4.13093 3.63542 4.0547 3.9768 3.90223 4.28835C3.75309 4.59659 3.53102 4.84517 3.23604 5.03409C2.94437 5.2197 2.58642 5.3125 2.16218 5.3125C1.7313 5.3125 1.36838 5.2197 1.0734 5.03409C0.778417 4.84517 0.554695 4.59659 0.402233 4.28835C0.249771 3.9768 0.17354 3.63542 0.17354 3.2642ZM1.18774 2.72727V3.2642C1.18774 3.57244 1.26066 3.8492 1.40649 4.09446C1.55233 4.33641 1.80422 4.45739 2.16218 4.45739C2.51019 4.45739 2.75545 4.33641 2.89797 4.09446C3.0438 3.8492 3.11672 3.57244 3.11672 3.2642V2.72727C3.11672 2.41903 3.04712 2.14394 2.90791 1.90199C2.76871 1.65672 2.52013 1.53409 2.16218 1.53409C1.81416 1.53409 1.56393 1.65672 1.41147 1.90199C1.26232 2.14394 1.18774 2.41903 1.18774 2.72727ZM0.551381 11L7.55138 0.818182H8.6849L1.6849 11H0.551381Z" fill="currentColor"></path></svg>
                                                         </div>
@@ -348,7 +350,7 @@
                                             </label>
                                             <label for="max">Maximum Percentage<div class="relative">
                                                 <div class="min-w-0 rounded border border-solid text-left dark h-10 border-[#1D2F41] bg-[#1D2F41] flex w-full dark">
-                                                    <input name="value" placeholder="10" id="maximum_profit_percentage" type="number" class="all-unset text-sm w-0 min-w-0 flex-1 items-center text-white focus:ring-0 pl-4 bg-[#1D2F41] placeholder-gray-500 focus-within:border-slate-500  rounded-l border-none" value="">
+                                                    <input name="percentage_value[]" placeholder="10" id="maximum_profit_percentage" type="number" class="all-unset text-sm w-0 min-w-0 flex-1 items-center text-white focus:ring-0 pl-4 bg-[#1D2F41] placeholder-gray-500 focus-within:border-slate-500  rounded-l border-none" value="">
                                                     <div class="flex shrink-0 items-center justify-center bg-[#1D2F41] rounded-r w-10 text-brand-gray-6">
                                                         <svg width="12" height="12" viewBox="-2 -2 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5.24456 9.09091V8.55398C5.24456 8.18277 5.32079 7.84304 5.47326 7.5348C5.62903 7.22325 5.85441 6.97467 6.14939 6.78906C6.44769 6.60014 6.80896 6.50568 7.2332 6.50568C7.66407 6.50568 8.02534 6.60014 8.31701 6.78906C8.60867 6.97467 8.82908 7.22325 8.97823 7.5348C9.12737 7.84304 9.20195 8.18277 9.20195 8.55398V9.09091C9.20195 9.46212 9.12572 9.8035 8.97326 10.1151C8.82411 10.4233 8.60204 10.6719 8.30706 10.8608C8.0154 11.0464 7.65744 11.1392 7.2332 11.1392C6.80233 11.1392 6.4394 11.0464 6.14442 10.8608C5.84944 10.6719 5.62572 10.4233 5.47326 10.1151C5.32079 9.8035 5.24456 9.46212 5.24456 9.09091ZM6.25877 8.55398V9.09091C6.25877 9.39915 6.33168 9.6759 6.47752 9.92116C6.62335 10.1631 6.87524 10.2841 7.2332 10.2841C7.58121 10.2841 7.82648 10.1631 7.96899 9.92116C8.11483 9.6759 8.18774 9.39915 8.18774 9.09091V8.55398C8.18774 8.24574 8.11814 7.97064 7.97894 7.72869C7.83973 7.48343 7.59115 7.3608 7.2332 7.3608C6.88519 7.3608 6.63495 7.48343 6.48249 7.72869C6.33334 7.97064 6.25877 8.24574 6.25877 8.55398ZM0.17354 3.2642V2.72727C0.17354 2.35606 0.249771 2.01634 0.402233 1.7081C0.558009 1.39654 0.783388 1.14796 1.07837 0.962358C1.37666 0.773437 1.73793 0.678977 2.16218 0.678977C2.59305 0.678977 2.95432 0.773437 3.24598 0.962358C3.53765 1.14796 3.75806 1.39654 3.9072 1.7081C4.05635 2.01634 4.13093 2.35606 4.13093 2.72727V3.2642C4.13093 3.63542 4.0547 3.9768 3.90223 4.28835C3.75309 4.59659 3.53102 4.84517 3.23604 5.03409C2.94437 5.2197 2.58642 5.3125 2.16218 5.3125C1.7313 5.3125 1.36838 5.2197 1.0734 5.03409C0.778417 4.84517 0.554695 4.59659 0.402233 4.28835C0.249771 3.9768 0.17354 3.63542 0.17354 3.2642ZM1.18774 2.72727V3.2642C1.18774 3.57244 1.26066 3.8492 1.40649 4.09446C1.55233 4.33641 1.80422 4.45739 2.16218 4.45739C2.51019 4.45739 2.75545 4.33641 2.89797 4.09446C3.0438 3.8492 3.11672 3.57244 3.11672 3.2642V2.72727C3.11672 2.41903 3.04712 2.14394 2.90791 1.90199C2.76871 1.65672 2.52013 1.53409 2.16218 1.53409C1.81416 1.53409 1.56393 1.65672 1.41147 1.90199C1.26232 2.14394 1.18774 2.41903 1.18774 2.72727ZM0.551381 11L7.55138 0.818182H8.6849L1.6849 11H0.551381Z" fill="currentColor"></path></svg>
                                                     </div>
@@ -365,7 +367,9 @@
                             <button aria-expanded="false" data-target="sportsbookPopOver" class="filter-btn min-w-0 max-w-md font-semibold inline-flex rounded-md transition-all duration-200 ease-in-out items-center border border-[#4DC2EF] bg-[#25394D] hover:border-brand-blue-3 hover:bg-[#09131E] active:text-brand-blue-2 active:border-brand-blue-2 active:bg-brand-gray text-sm h-10 px-[1.11rem] no-underline disabled:text-brand-gray-4 text-[#86A5B1] hover:text-white" type="button" id="headlessui-popover-button-:r76k:">
                                 <div class="flex min-w-0 flex-1 items-center justify-center gap-1.5 text-left space-between">
                                     <div class="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap">Sportsbooks
-                                        <span class="text-xs text-inherit ml-1 font-light" class="sportsbook-count">(All)</span>
+                                        <span class="text-xs text-inherit ml-1 font-light sportsbook-count">
+                                            (All)
+                                        </span>
                                     </div>
                                     <div class="h-4 w-4">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" height="20" class="pb-0.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path></svg>
@@ -482,7 +486,7 @@
                                             <div class="flex items-center gap-2">
                                                 <span class="ml-3 text-sm font-medium text-gray-500 dark:text-gray-300">Select All</span>
                                                 <label class="relative inline-flex items-center cursor-pointer">
-                                                    <input type="checkbox" value="" class="sr-only peer" checked>
+                                                    <input type="checkbox" value="" class="sr-only peer btn--toggle-select-market" checked>
                                                 <div class="w-11 h-6 bg-gray-200 rounded-full peer  dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
                                                     
                                                 </div>
@@ -524,7 +528,7 @@
                             <button aria-expanded="false" data-target="daterangePopOver" class="filter-btn min-w-0 max-w-md font-semibold inline-flex rounded-md transition-all duration-200 ease-in-out items-center border border-[#4DC2EF] bg-[#25394D] hover:border-brand-blue-3 hover:bg-[#09131E] active:text-brand-blue-2 active:border-brand-blue-2 active:bg-brand-gray text-sm h-10 px-[1.11rem] no-underline disabled:text-brand-gray-4 text-[#86A5B1] hover:text-white" type="button" id="headlessui-popover-button-:r76s:">
                                 <div class="flex min-w-0 flex-1 items-center justify-center gap-1.5 text-left space-between">
                                     <div class="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap">Date Range
-                                        <span class="text-xs text-inherit ml-1 font-light">(All)</span>
+                                        <span class="text-xs text-inherit ml-1 font-light datetime-count">(All)</span>
                                     </div>
                                     <div class="h-4 w-4">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" height="20" class="pb-0.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path></svg>
@@ -535,15 +539,17 @@
                                 <div class="rounded-lg border border-brand-gray-4  bg-[#25394D] text-brand-gray-7 shadow-lg">
                                     <div class="w-72">
                                         <div class="flex flex-row items-center justify-between p-4 text-white">
-                                            <span class="text-sm text-inherit font-semibold">0 selected</span>
+                                            <span class="text-sm text-inherit font-semibold">
+                                                <i class="datetime-count">0</i> 
+                                                selected</span>
                                             <div class="flex items-center gap-2">
-                                                <span class="ml-3 text-sm font-medium text-gray-500 dark:text-gray-300">Select All</span>
-                                                <label class="relative inline-flex items-center cursor-pointer">
-                                                    <input type="checkbox" value="" class="sr-only peer" checked>
-                                                <div class="w-11 h-6 bg-gray-200 rounded-full peer  dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
-                                                    
-                                                </div>
-                                                </label>
+                                                 <button class="btn--clear-datetime min-w-0 max-w-md font-semibold inline-flex transition-all duration-200 ease-in-out items-center text-brand-blue-5 border border-brand-blue-5 bg-[#1D2F41] hover:border-brand-blue-3 hover:text-brand-blue-3 hover:bg-brand-gray active:text-brand-blue-2 active:border-brand-blue-2 active:bg-brand-gray text-xs h-8 px-3 rounded" type="button">
+                                                    <div class="flex min-w-0 flex-1 items-center justify-center gap-1.5">
+                                                        <div class="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap">Clear
+        
+                                                        </div>
+                                                    </div>
+                                                </button>
                                             </div>
                                         </div>
                                         <div class="border-b border-slate-500"></div>
@@ -559,10 +565,10 @@
                                                 </div>
                                                 <div class="form-check">
                                                     <label class="flex flex-row items-center text-white">
-                                                    <input name="date_time[]" value="2" class="mr-2 border-2 border-brand-gray-5 
-                                                        bg-transparent hover:bg-brand-gray-3 checked:border-brand-blue-3 checked:bg-brand-blue-3 
-                                                        focus:!border-brand-blue-3 focus:ring-brand-blue-8 focus:checked:!bg-brand-blue-3" type="radio">
-                                                        Next 24 hours
+                                                        <input name="date_time[]" value="2" class="mr-2 border-2 border-brand-gray-5 
+                                                            bg-transparent hover:bg-brand-gray-3 checked:border-brand-blue-3 checked:bg-brand-blue-3 
+                                                            focus:!border-brand-blue-3 focus:ring-brand-blue-8 focus:checked:!bg-brand-blue-3" type="radio">
+                                                            Next 24 hours
                                                     </label>
                                                 </div>
                                             </div>
