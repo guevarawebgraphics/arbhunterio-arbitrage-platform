@@ -897,7 +897,7 @@ trait OddsJamAPITrait
 
         })
 
-        ->where('is_below_one','<=',1)
+        // ->where('is_below_one','<=',1)
         ->select(
             'game_id as uid',
             'start_date',
@@ -925,7 +925,7 @@ trait OddsJamAPITrait
             'league',
         )
         ->orderBy('profit_percentage','DESC')
-        ->paginate(30);
+        ->paginate(10);
 
         return $gamesArray;
 
@@ -996,7 +996,7 @@ trait OddsJamAPITrait
             }
 
         })
-        ->where('is_below_one','<=',1)
+        // ->where('is_below_one','<=',1)
         ->count();
 
         $live_count = GamesPerMarket::where('is_live', 1 )
@@ -1056,7 +1056,7 @@ trait OddsJamAPITrait
             }
 
         })
-        ->where('is_below_one','<=',1)
+        // ->where('is_below_one','<=',1)
         ->count();
 
          $hidden_count = GamesPerMarket::where('is_live', 0 )
@@ -1116,19 +1116,20 @@ trait OddsJamAPITrait
             }
 
         })
-        ->where('is_below_one','<=',1)
+        // ->where('is_below_one','<=',1)
         ->count();
 
         $data = [
-            'pre_match_count'  =>   $pre_match_count,
-            'live_count'    => $live_count,
+            'pre_match_count' => $pre_match_count,
+            'live_count' => $live_count,
             'hidden_count' => $hidden_count
         ];
 
         return $data;
     }
 
-    public function createGamesPerMarket($gameId, $marketArray) {
+    public function createGamesPerMarket($gameId, $marketArray)
+    {
         
         try {
 
@@ -1171,10 +1172,6 @@ trait OddsJamAPITrait
                     $checkExists = GamesPerMarket::where('game_id', $game_id)->where('bet_type', $field['label'])->first();
 
                     $game_info = Game::where('uid', $game_id)->first();
-
-                    \Log::info($odds_data['sportsbook_a_values']);
-                    \Log::info($odds_data['sportsbook_b_values']);
-
 
                     if ( !empty($checkExists) ) {
 
@@ -1556,7 +1553,7 @@ trait OddsJamAPITrait
     }
 
     public function getOddsPerTeam($game) {
-          $latestPricesSubqueryA = DB::table('gameodds as x')
+        $latestPricesSubqueryA = DB::table('gameodds as x')
         ->select(
             'x.game_id', 
             'x.bet_type', 
@@ -1648,6 +1645,7 @@ trait OddsJamAPITrait
         return $response;
        
     }
+
     public function sports_book_image($arr, $sports_book)
     {
         $imagesHTML = '';
@@ -1808,6 +1806,7 @@ trait OddsJamAPITrait
         return $matchedBetName;
 
     }
+
 
 
 }

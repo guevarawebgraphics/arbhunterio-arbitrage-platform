@@ -63,14 +63,23 @@ class GamesTable extends Component
         $input['filter_param']  =  $this->filter_param;
 
         if ( $input['filter_param']['first_time'] ) {
+
             $input['filter_param']['sports'] = getSports();
+
             $sportsbook = [];
+
             foreach( getSportsBook() ?? [] as $item ) {
                 array_push( $sportsbook, $item->name );
             }
+
             $input['filter_param']['sportsbook'] = $sportsbook;
+
             $input['filter_param']['market'] = marketTypes();
+
             \Log::info('Is first time? ' . $input['filter_param']['first_time'] );
+
+            \Log::info('Is first time? ' . json_encode( $input['filter_param'] ) );
+            
         }
 
         $this->games = $this->getGamesPerMarket($input);
@@ -79,7 +88,9 @@ class GamesTable extends Component
 
         $total_counts =  $this->total_counts;
 
-        \Log::info('Total: ' . json_encode($total_counts) );
+
+        // Updated Filter
+        $this->filter_param = $input['filter_param'];
 
         $this->emit('updateCounts', $total_counts['pre_match_count'], $total_counts['live_count'], $total_counts['hidden_count'] );
     }
@@ -100,7 +111,8 @@ class GamesTable extends Component
 
     }
 
-    public function refreshTable($data = [
+    public function refreshTable(
+        $data = [
             'min_profit'    =>   0,
             'max_profit'    =>   8,
             'sports'    =>   [],

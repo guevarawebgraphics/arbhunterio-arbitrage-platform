@@ -213,6 +213,7 @@ async function filterCounts() {
 
 }
 
+
 $(document).on('change keyup', '#minimum_profit_percentage, #maximum_profit_percentage', function () {
     refreshDataTable();
 });
