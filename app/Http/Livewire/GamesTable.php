@@ -40,7 +40,9 @@ class GamesTable extends Component
         'max_profit'    =>   8,
         'sports'    =>   [],
         'sportsbook'    =>   [],
-        'market'    =>   [],
+        'market'    =>   [
+            'Alternate Market','Main Market','Player Prop'
+        ],
         'date_time'    =>   0, // 0 = NONE; 1 = Today; 2 = Next 24 Hours,
         'first_time'    =>  true
     ];
@@ -73,8 +75,6 @@ class GamesTable extends Component
             }
 
             $input['filter_param']['sportsbook'] = $sportsbook;
-
-            $input['filter_param']['market'] = marketTypes();
 
             \Log::info('Is first time? ' . $input['filter_param']['first_time'] );
 
