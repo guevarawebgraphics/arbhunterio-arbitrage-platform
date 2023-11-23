@@ -618,5 +618,26 @@ class APIController extends Controller
         $query = SaveFilter::where('id',  $id)->delete();
         return $query;
     }
+
+    public function getFilter($id) {
+        $query = SaveFilter::find($id);
+
+        $data = [];
+
+        if (!empty($query)) {
+            $data = [
+                'user_id'   =>  $query->user_id,
+                'name'  =>  $query->name,
+                'min_profit'    =>  $query->min_profit,
+                'max_profit'    =>  $query->max_profit,
+                'sportsbook'    =>  json_decode($query->sportsbook),
+                'sports'    =>  json_decode($query->sports),
+                'markets'   =>  json_decode($query->markets),
+                'datetime'  =>  $query->datetime,
+                'is_alert'  =>  $query->is_alert
+            ];
+        }
+        return $data;
+    }
     
 }

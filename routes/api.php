@@ -63,4 +63,7 @@ Route::post('save/filter', '\App\Http\Controllers\Api\APIController@storeFilter'
 
 Route::get('filters/{user_id}', '\App\Http\Controllers\Api\APIController@indexFilters')->name('api.filters');
 
-Route::get('filter/delete/{user_id}', '\App\Http\Controllers\Api\APIController@destroyFilter')->name('api.filter.destroy');
+Route::get('filter/delete/{id}', '\App\Http\Controllers\Api\APIController@destroyFilter')->name('api.filter.destroy');
+
+Route::get('filter/{id}', '\App\Http\Controllers\Api\APIController@getFilter')->name('api.filter.item');
+

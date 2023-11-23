@@ -481,7 +481,7 @@ async function getFilters() {
                 $.each(response, function (i, val) {
                     html += `<div class="form-check save--filter-items">
                                 <label class="flex flex-row items-center text-white">
-                                <a href="javascript:void(0);">
+                                <a href="javascript:void(0);" class="btn--filter-item" data-id="${val.id}">
                                      ${val.name} 
                                 </a>
                                 <a href="javascript:void(0);" class="btn--delete-save-filter" data-id="${val.id}">
@@ -528,3 +528,54 @@ $(document).on('click', '.btn--delete-save-filter', function () {
     });
 
 });
+
+$(document).on('click', '.btn--filter-item', function () {
+
+    var id = $(this).attr('data-id');
+    $.ajax({
+        url: baseURI + "/api/filter/" + id,
+        method: 'GET',
+        success: function (response) {
+            console.log(response);
+            if (response) {
+                $("#minimum_profit_percentage").val(response.min_profit);
+                $("#maximum_profit_percentage").val(response.max_profit);
+
+                $(`input[name="sportsbook[]"]`).prop('checked', false);
+                $(`input[name="sports[]"]`).prop('checked', false);
+                $(`input[name="market[]"]`).prop('checked', false);
+                 $(`input[name="date_time[]"]`).prop('checked', false);
+
+                $.each(response.sportsbook, function (i, val) {
+                    $(`input[name="sportsbook[]"][value="${val}"]`).prop('checked', true);
+                });
+
+                 $.each(response.sports, function (i, val) {
+                    $(`input[name="sports[]"][value="${val}"]`).prop('checked', true);
+                 });
+                
+                 $.each(response.markets, function (i, val) {
+                    $(`input[name="market[]"][value="${val}"]`).prop('checked', true);
+                 });
+                
+                $(`input[name="date_time[]"][value="${response.datetime}"]`).prop('checked', true);
+                
+                filterCounts();
+
+                refreshDataTable();
+            } else {
+                Swal.fire({
+                    title: "Error",
+                    text: "Something went wrong..",
+                    icon: "error"
+                });
+            }
+        },
+        error: function () {
+            
+        }
+    });
+
+});
+
+
