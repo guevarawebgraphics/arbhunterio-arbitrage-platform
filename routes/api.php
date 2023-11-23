@@ -58,3 +58,9 @@ Route::get('/test-api', '\App\Http\Controllers\Api\APIController@testApi')->name
 Route::get('/game/{id}/bet_type/{bet_type}','\App\Http\Controllers\Api\APIController@getGameInfo')->name('api.games.info');
 
 Route::get('/game/{gameId}/hidden/{betType}/status/{statusId}','\App\Http\Controllers\Api\APIController@updateGameHidden')->name('api.game.hidden.status');
+
+Route::post('save/filter', '\App\Http\Controllers\Api\APIController@storeFilter')->name('api.store.filter');
+
+Route::get('filters/{user_id}', '\App\Http\Controllers\Api\APIController@indexFilters')->name('api.filters');
+
+Route::get('filter/delete/{user_id}', '\App\Http\Controllers\Api\APIController@destroyFilter')->name('api.filter.destroy');

@@ -132,6 +132,9 @@
     <script src="{{asset('public/assets/js/flowbite.min.js')}}"></script>
     <script src="{{asset('public/assets/js/switch.js')}}"></script>
     <script src="{{asset('public/bsbmd/plugins/toastr/toastr.js')}}"></script>
+
+    {{Html::script('public/js/swal.js')}}
+    
     @yield('extra-script')
 
     @livewireScripts

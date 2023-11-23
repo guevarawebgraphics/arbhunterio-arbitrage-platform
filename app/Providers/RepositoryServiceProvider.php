@@ -78,6 +78,9 @@ use App\Services\SportsBooks\Repositories\SportsBookRepositoryInterface;
 use App\Services\Games\Repositories\GameRepository;
 use App\Services\Games\Repositories\GameRepositoryInterface;
 
+use App\Services\SaveFilters\Repositories\SaveFilterRepository;
+use App\Services\SaveFilters\Repositories\SaveFilterRepositoryInterface;
+
 
 use Illuminate\Support\ServiceProvider;
 
@@ -129,6 +132,8 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(OddsJamGameEventCronJobRepositoryInterface::class, OddsJamGameEventCronJobRepository::class);
         $this->app->bind(SportsBookRepositoryInterface::class, SportsBookRepository::class);
         $this->app->bind(GameRepositoryInterface::class, GameRepository::class);
+
+        $this->app->bind(SaveFilterRepositoryInterface::class, SaveFilterRepository::class);
     }
 
     /**

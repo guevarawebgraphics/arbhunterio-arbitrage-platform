@@ -15,6 +15,7 @@ use App\Jobs\StoreOddsStreamJob;
 use Illuminate\Support\Facades\Queue;
 use App\Events\NewOddsReceived;
 use App\Services\GamesPerMarkets\GamesPerMarket;
+use App\Services\SaveFilters\SaveFilter;
 use App\Jobs\StoreGamesPerMarketJob;
 use App\Jobs\SendRequestFetchOddsJob;
 
@@ -582,6 +583,40 @@ class APIController extends Controller
         ];
 
         return $response;
+    }
+
+    public function storeFilter( Request $request ) {
+        
+        $input = [];
+        $input['user_id']   =   $request->user_id;
+        $input['name']   =   $request->name_filter;
+        $input['min_profit']   =   $request->min_profit;
+        $input['max_profit']   =   $request->max_profit;
+        $input['sportsbook']   =   json_encode($request->sportsbook);
+        $input['sports']   =   json_encode($request->sports);
+        $input['markets']   =   json_encode($request->market);
+        $input['datetime']   =   $request->date_time;
+        $input['is_alert']   =   isset($request->is_alert) ? 1 : 0;
+
+        $query = SaveFilter::create($input);
+
+        $response = [
+            'status'    =>  true,
+            'data'  =>  $query
+        ];
+
+        return $response;
+
+    }
+
+    public function indexFilters($user_id) {
+        $query = SaveFilter::where('user_id',  $user_id)->orderBy('created_at','DESC')->get();
+        return $query;
+    }
+
+    public function destroyFilter($id) {
+        $query = SaveFilter::where('id',  $id)->delete();
+        return $query;
     }
     
 }

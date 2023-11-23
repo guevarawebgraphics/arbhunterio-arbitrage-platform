@@ -293,7 +293,7 @@
                                     <div class="h-4 w-4 -ml-1">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z"></path></svg>
                                     </div>
-                                    <div class="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap">Save Filter</div>
+                                    <div class="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap btn--save-filter">Save Filter</div>
                                 </div>
                             </button>
                             <button class="min-w-0 max-w-md font-semibold inline-flex rounded-md transition-all duration-200 ease-in-out items-center text-white bg-[#314457] hover:bg-[#3d546b] active:bg-brand-gray-5 text-sm h-10 px-[1.11rem] w-full md:w-auto" type="button">
@@ -577,6 +577,37 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="relative">
+                            <button aria-expanded="false" data-target="saveFilterPopOvers" class="filter-btn min-w-0 max-w-md font-semibold inline-flex rounded-md transition-all duration-200 ease-in-out items-center border border-[#4DC2EF] bg-[#25394D] hover:border-brand-blue-3 hover:bg-[#09131E] active:text-brand-blue-2 active:border-brand-blue-2 active:bg-brand-gray text-sm h-10 px-[1.11rem] no-underline disabled:text-brand-gray-4 text-[#86A5B1] hover:text-white" type="button">
+                                <div class="flex min-w-0 flex-1 items-center justify-center gap-1.5 text-left space-between">
+                                    <div class="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap">Saved Filters
+                                          <span class="text-xs text-inherit ml-1 font-light saved-filters-count">(3)</span>
+                                    </div>
+                                    <div class="h-4 w-4">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" height="20" class="pb-0.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path></svg>
+                                    </div>
+                                </div>
+                            </button>
+                            <div class="hidden absolute z-50 mt-3 max-h-[500px] opacity-100 translate-y-0 pop-over"  tabindex="-1" id="saveFilterPopOvers" data-headlessui-state="open">
+                                <div class="rounded-lg border border-brand-gray-4  bg-[#25394D] text-brand-gray-7 shadow-lg">
+                                    <div class="w-72">
+                                        <div class="flex flex-row items-center justify-between p-4 text-white">
+                                            <span class="text-sm text-inherit font-semibold">
+                                                <i class="saved-filters-count">3</i> 
+                                                Items</span>
+                                            <div class="flex items-center gap-2">
+                                            </div>
+                                        </div>
+                                        <div class="border-b border-slate-500"></div>
+                                        <div class="max-h-[400px] overflow-y-auto">
+                                            <div class="mt-1 flex flex-col gap-3 p-6"  id="save-filter-list">
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -750,6 +781,7 @@
 </script>
 
 <script>
+
     var sBaseURI = '{{ url('/') }}';
     var loading_image = "{{url('public/images/loading2.gif')}}";
     var sports_book = {!! json_encode(getSportsBook()) !!};
@@ -758,6 +790,8 @@
 
     var is_live = {{ $_GET['is_live'] ?? 0 }};
     var is_hidden = {{ $_GET['is_hidden'] ?? 0 }};
+    var user_id = "{{auth()->user()->id}}";
+
 </script>
 
 {{Html::script('public/js/bjcdl/libraries/dashboard.js')}}

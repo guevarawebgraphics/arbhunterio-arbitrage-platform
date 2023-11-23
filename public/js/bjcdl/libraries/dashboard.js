@@ -190,6 +190,8 @@ async function filterCounts() {
 
     var date_time = $('input[name="date_time[]"]:checked').length;
 
+    var filter_item = $(".save--filter-items").length;
+
     var percentage = 0;
 
     $(".sportsbook-count").html(sportsbook);
@@ -210,6 +212,9 @@ async function filterCounts() {
     var total = sportsbook + sports + market + date_time + percentage;
     
     $(".total-filter").html(total);
+
+      
+    $(".saved-filters-count").html(filter_item);
 
 }
 
@@ -332,3 +337,194 @@ async function refreshDataTable() {
 
     
 }
+
+$(document).on('click', '.btn--save-filter', function () {
+
+    Swal.fire({
+        title: ``,
+        html: `
+      
+            <div class="mb-5">
+                <label for="name_filter" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Filter name</label>
+                <input type="text" id="name_filter" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="NBA this week" required>
+            </div>
+            <div class="flex items-start mb-5">
+                <div class="flex items-center h-5">
+                <input id="is_alert" type="checkbox" value="" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800" required>
+                </div>
+                <label for="is_alert" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Recieve an instant email alert when there are new betting opportunities matching your filter criteria</label>
+            </div>
+        `,
+        showCloseButton: true,
+        showCancelButton: true,
+        focusConfirm: false,
+        confirmButtonText: `
+            Submit
+        `,
+        confirmButtonAriaLabel: "Submit",
+        cancelButtonText: `
+           Cancel
+        `,
+        cancelButtonAriaLabel: "Cancel"
+    }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+           
+            let input = [];
+
+            let first_time = false;
+
+            let min_profit = 0;
+
+            let max_profit = 0;
+
+            min_profit = $("#minimum_profit_percentage").val() ?  $("#minimum_profit_percentage").val() : 0 ;
+
+            max_profit = $("#maximum_profit_percentage").val() ? $("#maximum_profit_percentage").val() : 0;
+
+            let sports = [];
+
+            let sportsbook = [];
+
+            let market = [];
+
+            let date_time = 0;  // 0 = NONE; 1 = Today; 2 = Next 24 Hours
+
+            var name_filter = $("#name_filter").val();
+
+            var is_alert = $("#is_alert:checked").val();
+            
+            $('input[name="sports[]"]:checked').each(function() {
+                sports.push($(this).val());
+            });
+
+            $('input[name="sportsbook[]"]:checked').each(function() {
+                sportsbook.push($(this).val());
+            });
+
+            $('input[name="market[]"]:checked').each(function() {
+                market.push($(this).val());
+            });
+
+            if ($('input[name="date_time[]"]:checked').val()) {
+                date_time = $('input[name="date_time[]"]:checked').val();
+            }
+
+            input.push({
+                min_profit: min_profit,
+                max_profit: max_profit,
+                sports: sports,
+                sportsbook: sportsbook,
+                market: market,
+                date_time: date_time,
+                name_filter: name_filter,
+                user_id: user_id,
+                is_alert:is_alert
+            });
+
+
+            $.ajax({
+                url: baseURI + "/api/save/filter",
+                method: 'POST',
+                data: {
+                    min_profit: min_profit,
+                    max_profit: max_profit,
+                    sports: sports,
+                    sportsbook: sportsbook,
+                    market: market,
+                    date_time: date_time,
+                    name_filter: name_filter,
+                    user_id:user_id
+                },
+                success: function (response) {
+                    if (response.status) {
+                        Swal.fire({
+                            title: "Success",
+                            text: "Successfully saved!",
+                            icon: "success"
+                        });
+
+                        getFilters();
+                    } else {
+                        Swal.fire({
+                            title: "Error",
+                            text: "Something went wrong..",
+                            icon: "error"
+                        });
+                    }
+                },
+                error: function() {
+                    Swal.fire({
+                        title: "Error",
+                        text: "Something went wrong..",
+                        icon: "error"
+                    });
+                }
+            });
+
+
+        } else if (result.isDenied) {
+            Swal.fire("Changes are not saved", "", "info");
+        }
+    });
+});
+
+async function getFilters() {
+    $.ajax({
+        url: baseURI + "/api/filters/" + user_id,
+        method: 'GET',
+        success: function (response) {
+            var html = '';
+
+            if (response.length > 0 ) {
+                
+                $.each(response, function (i, val) {
+                    html += `<div class="form-check save--filter-items">
+                                <label class="flex flex-row items-center text-white">
+                                <a href="javascript:void(0);">
+                                     ${val.name} 
+                                </a>
+                                <a href="javascript:void(0);" class="btn--delete-save-filter" data-id="${val.id}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9.75L14.25 12m0 0l2.25 2.25M14.25 12l2.25-2.25M14.25 12L12 14.25m-2.58 4.92l-6.375-6.375a1.125 1.125 0 010-1.59L9.42 4.83c.211-.211.498-.33.796-.33H19.5a2.25 2.25 0 012.25 2.25v10.5a2.25 2.25 0 01-2.25 2.25h-9.284c-.298 0-.585-.119-.796-.33z" />
+                                    </svg>
+                                </a>
+                                </label>
+                            </div>`;
+                });
+            }
+            $("#save-filter-list").html(html);
+
+            filterCounts();
+
+
+        },
+        error: function () {
+            
+        }
+    });
+
+}
+
+getFilters();
+
+$(document).on('click', '.btn--delete-save-filter', function () {
+
+    var id = $(this).attr('data-id');
+    $.ajax({
+        url: baseURI + "/api/filter/delete/" + id,
+        method: 'GET',
+        success: function (response) {
+            Swal.fire({
+                title: "Success",
+                text: "Successfully deleted!",
+                icon: "success"
+            });
+            getFilters();
+        },
+        error: function () {
+            
+        }
+    });
+
+});
