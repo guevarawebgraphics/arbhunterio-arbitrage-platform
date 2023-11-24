@@ -1056,7 +1056,8 @@ trait OddsJamAPITrait
                     'g.away_team',
                     'go.bet_type',
                     'g.sport',
-                    'g.league'
+                    'g.league',
+                    'g.is_live'
                 )
                 ->groupBy(
                     'g.uid',
@@ -1065,7 +1066,8 @@ trait OddsJamAPITrait
                     'g.away_team',
                     'go.bet_type',
                     'g.sport',
-                    'g.league'
+                    'g.league',
+                    'g.is_live'
                 )
                 ->first();
                 
@@ -1099,6 +1101,8 @@ trait OddsJamAPITrait
                             'sportsbook_b_values'  =>  $odds_data['sportsbook_b_values'],
                             'is_below_one'  =>  $odds_data['is_below_one']  
                         ]);
+
+                         \Log::info('Games Per Market Successfully Updated!! ' . json_encode($games_per_market_stored) ); 
 
                     } else {
 
@@ -1311,7 +1315,7 @@ trait OddsJamAPITrait
                 DB::raw('MAX(x.timestamp) as latest_timestamp'),
                 DB::raw('(SELECT x.bet_price FROM gameodds WHERE game_id = x.game_id AND bet_type = x.bet_type AND sportsbook = x.sportsbook ORDER BY timestamp DESC LIMIT 1) as max_bet_price')
             )
-            ->where('x.is_live', 0)
+            ->where('x.is_live', $row->is_live )
             ->whereNotIn('x.type', ['locked'])
             ->whereRaw($search_raw_x)
             ->groupBy('x.game_id', 'x.bet_type', 'x.sportsbook');
@@ -1324,7 +1328,7 @@ trait OddsJamAPITrait
                 DB::raw('MAX(y.timestamp) as latest_timestamp'),
                 DB::raw('(SELECT y.bet_price FROM gameodds WHERE game_id = y.game_id AND bet_type = y.bet_type AND sportsbook = y.sportsbook ORDER BY timestamp DESC LIMIT 1) as max_bet_price')
             )
-            ->where('y.is_live', 0)
+            ->where('y.is_live',$row->is_live )
             ->whereNotIn('y.type', ['locked'])
             ->whereRaw($search_raw_y)
             ->groupBy('y.game_id', 'y.bet_type', 'y.sportsbook');
@@ -1347,7 +1351,7 @@ trait OddsJamAPITrait
             ->whereRaw($search_raw_a)
             ->where('go.game_id', $game_id)
             ->where('go.bet_type', $bet_type)
-            ->where('go.is_live', 0)
+            ->where('go.is_live',$row->is_live )
             ->whereNotIn('go.type', ['locked'])
             ->groupBy('go.sportsbook')
             ->orderBy('max_bet_price','DESC')
@@ -1383,11 +1387,11 @@ trait OddsJamAPITrait
             ->whereRaw($search_raw_b)
             ->where('go.game_id', $game_id)
             ->where('go.bet_type', $bet_type)
-            ->where('go.is_live', 0)
+            ->where('go.is_live', $row->is_live )
             ->whereNotIn('go.type', ['locked'])
             ->whereNotIn('go.sportsbook', $notIn )
             ->where(function ($query) use ($highest_over) {
-                if($highest_over->selection && in_array($highest_over->selection_line,["over","under"])) {
+                if( !empty($highest_over->selection) && in_array($highest_over->selection_line,["over","under"])) {
                     $query->where('go.selection', $highest_over->selection );
                 }
             })
@@ -1467,8 +1471,7 @@ trait OddsJamAPITrait
 
     public function getOddsPerTeam($game) {
 
-    
-            $latestPricesSubqueryA = DB::table('gameodds as x')
+        $latestPricesSubqueryA = DB::table('gameodds as x')
             ->select(
                 'x.game_id', 
                 'x.bet_type', 
@@ -1476,8 +1479,9 @@ trait OddsJamAPITrait
                 DB::raw('MAX(x.timestamp) as latest_timestamp'),
                 DB::raw('(SELECT x.bet_price FROM gameodds WHERE game_id = x.game_id AND bet_type = x.bet_type AND sportsbook = x.sportsbook ORDER BY timestamp DESC LIMIT 1) as max_bet_price')
             )
-            ->where('x.is_live', 0)
+            ->where('x.is_live',$game->is_live )
             ->whereNotIn('x.type', ['locked'])
+            ->whereIn('x.sportsbook', explode(',', $game->sportsbook_a_values)) 
             ->where('x.bet_name', $game->selection_line_a)
             ->groupBy('x.game_id', 'x.bet_type', 'x.sportsbook');
 
@@ -1489,9 +1493,10 @@ trait OddsJamAPITrait
                 DB::raw('MAX(y.timestamp) as latest_timestamp'),
                 DB::raw('(SELECT y.bet_price FROM gameodds WHERE game_id = y.game_id AND bet_type = y.bet_type AND sportsbook = y.sportsbook ORDER BY timestamp DESC LIMIT 1) as max_bet_price')
             )
-            ->where('y.is_live', 0)
+            ->where('y.is_live',$game->is_live )
+            ->whereIn('y.sportsbook', explode(',', $game->sportsbook_b_values)) 
+            ->where('y.bet_name', $game->selection_line_b)
             ->whereNotIn('y.type', ['locked'])
-            ->where('y.bet_name', $game->selection_line_b )
             ->groupBy('y.game_id', 'y.bet_type', 'y.sportsbook');
 
 
@@ -1511,10 +1516,11 @@ trait OddsJamAPITrait
                 'max_bet_prices.max_bet_price',
                 'go.selection'
             )
-        ->where('go.bet_name', $game->selection_line_a)
         ->where('go.game_id', $game->game_id )
         ->where('go.bet_type', $game->bet_type)
-        ->where('go.is_live', 0)
+        ->where('go.is_live', $game->is_live )
+        ->whereIn('go.sportsbook', explode(',', $game->sportsbook_a_values)) 
+        ->where('go.bet_name', $game->selection_line_a)
         ->whereNotIn('go.type', ['locked'])
         ->groupBy('go.sportsbook')
         ->orderBy('max_bet_price','DESC')
@@ -1548,15 +1554,16 @@ trait OddsJamAPITrait
                 'max_bet_prices.max_bet_price',
                 'go.selection'
             )
-        ->where('go.bet_name', $game->selection_line_b)
         ->where('go.game_id', $game->game_id)
         ->where('go.bet_type', $game->bet_type)
-        ->where('go.is_live', 0)
+        ->where('go.is_live', $game->is_live )
+        ->whereIn('go.sportsbook', explode(',', $game->sportsbook_b_values) )
+        ->where('go.bet_name', $game->selection_line_b)
         ->whereNotIn('go.type', ['locked'])
         ->whereNotIn('go.sportsbook', $notIn )
         ->where(function ($query) use ($highest_over) {
 
-            if($highest_over->selection && in_array($highest_over->selection_line,["over","under"])) {
+             if( !empty($highest_over->selection) && in_array($highest_over->selection_line,["over","under"])) {
                 $query->where('go.selection', $highest_over->selection );
             }
             
@@ -1566,6 +1573,8 @@ trait OddsJamAPITrait
         ->get();
 
         $highest_under = $best_under_odds_query ? $best_under_odds_query->sortByDesc('max_bet_price')->first() : null;
+
+
 
         $response = [
             'best_over_odds_query'  =>  $best_over_odds_query,

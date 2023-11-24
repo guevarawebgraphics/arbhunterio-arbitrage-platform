@@ -54,7 +54,8 @@ class StoreGamesPerMarketJob implements ShouldQueue
             'g.away_team',
             'go.bet_type',
             'g.sport',
-            'g.league'
+            'g.league',
+            'g.is_live'
         )
         ->groupBy(
             'g.uid',
@@ -63,7 +64,8 @@ class StoreGamesPerMarketJob implements ShouldQueue
             'g.away_team',
             'go.bet_type',
             'g.sport',
-            'g.league'
+            'g.league',
+            'g.is_live'
         )
         ->first();
 
