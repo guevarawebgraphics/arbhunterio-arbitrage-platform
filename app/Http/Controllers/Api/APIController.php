@@ -443,17 +443,18 @@ class APIController extends Controller
 
     public function testApi() {
         
-        $bet_type = "Puck Line";
-        $game_id = "10120-21344-2023-11-17";
+        $game_id = "22677-12806-23-47";
+        $bet_type = "Player Tackles";
 
-        $home_team = "Winnipeg Jets";
-        $away_team = "Buffalo Sabres";
+        
+        $search_raw_a = "go.selection_line = 'over'";
+        $search_raw_b = "go.selection_line = 'under'";
 
-        $search_raw_a = "go.selection LIKE '%".$home_team."%'";
-        $search_raw_b = "go.selection LIKE '%".$away_team."%'";
+        $search_raw_x = "x.selection_line = 'over'";
+        $search_raw_y = "y.selection_line = 'under'";
 
-        $search_raw_x = "x.selection LIKE '%".$home_team."%'";
-        $search_raw_y = "y.selection LIKE '%".$away_team."%'";
+        $latest_raw_a = "x.selection_line = 'over'";
+        $latest_raw_b = "x.selection_line = 'under'";
 
         $latestPricesSubqueryA = DB::table('gameodds as x')
             ->select(
@@ -468,7 +469,7 @@ class APIController extends Controller
             ->whereRaw($search_raw_x)
             ->groupBy('x.game_id', 'x.bet_type', 'x.sportsbook');
 
-        $latestPricesSubqueryB = DB::table('gameodds as y')
+            $latestPricesSubqueryB = DB::table('gameodds as y')
             ->select(
                 'y.game_id', 
                 'y.bet_type', 
@@ -480,21 +481,22 @@ class APIController extends Controller
             ->whereNotIn('y.type', ['locked'])
             ->whereRaw($search_raw_y)
             ->groupBy('y.game_id', 'y.bet_type', 'y.sportsbook');
-                
-        $best_over_odds_query  =  DB::table('gameodds as go')
-            ->joinSub($latestPricesSubqueryA, 'max_bet_prices', function ($join) {
-                $join->on('go.game_id', '=', 'max_bet_prices.game_id')
-                    ->on('go.bet_type', '=', 'max_bet_prices.bet_type')
-                    ->on('go.sportsbook', '=', 'max_bet_prices.sportsbook');
-            })
-            ->select(
-                'go.bet_type', 
-                'go.selection_points', 
-                'go.selection_line', 
-                'go.bet_name', 
-                'go.sportsbook',
-                'max_bet_prices.max_bet_price'
-            )
+                    
+            $best_over_odds_query  =  DB::table('gameodds as go')
+                ->joinSub($latestPricesSubqueryA, 'max_bet_prices', function ($join) {
+                    $join->on('go.game_id', '=', 'max_bet_prices.game_id')
+                        ->on('go.bet_type', '=', 'max_bet_prices.bet_type')
+                        ->on('go.sportsbook', '=', 'max_bet_prices.sportsbook');
+                })
+                ->select(
+                    'go.bet_type', 
+                    'go.selection_points', 
+                    'go.selection_line', 
+                    'go.bet_name', 
+                    'go.sportsbook',
+                    'max_bet_prices.max_bet_price',
+                    'go.selection'
+                )
             ->whereRaw($search_raw_a)
             ->where('go.game_id', $game_id)
             ->where('go.bet_type', $bet_type)
@@ -514,32 +516,39 @@ class APIController extends Controller
 
             $notIn = $best_over_odds_query->where('max_bet_price', $notInMaxBetPrice)->pluck('sportsbook')->unique()->values()->all();
 
+            $highest_over = $best_over_odds_query ? $best_over_odds_query->sortByDesc('max_bet_price')->first() : null;
 
-        $best_under_odds_query  = DB::table('gameodds as go')
-            ->joinSub($latestPricesSubqueryB, 'max_bet_prices', function ($join) {
-                $join->on('go.game_id', '=', 'max_bet_prices.game_id')
-                    ->on('go.bet_type', '=', 'max_bet_prices.bet_type')
-                    ->on('go.sportsbook', '=', 'max_bet_prices.sportsbook');
-            })
-            ->select(
-                'go.bet_type', 
-                'go.selection_points', 
-                'go.selection_line', 
-                'go.bet_name', 
-                'go.sportsbook',
-                'max_bet_prices.max_bet_price'
-            )
+            $best_under_odds_query  = DB::table('gameodds as go')
+                ->joinSub($latestPricesSubqueryB, 'max_bet_prices', function ($join) {
+                    $join->on('go.game_id', '=', 'max_bet_prices.game_id')
+                        ->on('go.bet_type', '=', 'max_bet_prices.bet_type')
+                        ->on('go.sportsbook', '=', 'max_bet_prices.sportsbook');
+                })
+                ->select(
+                    'go.bet_type', 
+                    'go.selection_points', 
+                    'go.selection_line', 
+                    'go.bet_name', 
+                    'go.sportsbook',
+                    'max_bet_prices.max_bet_price',
+                    'go.selection'
+                )
             ->whereRaw($search_raw_b)
             ->where('go.game_id', $game_id)
             ->where('go.bet_type', $bet_type)
             ->where('go.is_live', 0)
             ->whereNotIn('go.type', ['locked'])
             ->whereNotIn('go.sportsbook', $notIn )
+            ->where('go.selection', $highest_over->selection )
             ->groupBy('go.sportsbook')
             ->orderBy('max_bet_price','DESC')
             ->get();
 
-        $bet_name = $this->findMatchedPoints($best_over_odds_query, $best_under_odds_query, 2);
+           
+
+        $highest_under = $best_under_odds_query ? $best_under_odds_query->sortByDesc('max_bet_price')->first() : null;
+
+        $bet_name = $this->findMatchedPoints($best_over_odds_query, $best_under_odds_query, 1);
 
         $query = [
             'queryA'    =>  [

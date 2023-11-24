@@ -884,7 +884,7 @@ trait OddsJamAPITrait
 
         })
 
-        ->where('is_below_one','<=',1)
+        // ->where('is_below_one','<=',1)
         ->select(
             'game_id as uid',
             'start_date',
@@ -967,7 +967,7 @@ trait OddsJamAPITrait
             }
 
         })
-        ->where('is_below_one','<=',1)
+        // ->where('is_below_one','<=',1)
         ->count();
 
         $live_count = GamesPerMarket::where('is_live', 1 )
@@ -994,7 +994,7 @@ trait OddsJamAPITrait
             }
 
         })
-        ->where('is_below_one','<=',1)
+        // ->where('is_below_one','<=',1)
         ->count();
 
          $hidden_count = GamesPerMarket::where('is_live', 0 )
@@ -1021,7 +1021,7 @@ trait OddsJamAPITrait
             }
 
         })
-        ->where('is_below_one','<=',1)
+        // ->where('is_below_one','<=',1)
         ->count();
 
         $data = [
@@ -1341,7 +1341,8 @@ trait OddsJamAPITrait
                     'go.selection_line', 
                     'go.bet_name', 
                     'go.sportsbook',
-                    'max_bet_prices.max_bet_price'
+                    'max_bet_prices.max_bet_price',
+                    'go.selection'
                 )
             ->whereRaw($search_raw_a)
             ->where('go.game_id', $game_id)
@@ -1362,6 +1363,7 @@ trait OddsJamAPITrait
 
             $notIn = $best_over_odds_query->where('max_bet_price', $notInMaxBetPrice)->pluck('sportsbook')->unique()->values()->all();
 
+            $highest_over = $best_over_odds_query ? $best_over_odds_query->sortByDesc('max_bet_price')->first() : null;
 
             $best_under_odds_query  = DB::table('gameodds as go')
                 ->joinSub($latestPricesSubqueryB, 'max_bet_prices', function ($join) {
@@ -1375,7 +1377,8 @@ trait OddsJamAPITrait
                     'go.selection_line', 
                     'go.bet_name', 
                     'go.sportsbook',
-                    'max_bet_prices.max_bet_price'
+                    'max_bet_prices.max_bet_price',
+                    'go.selection'
                 )
             ->whereRaw($search_raw_b)
             ->where('go.game_id', $game_id)
@@ -1383,15 +1386,20 @@ trait OddsJamAPITrait
             ->where('go.is_live', 0)
             ->whereNotIn('go.type', ['locked'])
             ->whereNotIn('go.sportsbook', $notIn )
+            ->where(function ($query) use ($highest_over) {
+                if($highest_over->selection && in_array($highest_over->selection_line,["over","under"])) {
+                    $query->where('go.selection', $highest_over->selection );
+                }
+            })
             ->groupBy('go.sportsbook')
             ->orderBy('max_bet_price','DESC')
             ->get();
+
+             $highest_under = $best_under_odds_query ? $best_under_odds_query->sortByDesc('max_bet_price')->first() : null;
         }
 
 
-        $highest_over = $best_over_odds_query ? $best_over_odds_query->sortByDesc('max_bet_price')->first() : null;
-
-        $highest_under = $best_under_odds_query ? $best_under_odds_query->sortByDesc('max_bet_price')->first() : null;
+       
 
         if (!empty($best_over_odds_query) && !empty($best_under_odds_query) && !empty($highest_over) && !empty($highest_under)) {
 
@@ -1458,31 +1466,35 @@ trait OddsJamAPITrait
     }
 
     public function getOddsPerTeam($game) {
-        $latestPricesSubqueryA = DB::table('gameodds as x')
-        ->select(
-            'x.game_id', 
-            'x.bet_type', 
-            'x.sportsbook', 
-            DB::raw('MAX(x.timestamp) as latest_timestamp'),
-            DB::raw('(SELECT x.bet_price FROM gameodds WHERE game_id = x.game_id AND bet_type = x.bet_type AND sportsbook = x.sportsbook ORDER BY timestamp DESC LIMIT 1) as max_bet_price')
-        )
-        ->where('x.is_live', 0)
-        ->whereNotIn('x.type', ['locked'])
-        ->where('x.bet_name', $game->selection_line_a)
-        ->groupBy('x.game_id', 'x.bet_type', 'x.sportsbook');
 
-        $latestPricesSubqueryB = DB::table('gameodds as y')
-        ->select(
-            'y.game_id', 
-            'y.bet_type', 
-            'y.sportsbook', 
-            DB::raw('MAX(y.timestamp) as latest_timestamp'),
-            DB::raw('(SELECT y.bet_price FROM gameodds WHERE game_id = y.game_id AND bet_type = y.bet_type AND sportsbook = y.sportsbook ORDER BY timestamp DESC LIMIT 1) as max_bet_price')
-        )
-        ->where('y.is_live', 0)
-        ->whereNotIn('y.type', ['locked'])
-        ->where('y.bet_name', $game->selection_line_b )
-        ->groupBy('y.game_id', 'y.bet_type', 'y.sportsbook');
+    
+            $latestPricesSubqueryA = DB::table('gameodds as x')
+            ->select(
+                'x.game_id', 
+                'x.bet_type', 
+                'x.sportsbook', 
+                DB::raw('MAX(x.timestamp) as latest_timestamp'),
+                DB::raw('(SELECT x.bet_price FROM gameodds WHERE game_id = x.game_id AND bet_type = x.bet_type AND sportsbook = x.sportsbook ORDER BY timestamp DESC LIMIT 1) as max_bet_price')
+            )
+            ->where('x.is_live', 0)
+            ->whereNotIn('x.type', ['locked'])
+            ->where('x.bet_name', $game->selection_line_a)
+            ->groupBy('x.game_id', 'x.bet_type', 'x.sportsbook');
+
+            $latestPricesSubqueryB = DB::table('gameodds as y')
+            ->select(
+                'y.game_id', 
+                'y.bet_type', 
+                'y.sportsbook', 
+                DB::raw('MAX(y.timestamp) as latest_timestamp'),
+                DB::raw('(SELECT y.bet_price FROM gameodds WHERE game_id = y.game_id AND bet_type = y.bet_type AND sportsbook = y.sportsbook ORDER BY timestamp DESC LIMIT 1) as max_bet_price')
+            )
+            ->where('y.is_live', 0)
+            ->whereNotIn('y.type', ['locked'])
+            ->where('y.bet_name', $game->selection_line_b )
+            ->groupBy('y.game_id', 'y.bet_type', 'y.sportsbook');
+
+
                     
         $best_over_odds_query  =  DB::table('gameodds as go')
             ->joinSub($latestPricesSubqueryA, 'max_bet_prices', function ($join) {
@@ -1496,7 +1508,8 @@ trait OddsJamAPITrait
                 'go.selection_line', 
                 'go.bet_name', 
                 'go.sportsbook',
-                'max_bet_prices.max_bet_price'
+                'max_bet_prices.max_bet_price',
+                'go.selection'
             )
         ->where('go.bet_name', $game->selection_line_a)
         ->where('go.game_id', $game->game_id )
@@ -1507,7 +1520,7 @@ trait OddsJamAPITrait
         ->orderBy('max_bet_price','DESC')
             ->get();
 
-        $notInQuery = $best_over_odds_query->sortByDesc('max_bet_price')->first();
+         $notInQuery = $best_over_odds_query->sortByDesc('max_bet_price')->first();
 
         if ($notInQuery !== null) {
             $notInMaxBetPrice = $notInQuery->max_bet_price;
@@ -1516,6 +1529,8 @@ trait OddsJamAPITrait
         }
 
         $notIn = $best_over_odds_query->where('max_bet_price', $notInMaxBetPrice)->pluck('sportsbook')->unique()->values()->all();
+
+        $highest_over = $best_over_odds_query ? $best_over_odds_query->sortByDesc('max_bet_price')->first() : null;
 
 
         $best_under_odds_query  = DB::table('gameodds as go')
@@ -1530,7 +1545,8 @@ trait OddsJamAPITrait
                 'go.selection_line', 
                 'go.bet_name', 
                 'go.sportsbook',
-                'max_bet_prices.max_bet_price'
+                'max_bet_prices.max_bet_price',
+                'go.selection'
             )
         ->where('go.bet_name', $game->selection_line_b)
         ->where('go.game_id', $game->game_id)
@@ -1538,9 +1554,18 @@ trait OddsJamAPITrait
         ->where('go.is_live', 0)
         ->whereNotIn('go.type', ['locked'])
         ->whereNotIn('go.sportsbook', $notIn )
+        ->where(function ($query) use ($highest_over) {
+
+            if($highest_over->selection && in_array($highest_over->selection_line,["over","under"])) {
+                $query->where('go.selection', $highest_over->selection );
+            }
+            
+        })
         ->groupBy('go.sportsbook')
         ->orderBy('max_bet_price','DESC')
         ->get();
+
+        $highest_under = $best_under_odds_query ? $best_under_odds_query->sortByDesc('max_bet_price')->first() : null;
 
         $response = [
             'best_over_odds_query'  =>  $best_over_odds_query,

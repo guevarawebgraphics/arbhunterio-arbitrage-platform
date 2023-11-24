@@ -37,7 +37,7 @@ class GamesTable extends Component
     
     public $filter_param = [
         'min_profit'    =>   0,
-        'max_profit'    =>   8,
+        'max_profit'    =>   15,
         'sports'    =>   [],
         'sportsbook'    =>   [],
         'market'    =>   [

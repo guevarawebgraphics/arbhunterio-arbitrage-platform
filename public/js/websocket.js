@@ -8,7 +8,7 @@ console.log('Pusher:', window.Pusher);
 
 window.Echo = new Echo({
     broadcaster: 'pusher',
-    key: 'app', // change to `dev` if local or non-https. Else if production make it `app`
+    key: 'dev', // change to `dev` if local or non-https. Else if production make it `app`
     cluster: 'mt1',
     wsHost: window.location.hostname,
     wsPort: 6001,
