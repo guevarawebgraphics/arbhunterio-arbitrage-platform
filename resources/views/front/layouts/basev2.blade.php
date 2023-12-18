@@ -57,6 +57,11 @@
                 left: 100%;
             }
         }
+
+        .bg-green {
+            background-color:green !important; 
+            color: #fff !important;
+        }
         
     </style>
     @livewireStyles
